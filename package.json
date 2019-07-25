@@ -1,0 +1,35 @@
+{
+  "name": "whale-spy",
+  "version": "1.0.0",
+  "description": "Report whale sightings in the Puget Sound",
+  "main": "index.js",
+  "scripts": {
+    "dev": "env-cmd -f config/dev.env nodemon --exec babel-node index.js",
+    "test": "env-cmd -f config/test.env node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/annazus/whale-spy.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/annazus/whale-spy/issues"
+  },
+  "homepage": "https://github.com/annazus/whale-spy#readme",
+  "dependencies": {
+    "apollo-server": "^2.7.0",
+    "env-cmd": "^9.0.3",
+    "graphql": "^14.4.2",
+    "pg": "^7.11.0",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.10.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.5.0",
+    "@babel/core": "^7.5.4",
+    "@babel/node": "^7.5.0",
+    "@babel/preset-env": "^7.5.4",
+    "babel-preset-env": "^1.7.0"
+  }
+}

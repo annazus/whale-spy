@@ -1,0 +1,62 @@
+type Query {
+  hello: String
+  users: [User!]!
+  pins: [Pin!]!
+  myPins: [Pin!]!
+  comments(pinId: ID!): [Comment!]!
+  pictures(pinId: ID!): [Picture!]!
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type Pin {
+  id: ID!
+  latitude: Float!
+  longitude: Float!
+  title: String!
+  text: String!
+  dateSpotted: Date!
+  createdAt: Date!
+  updatedAt: Date!
+  author: User!
+  comments: [Comment!]!
+  pictures: [Picture!]!
+}
+
+type Picture {
+  id: ID!
+  url: String!
+  isHero: Boolean!
+  pin: Pin!
+  createdAt: Date!
+}
+
+type Comment {
+  id: ID!
+  text: String!
+  author: User!
+  createdAt: Date!
+  pin: Pin!
+}
+
+type Mutation {
+  signUp(name: String!, email: String!): User!
+  createPin(pin: CreatePinInput!): Pin!
+  createComment(pinId: ID!, text: String!): Comment!
+  createPicture(pinId: ID!, url: String!, isHero: Boolean): Picture!
+}
+
+input CreatePinInput {
+  dateSpotted: Date!
+  latitude: Float!
+  longitude: Float!
+  title: String!
+  text: String!
+}
+scalar Date
