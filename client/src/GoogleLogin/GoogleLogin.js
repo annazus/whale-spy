@@ -59,12 +59,13 @@ const GoogleLogin = ({
   const returnUserInfo = googleUser => {
     const profile = googleUser.getBasicProfile();
     console.log(profile);
-    const { access_token } = googleUser.getAuthResponse(true);
+    const { access_token, id_token } = googleUser.getAuthResponse(true);
     const userInfo = {
       name: profile.getName(),
       email: profile.getEmail(),
       imageUrl: profile.getImageUrl(),
-      accessToken: access_token
+      accessToken: access_token,
+      idToken: id_token
     };
 
     onSuccess(userInfo);

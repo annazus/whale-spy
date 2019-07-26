@@ -1,6 +1,6 @@
 import User from "./User";
 import Pin from "./Pin";
 import Comment from "./Comment";
-import Picture from "./Picture";
+import Image from "./Image";
 
-export { User, Pin, Comment, Picture };
+export { User, Pin, Comment, Image };

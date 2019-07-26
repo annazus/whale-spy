@@ -10,7 +10,7 @@ const User = connection => {
     },
     name: { type: Sequelize.STRING, allowNull: false },
     email: { type: Sequelize.STRING, allowNull: false, unique: true },
-    password: { type: Sequelize.STRING, allowNull: false }
+    picture: { type: Sequelize.STRING, allowNull: true }
   });
   user.associate = models => {
     user.hasMany(models.Pin);

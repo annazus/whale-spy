@@ -1,12 +1,17 @@
+import { AuthenticationError } from "apollo-server";
+import { getUserInfo, authenticated } from "../controllers";
+
 const Mutation = {
-  signUp(parent, { name, email }, { request, db }, info) {
-    return db.User.create({ name, email, password: "sdf" });
+  async signUp(parent, args, { req, db }) {
+    const googleUser = await getUserInfo(req);
+    const { name, email, picture } = googleUser;
+    const user = await db.User.findOne({ email });
+    if (user) {
+      throw new AuthenticationError(`User with email ${email} already exists`);
+    }
+    return db.User.create({ name, email, picture });
   },
-  async createPin(parent, { pin }, { request, db }, info) {
-    const user = await db.User.findOne({
-      where: { email: "a@a.a" },
-      attributes: ["id"]
-    });
+  createPin: authenticated(async (parent, { pin }, { currentUser, db }) => {
     const { dateSpotted, latitude, longitude, title, text } = pin;
     const pinRecord = await db.Pin.create({
       dateSpotted,
@@ -14,34 +19,31 @@ const Mutation = {
       longitude,
       title,
       text,
-      userId: user.id
+      userId: currentUser.id
     });
     return pinRecord;
-  },
-  async createComment(parent, { pinId, text }, { request, db }, info) {
-    const user = await db.User.findOne({
-      where: { email: "a@a.a" },
-      attributes: ["id"]
-    });
-    const comment = await db.Comment.create({
-      text,
-      pinId,
-      userId: user.id
-    });
-    return comment;
-  },
-  async createPicture(parent, { pinId, url, isHero }, { request, db }, info) {
-    const user = await db.User.findOne({
-      where: { email: "a@a.a" },
-      attributes: ["id"]
-    });
-    const picture = await db.Picture.create({
-      url,
-      pinId,
-      userId: user.id,
-      isHero: isHero ? true : false
-    });
-    return picture;
-  }
+  }),
+  createComment: authenticated(
+    async (parent, { pinId, text }, { currentUser, db }) => {
+      const comment = await db.Comment.create({
+        text,
+        pinId,
+        userId: currentUser.id
+      });
+      return comment;
+    }
+  ),
+  createImage: authenticated(
+    async (parent, { pinId, url, isHero }, { currentUser, db }) => {
+      const image = await db.Image.create({
+        url,
+        pinId,
+        userId: currentUser.id,
+        isHero: isHero ? true : false
+      });
+      return image;
+    }
+  )
 };
+
 export { Mutation as default };

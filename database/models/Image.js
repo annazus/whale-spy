@@ -1,7 +1,7 @@
 import Sequelize from "sequelize";
 
-const Picture = connection => {
-  const picture = connection.define("picture", {
+const Image = connection => {
+  const image = connection.define("picture", {
     id: {
       type: Sequelize.UUID,
       primaryKey: true,
@@ -12,11 +12,11 @@ const Picture = connection => {
     isHero: { type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false }
   });
 
-  picture.associate = models => {
-    picture.belongsTo(models.Pin);
+  image.associate = models => {
+    image.belongsTo(models.Pin);
   };
 
-  return picture;
+  return image;
 };
 
-export { Picture as default };
+export { Image as default };
