@@ -3,7 +3,7 @@ import graphqlServerStart from "../server";
 import { getClient } from "./utils/utils";
 import connectToDB, { closeDB } from "../database";
 import { _setMockUserInfo } from "google-auth-library";
-
+import { QUERY_COMMENTS } from "./definitions";
 import {
   initDatabase,
   userOne,
@@ -33,7 +33,11 @@ describe("test comment operations with an authenticated user", () => {
   });
 
   test(`query comment`, async () => {
-    const comments = client.query();
+    const variables = { pinId: pinOne.pin.id };
+    const comments = await client.query({ query: QUERY_COMMENTS, variables });
+    expect(comments.length).toBe(1);
+    expect(comments.data.comments[0].text).toBe(commentOne.input.text);
+    expect(comments.data.comments[0].author.email).toBe("");
   });
 
   test(`create a new comment`, async () => {});

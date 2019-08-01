@@ -1,5 +1,15 @@
 import { gql } from "apollo-boost";
 
+export const QUERY_PINS = gql`
+  query Pins {
+    signUp {
+      id
+      email
+      name
+      picture
+    }
+  }
+`;
 export const SIGNUP = gql`
   mutation SignUp {
     signUp {
@@ -97,6 +107,23 @@ export const UPDATE_PIN = gql`
         id
         name
         email
+      }
+    }
+  }
+`;
+
+export const QUERY_COMMENTS = gql`
+  query Comments($pinId: ID!) {
+    comments(pinId: $pinId) {
+      id
+      text
+      author {
+        email
+        name
+      }
+      pin {
+        id
+        title
       }
     }
   }
