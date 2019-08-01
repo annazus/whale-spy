@@ -46,6 +46,7 @@ type Mutation {
   signUp: User!
   createPin(pin: CreatePinInput!): Pin!
   deletePin(pin: ID!): Pin!
+  updatePin(pinId: ID!, pin: UpdatePinInput!): Pin!
   createComment(pinId: ID!, text: String!): Comment!
   deleteComment(commentId: ID!): Comment!
   createImage(pinId: ID!, url: String!, isHero: Boolean): Image!
@@ -53,11 +54,18 @@ type Mutation {
 }
 
 input CreatePinInput {
-  dateSpotted: Date!
   latitude: Float!
   longitude: Float!
   title: String!
   content: String!
+  dateSpotted: Float!
+}
+input UpdatePinInput {
+  latitude: Float
+  longitude: Float
+  title: String
+  content: String
+  dateSpotted: Float
 }
 type Subscription {
   pinAdded: Pin

@@ -1,16 +1,22 @@
 let mockUserInfo = null;
-export const _setMockUserInfo = newUserInfo => {
+const _setMockUserInfo = newUserInfo => {
   mockUserInfo = newUserInfo;
 };
-export const ticket = jest.fn(() => {
+const ticket = jest.fn(() => {
   return {
     getPayload: jest.fn(() => {
+      console.log("MOCKED CALLw");
       return mockUserInfo;
     })
   };
 });
-export const OAuth2Client = jest.fn(() => {
+const OAuth2Client = jest.fn(() => {
   return {
     verifyIdToken: ticket
   };
 });
+module.exports = {
+  _setMockUserInfo,
+  ticket,
+  OAuth2Client
+};

@@ -1,28 +1,37 @@
 import Sequelize from "sequelize";
 import * as definitions from "./models";
+let connection;
+const connectToDB = async force => {
+  connection = new Sequelize(process.env.POSTGRES_URI, {
+    dialect: "postgres",
+    logging: false,
+    dialectOptions: {
+      ssl: true
+    }
+  });
+  connection
+    .authenticate()
+    .then(() => {
+      console.log("Connection to database successful");
+    })
+    .catch(err => console.log("Unable to connect to the database:", err));
 
-const connection = new Sequelize(process.env.POSTGRES_URI, {
-  dialect: "postgres",
-  logging: true,
-  dialectOptions: {
-    ssl: true
-  }
-});
+  let db = {};
 
-connection
-  .authenticate()
-  .then(() => console.log("Connection to database successful"))
-  .catch(err => console.log("Unable to connect to the database:", err));
+  Object.keys(definitions).forEach(element => {
+    db[element] = definitions[element](connection);
+  });
+  Object.keys(definitions).forEach(element => {
+    if (db[element].associate) db[element].associate(db);
+  });
+  await connection.sync({ force });
 
-let db = {};
+  return db;
+};
 
-connection.sync({ force: true });
+export const closeDB = async () => {
+  if (!connection) return;
+  await connection.close();
+};
 
-Object.keys(definitions).forEach(element => {
-  db[element] = definitions[element](connection);
-});
-Object.keys(definitions).forEach(element => {
-  if (db[element].associate) db[element].associate(db);
-});
-
-export default db;
+export default connectToDB;

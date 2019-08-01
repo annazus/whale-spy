@@ -6,7 +6,7 @@ const Query = {
   //   },
   me: authenticated((parent, args, ctx, info) => {
     const { db, currentUser } = ctx;
-    return db.User.findOne({ where: { email: currentUser.email } });
+    return db.User.findByPk(currentUser.id);
   }),
   pins(parent, args, { db }, info) {
     return db.Pin.findAll({});
