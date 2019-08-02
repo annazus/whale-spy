@@ -117,13 +117,54 @@ export const QUERY_COMMENTS = gql`
     comments(pinId: $pinId) {
       id
       text
+      createdAt
+    }
+  }
+`;
+export const QUERY_COMMENTS_WITH_USER_PIN = gql`
+  query Comments($pinId: ID!) {
+    comments(pinId: $pinId) {
+      id
+      text
+      createdAt
       author {
+        id
         email
         name
       }
       pin {
         id
         title
+      }
+    }
+  }
+`;
+export const MUTATE_CREATE_COMMENT = gql`
+  mutation CreateComment($text: String!, $pinId: ID!) {
+    createComment(text: $text, pinId: $pinId) {
+      id
+      text
+      createdAt
+      author {
+        id
+      }
+      pin {
+        id
+      }
+    }
+  }
+`;
+export const MUTATE_DELETE_COMMENT = gql`
+  mutation DeleteComment($commentId: ID!) {
+    deleteComment(commentId: $commentId) {
+      id
+      text
+      createdAt
+      author {
+        id
+      }
+      pin {
+        id
       }
     }
   }

@@ -6,24 +6,23 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const getUserInfo = async req => {
   try {
     const authHeader = req.headers.authorization;
+    if (!authHeader) throw new AuthenticationError("User has not logged in.");
+
     const idToken = authHeader.replace("Bearer ", "");
-    console.log("IDTOKEN", idToken);
     const ticket = await client.verifyIdToken({
       idToken,
       audience: process.env.GOOGLE_CLIENT_ID
     });
     const googleUser = ticket.getPayload();
-    console.log(googleUser);
-    if (!googleUser) throw new AuthenticationError("GOoge returned error");
+    if (!googleUser) throw new AuthenticationError("Google returned error");
     return googleUser;
   } catch (error) {
     console.log(error);
-    throw new AuthenticationError(error.messsage);
+    throw new AuthenticationError("User has not logged in.");
   }
 };
 const authenticated = next => async (parent, args, ctx, info) => {
   const { db, req } = ctx;
-  console.log(req.headers.authorization);
   const { email, picture, name } = await getUserInfo(req);
   const currentUser = await db.User.findOne({
     where: { email: email }

@@ -13,10 +13,10 @@ const Query = {
   },
   myPins(parent, args, { req, db }, info) {
     return db.Pin.findAll({});
+  },
+  comments: (parent, { pinId }, { db }, info) => {
+    return db.Comment.findAll({ where: { pinId: pinId } });
   }
-  //   comments(parent, { pinId }, { request, db }, info) {
-  //     return db.Comment.findAll({ where: { pinId: pinId } });
-  //   },
   //   images(parent, { pinId }, { request, db }, info) {
   //     return db.Image.findAll({ where: { pinId: pinId } });
   //   }

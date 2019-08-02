@@ -79,15 +79,15 @@ export const initDatabase = async db => {
 
   const dbComment1 = await db.Comment.create({
     ...commentOne.input,
-    userId: userTwo.id,
-    pinId: pinOne.id
+    userId: userTwo.user.id,
+    pinId: pinOne.pin.id
   });
   commentOne.comment = dbComment1.dataValues;
 
   const dbComment2 = await db.Comment.create({
     ...commentTwo.input,
-    userId: userOne.id,
-    pinId: pinOne.id
+    userId: userOne.user.id,
+    pinId: pinOne.pin.id
   });
   commentTwo.comment = dbComment2.dataValues;
 };

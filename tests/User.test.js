@@ -24,7 +24,6 @@ test("signup", async () => {
   _setMockUserInfo(jimUser);
   const client = getClient("DummyToken");
   const newUser = await client.mutate({ mutation: SIGNUP });
-  console.log(newUser);
   const dbUser = await db.User.findByPk(newUser.data.signUp.id);
   expect(dbUser.dataValues.email).toBe(jimUser.email);
   expect(dbUser.dataValues.picture).toBe(jimUser.picture);

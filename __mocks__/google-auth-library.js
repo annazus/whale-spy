@@ -5,7 +5,6 @@ const _setMockUserInfo = newUserInfo => {
 const ticket = jest.fn(() => {
   return {
     getPayload: jest.fn(() => {
-      console.log("MOCKED CALLw");
       return mockUserInfo;
     })
   };

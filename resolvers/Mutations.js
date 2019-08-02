@@ -12,7 +12,6 @@ const Mutation = {
     return db.User.create({ name, email, picture });
   },
   createPin: authenticated(async (parent, { pin }, { currentUser, db }) => {
-    console.log("input", currentUser);
     const { latitude, longitude, title, text, content, dateSpotted } = pin;
     const newPin = await db.Pin.create({
       dateSpotted: dateSpotted,
@@ -52,21 +51,31 @@ const Mutation = {
   deletePin: authenticated(async (parent, { pin }, { db, currentUser }) => {
     const pinToDelete = await db.Pin.findByPk(pin);
     if (!pinToDelete) throw new Error("Pin cannot be found");
-    if (pinToDelete.userId !== currentUser.id)
+    if (pinToDelete.dataValues.userId !== currentUser.id)
       throw new Error("You must be the author of the pin to delete it");
     const affectedRows = await db.Pin.destroy({ where: { id: pin } });
-    console.log(pinToDelete);
     return pinToDelete.dataValues;
   }),
 
   createComment: authenticated(
-    async (parent, { pinId, text }, { currentUser, db }) => {
-      const comment = await db.Comment.create({
+    (parent, { pinId, text }, { currentUser, db }) => {
+      return db.Comment.create({
         text,
         pinId,
         userId: currentUser.id
       });
-      return comment;
+    }
+  ),
+  deleteComment: authenticated(
+    async (parent, { commentId }, { db, currentUser }) => {
+      const commentToDelete = await db.Comment.findByPk(commentId);
+      if (!commentToDelete) throw new Error("Comment cannot be found");
+      if (commentToDelete.dataValues.userId !== currentUser.id)
+        throw new Error("You must be the author of the comment to delete it");
+      const affectedRows = await db.Comment.destroy({
+        where: { id: commentId }
+      });
+      return commentToDelete.dataValues;
     }
   ),
   createImage: authenticated(
