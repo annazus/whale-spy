@@ -41,7 +41,7 @@ function App() {
       <GoogleLogin
         loginText="Login with Google"
         googleAuthApiSrc="https://apis.google.com/js/platform.js"
-        clientID={process.env.REACT_GOOGLE_CLIENT_ID}
+        clientID="RIbbos"
         disabled={false}
         onRequest={onRequest}
         onSuccess={onSuccess}
@@ -50,7 +50,7 @@ function App() {
       <GoogleLogout
         logoutText="Logout from App"
         googleAuthApiSrc="https://apis.google.com/js/platform.js"
-        clientID={process.env.REACT_GOOGLE_CLIENT_ID}
+        clientID={process.env.REACT_APP_GOOGLE_CLIENT_ID}
         disabled={false}
         onLogoutSuccess={onLogoutSuccess}
       />

@@ -11,6 +11,7 @@ const GraphQLServerStart = async db => {
     typeDefs,
     resolvers,
     context: ({ req }) => {
+      console.log(db, db);
       return { req, db };
     }
   });

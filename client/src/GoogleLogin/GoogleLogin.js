@@ -22,10 +22,11 @@ const GoogleLogin = ({
   disabled,
   onRequest,
   onSuccess,
-  onFailure
+  onFailure,
+  refreshToken
 }) => {
   const [isSignedIn, setIsSignedIn] = useState(false);
-
+  console.log(loginText);
   useEffect(() => {
     console.log("useEffect to load Google Auth");
     loadScript(document, googleAuthApiSrc, "script", initializeApi);
@@ -59,7 +60,10 @@ const GoogleLogin = ({
   const returnUserInfo = googleUser => {
     const profile = googleUser.getBasicProfile();
     console.log(profile);
-    const { access_token, id_token } = googleUser.getAuthResponse(true);
+    const { access_token, id_token, expires_in } = googleUser.getAuthResponse(
+      true
+    );
+    console.log("expires in", expires_in);
     const userInfo = {
       name: profile.getName(),
       email: profile.getEmail(),
@@ -67,6 +71,7 @@ const GoogleLogin = ({
       accessToken: access_token,
       idToken: id_token
     };
+    if (refreshToken) refreshToken(expires_in);
 
     onSuccess(userInfo);
   };

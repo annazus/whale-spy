@@ -42,7 +42,9 @@ const GoogleLogout = ({
     if (disabled) return;
     const auth2 = window.gapi.auth2.getAuthInstance();
     auth2.signOut().then(
-      () => onLogoutSuccess(),
+      () => {
+        if (onLogoutSuccess) onLogoutSuccess();
+      },
       error => {
         console.log(error);
       }
@@ -58,6 +60,6 @@ export { GoogleLogout as default };
 
 GoogleLogout.defaultProps = {
   googleAuthApiSrc: "https://apis.google.com/js/platform.js",
-  logoutText: "Logout with Google",
+  logoutText: "Logout",
   disabled: false
 };

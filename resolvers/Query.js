@@ -9,6 +9,7 @@ const Query = {
     return db.User.findByPk(currentUser.id);
   }),
   pins(parent, args, { db }, info) {
+    console.log(db);
     return db.Pin.findAll({});
   },
   myPins(parent, args, { req, db }, info) {

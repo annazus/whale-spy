@@ -10,12 +10,14 @@ const Button = ({ text, clickHandler, disabled }) => {
     display: "flex",
     alignItems: "center",
     borderRadius: 2,
-    padding: 0,
+    padding: "0px",
+    margin: "0px",
     boxShadow: "0 2px 2px 0 rgba(0, 0, 0, .24), 0 0 1px 0 rgba(0, 0, 0, .24)",
     border: "1px solid transparent",
-    width: "200px",
+    width: "100px",
     position: "relative",
-    tabIndex: 0
+    tabIndex: 0,
+    marginRight: "10px"
   };
 
   const activeButtonStyle = {
@@ -37,7 +39,6 @@ const Button = ({ text, clickHandler, disabled }) => {
     fontWeight: "500",
     color: "rgba(0, 0, 0, 0.54)"
   };
-
   const style = hovered
     ? { ...buttonStyle, ...hoveredButtonStyle }
     : active

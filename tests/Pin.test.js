@@ -28,6 +28,7 @@ describe("Query pins with unauthorized user", () => {
   beforeAll(() => {
     client = getClient();
   });
+  test("query pins", () => {});
 });
 
 describe("Test pin mutations with authorized user", () => {
