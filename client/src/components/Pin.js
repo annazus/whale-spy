@@ -29,6 +29,7 @@ const Pin = ({
             onChange={handleOnChange}
           />
         </div>
+
         <div style={rowStyle}>
           <label>Content</label>
           <textarea

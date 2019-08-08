@@ -22,6 +22,7 @@ const NewComment = ({ pinId }) => {
         type: actionTypes.CREATE_COMMENT,
         payload: { comment: newComment.data.createComment }
       });
+      setComment("");
     } catch (error) {
       console.log(error);
     }

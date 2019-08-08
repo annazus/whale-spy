@@ -29,8 +29,12 @@ const CommentsContainer = () => {
     };
     getComments();
   }, [dispatch, state.currentPin.id]);
+  const closeComments = () => {
+    dispatch({ type: actionTypes.HIDE_COMMENTS });
+  };
   return (
     <div>
+      <button onClick={closeComments}>Close Comments</button>
       {state.isAuth ? <NewComment /> : null}
       {state.currentPin.comments ? (
         <CommentsList commentsList={state.currentPin.comments} />
