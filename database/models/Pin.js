@@ -12,12 +12,13 @@ const Pin = connection => {
     longitude: { type: Sequelize.FLOAT, allowNull: false },
     title: { type: Sequelize.STRING },
     content: { type: Sequelize.TEXT },
+    image: { type: Sequelize.TEXT },
     dateSpotted: { type: Sequelize.DATE, allowNull: false }
   });
   pin.associate = models => {
     pin.belongsTo(models.User);
     pin.hasMany(models.Comment);
-    pin.hasMany(models.Image);
+    // pin.hasMany(models.Image);
   };
   return pin;
 };

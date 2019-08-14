@@ -1,30 +1,22 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useAuthenticatedClient } from "../graphql/client";
-import { Context } from "../Context";
-import { actionTypes } from "../actions";
-import { MUTATION_CREATE_PIN } from "../graphql/definitions/mutations";
+import { useAuthenticatedClient } from "../../graphql/client";
+import { Context } from "../../Context";
+import { actionTypes } from "../../actions";
+import { MUTATION_CREATE_PIN } from "../../graphql/definitions/mutations";
 import Pin from "./Pin";
-const style = {
-  width: "100%",
-  height: "100%",
-  display: "flex",
-  flexDirection: "column"
-};
-const rowStyle = {
-  display: "flex",
-  flexDirection: "row"
-};
+
 const PinContent = () => {
   const { state, dispatch } = useContext(Context);
   const client = useAuthenticatedClient();
-  const handlePinSubmit = async event => {
-    event.preventDefault();
+  const handlePinSubmit = async fileUploadWidget => {
+    const pinUrl = await fileUploadWidget.current.uploadToCloudinary();
     const variables = {
+      image: pinUrl,
       title: state.draftPin.title,
       content: state.draftPin.content,
       latitude: state.draftPin.latitude,
       longitude: state.draftPin.longitude,
-      dateSpotted: new Date().getTime()
+      dateSpotted: state.draftPin.dateSpotted.getTime()
     };
     const newPin = await client.mutate({
       mutation: MUTATION_CREATE_PIN,
@@ -38,6 +30,7 @@ const PinContent = () => {
   };
 
   const onChange = event => {
+    console.log(event);
     dispatch({
       type: actionTypes.CREATE_DRAFT_PIN,
       payload: {
@@ -58,6 +51,7 @@ const PinContent = () => {
       handleSaveClick={handlePinSubmit}
       handleDiscardClick={handleDiscard}
       handleOnChange={onChange}
+      imageUrl={state.draftPin.image}
     />
   );
   // return (

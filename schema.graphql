@@ -25,7 +25,7 @@ type Pin {
   updatedAt: Date!
   author: User!
   comments: [Comment!]!
-  images: [Image!]!
+  image: String!
 }
 
 type Image {
@@ -61,6 +61,7 @@ input CreatePinInput {
   title: String!
   content: String!
   dateSpotted: Float!
+  image: String!
 }
 input UpdatePinInput {
   latitude: Float
@@ -68,6 +69,7 @@ input UpdatePinInput {
   title: String
   content: String
   dateSpotted: Float
+  image: String
 }
 type Subscription {
   pinAdded: Pin

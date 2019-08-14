@@ -13,8 +13,10 @@ export const QUERY_PINS = gql`
   query Pins {
     pins {
       id
+      image
       title
       content
+      dateSpotted
       latitude
       longitude
       createdAt

@@ -22,7 +22,9 @@ const pinOne = {
     content: "1st post content",
     latitude: 34.3,
     longitude: 34.3,
-    dateSpotted: new Date()
+    dateSpotted: new Date(),
+    image:
+      "https://res.cloudinary.com/wwooooo/image/upload/v1565305264/Screen_Shot_2019-01-03_at_9.44.57_AM_1_g97jeo.png"
   },
   pin: undefined
 };
@@ -33,7 +35,9 @@ const pinTwo = {
     content: "2nd post content",
     latitude: 34.3,
     longitude: 34.3,
-    dateSpotted: new Date()
+    dateSpotted: new Date(),
+    image:
+      "https://res.cloudinary.com/wwooooo/image/upload/v1565305000/noun_global_2082948_gvsuu9.png"
   },
   pin: undefined
 };

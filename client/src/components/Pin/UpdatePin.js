@@ -1,23 +1,25 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useAuthenticatedClient } from "../graphql/client";
-import { Context } from "../Context";
-import { actionTypes } from "../actions";
+import { useAuthenticatedClient } from "../../graphql/client";
+import { Context } from "../../Context";
+import { actionTypes } from "../../actions";
 import {
   MUTATON_UPDATE_PIN,
   MUTATION_DELETE_PIN
-} from "../graphql/definitions/mutations";
+} from "../../graphql/definitions/mutations";
 import Pin from "./Pin";
 
 const UpdatePin = () => {
   const { state, dispatch } = useContext(Context);
   const client = useAuthenticatedClient();
-  const handlePinSubmit = async event => {
-    event.preventDefault();
+  const handlePinSubmit = async fileUploadWidget => {
+    const pinUrl = await fileUploadWidget.current.uploadToCloudinary();
     const variables = {
+      pinId: state.currentPin.id,
       title: state.currentPin.title,
       content: state.currentPin.content,
       latitude: state.currentPin.latitude,
       longitude: state.currentPin.longitude,
+      image: pinUrl,
       dateSpotted: new Date().getTime()
     };
     const updatedPin = await client.mutate({
@@ -55,6 +57,7 @@ const UpdatePin = () => {
         handleSaveClick={handlePinSubmit}
         handleDiscardClick={handleDiscard}
         handleOnChange={onChange}
+        imageUrl={state.currentPin.image}
       />
       <button
         onClick={() => {

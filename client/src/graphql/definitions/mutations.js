@@ -17,6 +17,7 @@ export const MUTATION_CREATE_PIN = gql`
     $latitude: Float!
     $longitude: Float!
     $dateSpotted: Float!
+    $image: String!
   ) {
     createPin(
       pin: {
@@ -25,6 +26,7 @@ export const MUTATION_CREATE_PIN = gql`
         latitude: $latitude
         longitude: $longitude
         dateSpotted: $dateSpotted
+        image: $image
       }
     ) {
       id
@@ -33,6 +35,7 @@ export const MUTATION_CREATE_PIN = gql`
       latitude
       longitude
       dateSpotted
+      image
       author {
         id
         name
@@ -44,19 +47,23 @@ export const MUTATION_CREATE_PIN = gql`
 
 export const MUTATON_UPDATE_PIN = gql`
   mutation UpdatePin(
+    $pinId: ID!
     $title: String
     $content: String
     $latitude: Float
     $longitude: Float
     $dateSpotted: Float
+    $image: String
   ) {
     updatePin(
+      pinId: $pinId
       pin: {
         title: $title
         content: $content
         latitude: $latitude
         longitude: $longitude
         dateSpotted: $dateSpotted
+        image: $image
       }
     ) {
       id
@@ -65,6 +72,7 @@ export const MUTATON_UPDATE_PIN = gql`
       latitude
       longitude
       dateSpotted
+      image
       author {
         id
         name
@@ -84,6 +92,7 @@ export const MUTATION_DELETE_PIN = gql`
       latitude
       longitude
       dateSpotted
+      image
       author {
         id
         name

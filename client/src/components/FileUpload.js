@@ -17,7 +17,11 @@ class FileUpload extends Component {
     }
     this.setState({ fileToUpload: _file, url: _url });
 
-    if (this.props.changeHandler) this.props.changeHandler(_file, _url);
+    if (this.props.changeHandler)
+      this.props.changeHandler({
+        ...e,
+        target: { name: "image", value: _url }
+      });
   };
 
   discardData = () => {

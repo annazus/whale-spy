@@ -1,39 +1,17 @@
 import React, { useContext } from "react";
 import { Context } from "../Context";
+import classNames from "./header.module.css";
 import Auth from "./Auth";
 import Logout from "./Logout";
 import Logo from "./Logo";
-const styles = {
-  position: "fixed",
-  width: "100%",
-  minWidth: "320px",
-  maxWidth: "1024px",
-  height: "80px",
-  margin: "0 auto",
-  top: 0,
-  left: 0,
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "space-between",
-  alignItems: "center"
-};
 
-const authBarStyle = {
-  height: "60px",
-  display: "flex",
-  flexDirection: "row"
-};
-const button = {
-  height: "80px",
-  border: "1px solid red"
-};
 const Header = () => {
   const { state, dispatch } = useContext(Context);
 
   return (
-    <header style={styles}>
+    <header className={classNames.Header}>
       <Logo />
-      <div style={authBarStyle}>
+      <div className={classNames.AuthMenu}>
         {!state.isAuth ? (
           <>
             <Auth mode="SIGNUP" loginText="Signup" />

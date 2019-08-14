@@ -12,13 +12,14 @@ const Mutation = {
     return db.User.create({ name, email, picture });
   },
   createPin: authenticated(async (parent, { pin }, { currentUser, db }) => {
-    const { latitude, longitude, title, text, content, dateSpotted } = pin;
+    const { latitude, longitude, title, image, content, dateSpotted } = pin;
     const newPin = await db.Pin.create({
       dateSpotted: dateSpotted,
       content,
       latitude,
       longitude,
       title,
+      image,
       userId: currentUser.id
     });
     return newPin.dataValues;
@@ -31,14 +32,15 @@ const Mutation = {
       if (pinToUpdate.userId !== currentUser.id) {
         throw new Error("You are not the author of this pin");
       }
-      const { latitude, longitude, title, content, dateSpotted } = pin;
+      const { latitude, longitude, title, content, dateSpotted, image } = pin;
       const rowsAffected = await db.Pin.update(
         {
           dateSpotted: dateSpotted ? dateSpotted : pinToUpdate.dateSpotted,
           content: content ? content : pinToUpdate.content,
           latitude: latitude ? latitude : pinToUpdate.latitude,
           longitude: longitude ? longitude : pinToUpdate.longitude,
-          title: title ? title : pinToUpdate.title
+          title: title ? title : pinToUpdate.title,
+          image: image ? image : pinToUpdate.image
         },
         { where: { id: pinId } }
       );

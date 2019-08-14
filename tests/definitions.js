@@ -37,6 +37,7 @@ export const CREATE_PIN = gql`
     $latitude: Float!
     $longitude: Float!
     $dateSpotted: Float!
+    $image: String!
   ) {
     createPin(
       pin: {
@@ -45,6 +46,7 @@ export const CREATE_PIN = gql`
         latitude: $latitude
         longitude: $longitude
         dateSpotted: $dateSpotted
+        image: $image
       }
     ) {
       id
@@ -53,6 +55,7 @@ export const CREATE_PIN = gql`
       latitude
       longitude
       dateSpotted
+      image
       author {
         id
         name
@@ -70,6 +73,7 @@ export const DELETE_PIN = gql`
       longitude
       dateSpotted
       content
+      image
       author {
         id
         name
@@ -86,6 +90,7 @@ export const UPDATE_PIN = gql`
     $latitude: Float
     $longitude: Float
     $dateSpotted: Float
+    $image: String
   ) {
     updatePin(
       pinId: $pinId
@@ -95,6 +100,7 @@ export const UPDATE_PIN = gql`
         latitude: $latitude
         longitude: $longitude
         dateSpotted: $dateSpotted
+        image: $image
       }
     ) {
       id
@@ -103,6 +109,7 @@ export const UPDATE_PIN = gql`
       latitude
       longitude
       dateSpotted
+      image
       author {
         id
         name

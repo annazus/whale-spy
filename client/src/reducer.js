@@ -88,6 +88,7 @@ const reducer = (state = {}, action) => {
         draftPin: null
       };
     case actionTypes.SET_CURRENT_PIN:
+      console.log("currentpin", action.payload.currentPin);
       return {
         ...state,
         draftPin: null,

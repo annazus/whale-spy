@@ -1,6 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
 import ApolloClient from "apollo-boost";
-import ReactMapGL, { GeolocateControl, Marker, Popup } from "react-map-gl";
+import ReactMapGL, {
+  GeolocateControl,
+  Marker,
+  Popup,
+  FullscreenControl,
+  NavigationControl
+} from "react-map-gl";
 import { ReactComponent as WhaleIcon } from "../whaleIcon.svg";
 import { Context } from "../Context";
 import { actionTypes } from "../actions";
@@ -8,10 +14,23 @@ import { QUERY_PINS } from "../graphql/definitions/queries";
 import { GRAPHQL_SERVER_URL } from "../graphql/client";
 import PinInfo from "./PinInfo";
 const style = {};
-const geoLocateStyle = {
+const fullscreenControlStyle = {
   position: "absolute",
   top: 0,
   left: 0,
+  padding: "10px"
+};
+const navStyle = {
+  position: "absolute",
+  top: 36,
+  left: 0,
+  padding: "10px"
+};
+
+const geoLocateStyle = {
+  position: "absolute",
+  top: 0,
+  right: 0,
   margin: 10
 };
 
@@ -25,9 +44,9 @@ const Map = () => {
   const initialViewport = {
     width: "100%",
     height: 600,
-    latitude: 37.7577,
-    longitude: -122.4376,
-    zoom: 7
+    latitude: 47.7237,
+    longitude: -122.4713,
+    zoom: 12
   };
 
   const [viewport, setViewport] = useState(initialViewport);
@@ -42,8 +61,22 @@ const Map = () => {
         type: actionTypes.GET_PINS,
         payload: { pins: pinData.data.pins }
       });
+
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          setViewport({
+            ...initialViewport,
+            longitude: pos.coords.longitude,
+            latitude: pos.coords.latitude
+          });
+        },
+        error => {
+          console.log(error);
+        }
+      );
     };
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
   const clickHandler = ({ lngLat, type, target }) => {
     console.log(target);
@@ -56,17 +89,11 @@ const Map = () => {
         draftPin: {
           ...state.draftPin,
           longitude: lngLat[0],
-          latitude: lngLat[1]
+          latitude: lngLat[1],
+          dateSpotted: new Date()
         }
       }
     });
-    // setIsActiveMarker(true);
-    // setActiveMarker({
-    //   lng: lngLat[0],
-    //   lat: lngLat[1],
-    //   title: "New Marker"
-    // });
-    // console.log(type, target, lngLat);
   };
 
   const renderPopup = () => {
@@ -137,10 +164,11 @@ const Map = () => {
   return (
     <ReactMapGL
       {...viewport}
+      style={{ width: "100%" }}
       onViewportChange={viewport => setViewport(viewport)}
       mapboxApiAccessToken={process.env.REACT_APP_MAP_TOKEN}
       onClick={clickHandler}
-      style={style}
+      mapStyle={process.env.REACT_APP_MAP_LAYER}
     >
       {state.currentPin ? renderPopup() : null}
       <GeolocateControl
@@ -152,6 +180,12 @@ const Map = () => {
         ? markerRender({ ...state.draftPin, draggable: true })
         : null}
       {state.pins.map(pin => markerRender({ pin, ...pin, draggable: false }))}
+      <div style={fullscreenControlStyle}>
+        <FullscreenControl />
+        <div className="nav" style={navStyle}>
+          <NavigationControl />
+        </div>
+      </div>
     </ReactMapGL>
   );
 };

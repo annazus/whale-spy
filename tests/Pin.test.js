@@ -44,13 +44,16 @@ describe("Test pin mutations with authorized user", () => {
       content: "new post content",
       latitude: 34.3,
       longitude: 34.3,
-      dateSpotted: new Date()
+      dateSpotted: new Date(),
+      image:
+        "https://res.cloudinary.com/wwooooo/image/upload/v1565305217/Screen_Shot_2019-01-03_at_9.44.57_AM_1_gv1hep.png"
     };
     const variables = {
       title: newPinInput.title,
       content: newPinInput.content,
       latitude: newPinInput.latitude,
       longitude: newPinInput.longitude,
+      image: newPinInput.image,
       dateSpotted: newPinInput.dateSpotted.getTime()
     };
 
