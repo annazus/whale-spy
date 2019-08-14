@@ -11,7 +11,14 @@ import { ReactComponent as WhaleIcon } from "../whaleIcon.svg";
 import { Context } from "../Context";
 import { actionTypes } from "../actions";
 import { QUERY_PINS } from "../graphql/definitions/queries";
-import { GRAPHQL_SERVER_URL } from "../graphql/client";
+import {
+  PIN_ADDED_SUBSCRIPTION,
+  PIN_DELETED_SUBSCRIPTION,
+  PIN_UPDATED_SUBSCRIPTION
+} from "../graphql/definitions/subscription";
+
+import { GRAPHQL_SERVER_URL, getClient } from "../graphql/client";
+import { Subscription, useSubscription } from "react-apollo";
 import PinInfo from "./PinInfo";
 const style = {};
 const fullscreenControlStyle = {
@@ -53,9 +60,7 @@ const Map = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const client = new ApolloClient({
-        uri: GRAPHQL_SERVER_URL
-      });
+      const client = getClient();
       const pinData = await client.query({ query: QUERY_PINS });
       dispatch({
         type: actionTypes.GET_PINS,
@@ -162,31 +167,64 @@ const Map = () => {
     );
   };
   return (
-    <ReactMapGL
-      {...viewport}
-      style={{ width: "100%" }}
-      onViewportChange={viewport => setViewport(viewport)}
-      mapboxApiAccessToken={process.env.REACT_APP_MAP_TOKEN}
-      onClick={clickHandler}
-      mapStyle={process.env.REACT_APP_MAP_LAYER}
-    >
-      {state.currentPin ? renderPopup() : null}
-      <GeolocateControl
-        style={geoLocateStyle}
-        positionOptions={{ enableHighAccuracy: true }}
-        trackUserLocation={true}
-      />
-      {state.draftPin
-        ? markerRender({ ...state.draftPin, draggable: true })
-        : null}
-      {state.pins.map(pin => markerRender({ pin, ...pin, draggable: false }))}
-      <div style={fullscreenControlStyle}>
-        <FullscreenControl />
-        <div className="nav" style={navStyle}>
-          <NavigationControl />
+    <>
+      <ReactMapGL
+        {...viewport}
+        style={{ width: "100%" }}
+        onViewportChange={viewport => setViewport(viewport)}
+        mapboxApiAccessToken={process.env.REACT_APP_MAP_TOKEN}
+        onClick={clickHandler}
+        mapStyle={process.env.REACT_APP_MAP_LAYER}
+      >
+        {state.currentPin ? renderPopup() : null}
+        <GeolocateControl
+          style={geoLocateStyle}
+          positionOptions={{ enableHighAccuracy: true }}
+          trackUserLocation={true}
+        />
+        {state.draftPin
+          ? markerRender({ ...state.draftPin, draggable: true })
+          : null}
+        {state.pins.map(pin => markerRender({ pin, ...pin, draggable: false }))}
+        <div style={fullscreenControlStyle}>
+          <FullscreenControl />
+          <div className="nav" style={navStyle}>
+            <NavigationControl />
+          </div>
         </div>
-      </div>
-    </ReactMapGL>
+      </ReactMapGL>
+      {/* Subscriptions for Creating / Updating / Deleting Pins */}
+      <Subscription
+        subscription={PIN_ADDED_SUBSCRIPTION}
+        onSubscriptionData={({ subscriptionData }) => {
+          const { pinAdded } = subscriptionData.data;
+          dispatch({
+            type: actionTypes.ON_PIN_ADDED,
+            payload: { pin: pinAdded }
+          });
+        }}
+      />
+      <Subscription
+        subscription={PIN_UPDATED_SUBSCRIPTION}
+        onSubscriptionData={({ subscriptionData }) => {
+          const { pinUpdated } = subscriptionData.data;
+          dispatch({
+            type: actionTypes.ON_PIN_UPDATED,
+            payload: { pin: pinUpdated }
+          });
+        }}
+      />
+      <Subscription
+        subscription={PIN_DELETED_SUBSCRIPTION}
+        onSubscriptionData={({ subscriptionData }) => {
+          const { pinDeleted } = subscriptionData.data;
+          dispatch({
+            type: actionTypes.ON_PIN_DELETED,
+            payload: { pinId: pinDeleted.id }
+          });
+        }}
+      />
+    </>
   );
 };
 

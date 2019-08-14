@@ -32,7 +32,7 @@ const Auth = ({ mode, loginText }) => {
         payload: { user: result.data.me }
       });
     } catch (error) {
-      console.log(error);
+      console.log("error", error);
       //the person does not have an accout with this email - redirect to sign up
     }
   };
@@ -41,6 +41,7 @@ const Auth = ({ mode, loginText }) => {
   const onSuccess = async googleUser => {
     const { name, email, imageUrl, idToken } = googleUser;
     console.log("onSuccess", name, email, imageUrl, idToken);
+    // const client = getClient(idToken);
     const client = getClient(idToken);
     if (mode === "SIGNUP") {
       await signup(client);

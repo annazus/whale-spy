@@ -72,9 +72,9 @@ input UpdatePinInput {
   image: String
 }
 type Subscription {
-  pinAdded: Pin
-  pinDeleted: Pin
-  pinUpdated: Pin
-  commentAdded: Comment
+  pinAdded: Pin!
+  pinDeleted: Pin!
+  pinUpdated: Pin!
+  commentAdded(pinId: ID!): Comment!
 }
 scalar Date

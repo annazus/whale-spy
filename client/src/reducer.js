@@ -16,6 +16,17 @@ const reducer = (state = {}, action) => {
           comments: comments.concat(action.payload.comment)
         }
       };
+    case actionTypes.ON_COMMENT_ADDED:
+      let comments1 = state.currentPin.comments;
+      if (!comments1) comments1 = [];
+      return {
+        ...state,
+        isLoading: false,
+        currentPin: {
+          ...state.currentPin,
+          comments: comments1.concat(action.payload.comment)
+        }
+      };
     case actionTypes.CREATE_DRAFT_PIN:
       return {
         ...state,
@@ -74,6 +85,33 @@ const reducer = (state = {}, action) => {
         currentPin: null,
         draftPin: null
       };
+    case actionTypes.ON_PIN_ADDED:
+      pins = state.pins;
+      newPins = state.pins.concat(action.payload.pin);
+      return {
+        ...state,
+        isLoading: false,
+        pins: newPins,
+        currentPin: null,
+        draftPin: null
+      };
+    case actionTypes.ON_PIN_UPDATED:
+      const updatedPin1 = action.payload.pin;
+      const oldPinList1 = state.pins;
+      const tempPinList1 = oldPinList1.filter(pin => pin.id !== updatedPin1.id);
+
+      const newPinList1 = tempPinList1.concat(updatedPin1);
+      return {
+        ...state,
+        isLoading: false,
+        pins: newPinList1,
+        currentPin: null,
+        draftPin: null
+      };
+    case actionTypes.ON_PIN_DELETED:
+      const pinIdDeleted = action.payload.pinId;
+      const newPins1 = state.pins.filter(pin => pin.id !== pinIdDeleted);
+      return { ...state, isLoading: false, pins: newPins1, currentPin: null };
     case actionTypes.SAVE_CURRENT_PIN:
       const updatedPin = action.payload.pin;
       const oldPinList = state.pins;

@@ -2,7 +2,7 @@ import { ApolloServer, gql } from "apollo-server";
 import fs from "fs";
 import * as resolvers from "./resolvers";
 
-const GraphQLServerStart = async db => {
+const GraphQLServerStart = async (db, pubsub) => {
   const typeDefs = gql`
     ${fs.readFileSync("./schema.graphql", "utf8")}
   `;
@@ -10,9 +10,9 @@ const GraphQLServerStart = async db => {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: ({ req }) => {
-      console.log(db, db);
-      return { req, db };
+    context: ({ req, connection }) => {
+      if (req) return { req, db, pubsub };
+      else return { db, pubsub };
     }
   });
   server

@@ -6,6 +6,8 @@ import ApolloClient from "apollo-boost";
 import { GRAPHQL_SERVER_URL } from "../graphql/client";
 import { actionTypes } from "../actions";
 import { QUERY_COMMENTS } from "../graphql/definitions/queries";
+import { COMMENT_ADDED_SUBSCRIPTION } from "../graphql/definitions/subscription";
+import { Subscription } from "react-apollo";
 const CommentsContainer = () => {
   const { state, dispatch } = useContext(Context);
   useEffect(() => {
@@ -39,6 +41,18 @@ const CommentsContainer = () => {
       {state.currentPin.comments ? (
         <CommentsList commentsList={state.currentPin.comments} />
       ) : null}
+      <Subscription
+        subscription={COMMENT_ADDED_SUBSCRIPTION}
+        variables={{ pinId: state.currentPin.id }}
+        onSubscriptionData={({ subscriptionData }) => {
+          console.log("subcomment", subscriptionData);
+          const { commentAdded } = subscriptionData.data;
+          dispatch({
+            type: actionTypes.ON_COMMENT_ADDED,
+            payload: { comment: commentAdded }
+          });
+        }}
+      />
     </div>
   );
 };
