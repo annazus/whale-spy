@@ -14,11 +14,11 @@ export const GRAPHQL_SUBSERVER_URL = `ws://${process.env.REACT_APP_HOST}
 :4000/graphql`;
 
 const httpLink = new createHttpLink({
-  uri: "http://localhost:4000" // use https for secure endpoint
+  uri: GRAPHQL_SERVER_URL // use https for secure endpoint
 });
 
 const wsLink = new WebSocketLink({
-  uri: "ws://localhost:4000/graphql",
+  uri: GRAPHQL_SUBSERVER_URL,
   options: {
     reconnect: true
   }
