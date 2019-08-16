@@ -26,3 +26,8 @@
   align-items: center;
   width: 100%;
 }
+.Footer {
+  height: 75px;
+  width: 100%;
+  background-color: #def3f6;
+}

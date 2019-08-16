@@ -5,9 +5,19 @@ const reducer = (state = {}, action) => {
   let pins = [];
   let newPins = [];
   switch (action.type) {
+        case actionTypes.ADDING_MODE:
+
+      return {
+        ...state,
+        addingMode: true,
+
+      };
     case actionTypes.CREATE_COMMENT:
       let comments = state.currentPin.comments;
+
       if (!comments) comments = [];
+      if (comments.find(comment => comment.id === action.payload.comment.id))
+        return state;
       return {
         ...state,
         isLoading: false,
@@ -18,7 +28,10 @@ const reducer = (state = {}, action) => {
       };
     case actionTypes.ON_COMMENT_ADDED:
       let comments1 = state.currentPin.comments;
+
       if (!comments1) comments1 = [];
+      if (comments1.find(comment => comment.id === action.payload.comment.id))
+        return state;
       return {
         ...state,
         isLoading: false,
@@ -45,7 +58,8 @@ const reducer = (state = {}, action) => {
       newPins = state.pins.filter(pin => pin.id !== state.currentPin.id);
       return { ...state, isLoading: false, pins: newPins, currentPin: null };
     case actionTypes.DISCARD_DRAFT:
-      return { ...state, draftPin: null };
+      return { ...state, draftPin: null,addingMode:false };
+
     case actionTypes.DISCARD_CURRENT_PIN_CHANGES:
       return { ...state, currentPin: null };
 
@@ -77,16 +91,19 @@ const reducer = (state = {}, action) => {
       return { ...state, isLoading: true };
     case actionTypes.SAVE_DRAFT_AS_PIN:
       pins = state.pins;
+      if (pins.find(pin => pin.id === action.payload.pin.id)) return state;
       newPins = state.pins.concat(action.payload.pin);
       return {
         ...state,
         isLoading: false,
         pins: newPins,
         currentPin: null,
-        draftPin: null
+        draftPin: null,
+        addingMode:false
       };
     case actionTypes.ON_PIN_ADDED:
       pins = state.pins;
+      if (pins.find(pin => pin.id === action.payload.pin.id)) return state;
       newPins = state.pins.concat(action.payload.pin);
       return {
         ...state,

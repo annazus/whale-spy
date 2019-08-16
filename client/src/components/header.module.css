@@ -5,7 +5,8 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background: #efefef;
+  background: #76b6c4;
+  height: 80px;
 }
 
 .AuthMenu {

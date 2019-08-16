@@ -1,0 +1,18 @@
+.logoBlock {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: 15px;
+}
+.logo {
+  display: block;
+  text-indent: -9999px;
+  width: 40px;
+  height: 40px;
+}
+.heading {
+  margin-left: 5px;
+  color: #064273;
+  font-size: 0.9em;
+}

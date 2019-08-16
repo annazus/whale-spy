@@ -10,13 +10,14 @@ const PinContent = () => {
   const client = useAuthenticatedClient();
   const handlePinSubmit = async fileUploadWidget => {
     const pinUrl = await fileUploadWidget.current.uploadToCloudinary();
+    console.log("draftPin",state.draftPin)
     const variables = {
       image: pinUrl,
       title: state.draftPin.title,
       content: state.draftPin.content,
       latitude: state.draftPin.latitude,
       longitude: state.draftPin.longitude,
-      dateSpotted: state.draftPin.dateSpotted.getTime()
+      dateSpotted: state.draftPin.dateSpotted
     };
     const newPin = await client.mutate({
       mutation: MUTATION_CREATE_PIN,

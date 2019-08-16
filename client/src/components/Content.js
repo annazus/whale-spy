@@ -6,13 +6,13 @@ import { Context } from "../Context";
 import PinContent from "./Pin/PinContent";
 import UpdatePin from "./Pin/UpdatePin";
 import CommentsContainer from "./CommentsContainer";
-
 const Content = () => {
   const { state, dispatch } = useContext(Context);
 
   return (
     <div className={classNames.Content}>
       <Header />
+
       <div className={classNames.ContentAppContainer}>
         {state.showComments ? (
           <CommentsContainer />
@@ -24,6 +24,7 @@ const Content = () => {
 
         <Map />
       </div>
+      <div className={classNames.Footer} />
     </div>
   );
 };

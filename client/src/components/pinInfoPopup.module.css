@@ -1,0 +1,43 @@
+.pinInfo {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 200px;
+  height: 120px;
+  z-index:9999;
+}
+.pinInfoData {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-left: 10px;
+}
+
+.thumbNail {
+  height: 60px;
+  width: 60px;
+}
+
+.label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 0.8em;
+}
+.value {
+  font-size: 0.8em;
+  margin-bottom: 5px;
+}
+
+.showDetail {
+  margin-left: 10px;
+  font-size: 1.2em;
+  font-weight: bold;
+  align-self: center;
+  text-decoration: none;
+}
+a:hover {
+  cursor: pointer;
+  color: red;
+}

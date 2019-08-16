@@ -1,19 +1,20 @@
 import React from "react";
 import LogoImage from "./whaleIcon.svg";
+import styles from "./logo.module.css";
 const Logo = () => {
   const logoStyle = {
-    display: "block",
-    textIndent: "-9999px",
-    width: "60px",
-    height: "60px",
     background: `url(${LogoImage})`,
-    backgroundSize: "60px 60px",
-    margin: "5px"
+    backgroundSize: "40px 40px"
   };
   return (
-    <a href="/" style={logoStyle}>
-      Whale Spy
-    </a>
+    <>
+      <div className={styles.logoBlock}>
+        <a href="/" className={styles.logo} style={logoStyle}>
+          Whale Spy
+        </a>
+        <h4 className={styles.heading}>Whale Spy</h4>
+      </div>
+    </>
   );
 };
 

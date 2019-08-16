@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect } from "react";
-import ApolloClient from "apollo-boost";
 import ReactMapGL, {
   GeolocateControl,
   Marker,
@@ -8,6 +7,9 @@ import ReactMapGL, {
   NavigationControl
 } from "react-map-gl";
 import { ReactComponent as WhaleIcon } from "../whaleIcon.svg";
+import { ReactComponent as DraftWhaleIcon } from "../draftWhaleIcon.svg";
+import RoundButton from "./RoundButton/RoundButton";
+import classNames from "./map.module.css";
 import { Context } from "../Context";
 import { actionTypes } from "../actions";
 import { QUERY_PINS } from "../graphql/definitions/queries";
@@ -16,10 +18,10 @@ import {
   PIN_DELETED_SUBSCRIPTION,
   PIN_UPDATED_SUBSCRIPTION
 } from "../graphql/definitions/subscription";
-
+import CityPin from "./CityPin";
 import { GRAPHQL_SERVER_URL, getClient } from "../graphql/client";
 import { Subscription, useSubscription } from "react-apollo";
-import PinInfo from "./PinInfo";
+import PinInfoPopup from "./PinInfoPopup";
 const style = {};
 const fullscreenControlStyle = {
   position: "absolute",
@@ -43,14 +45,19 @@ const geoLocateStyle = {
 
 const whaleIconStyle = {
   width: "20px",
-  height: "20px"
+  height: "20px",
+  color: "red",
+  zIndex:"0"
 };
 const Map = () => {
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupPin, setPopupPin] = useState(null);
+
   const { state, dispatch } = useContext(Context);
 
   const initialViewport = {
     width: "100%",
-    height: 600,
+    height: "100%",
     latitude: 47.7237,
     longitude: -122.4713,
     zoom: 12
@@ -83,10 +90,37 @@ const Map = () => {
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
+
+  const showSelectedPin= (pin) => {
+    console.log(pin)
+                dispatch({
+                  type: actionTypes.SET_CURRENT_PIN,
+                  payload: { currentPin: pin }
+                });
+  }
+  const onNewPinClicked = () => {
+    console.log(viewport)
+                setShowPopup(false);
+            setPopupPin(null);
+    dispatch({type:actionTypes.ADDING_MODE});
+    dispatch({
+        type: actionTypes.CREATE_DRAFT_PIN,
+        payload: {
+          draftPin: {
+            ...state.draftPin,
+            dateSpotted : Date.now(),
+            longitude: viewport.longitude,
+            latitude: viewport.latitude
+          }
+        }
+      });
+  }
   const clickHandler = ({ lngLat, type, target }) => {
+    
     console.log(target);
     console.log(target.nodeName);
     if (!state.isAuth) return;
+    if (!state.addingMode) return;
     if (target.nodeName === "BUTTON") return;
     dispatch({
       type: actionTypes.CREATE_DRAFT_PIN,
@@ -106,15 +140,17 @@ const Map = () => {
       <Popup
         tipSize={5}
         anchor="top"
-        longitude={state.currentPin.longitude}
-        latitude={state.currentPin.latitude}
+        longitude={popupPin.longitude}
+        latitude={popupPin.latitude}
         closeOnClick={false}
-        onClose={() => dispatch({ type: actionTypes.UNSELECT_CURRENT_PIN })}
+        onClose={() => {
+          setShowPopup(false);
+          setPopupPin(null);
+
+          // dispatch({ type: actionTypes.UNSELECT_CURRENT_PIN });
+        }}
       >
-        <PinInfo
-          title={state.currentPin.title}
-          imageUrl={state.currentPin.imageUrl}
-        />
+        <PinInfoPopup pin={popupPin} clickHandler = {showSelectedPin}/>
       </Popup>
     );
   };
@@ -152,40 +188,47 @@ const Map = () => {
         draggable={draggable}
         onDragEnd={onDragEndHandler}
       >
+
         <div
           onClick={() => {
-            pin &&
-              dispatch({
-                type: actionTypes.SET_CURRENT_PIN,
-                payload: { currentPin: pin }
-              });
+            if (state.addingMode ) return;
+            setShowPopup(true);
+            setPopupPin(pin);
+
           }}
+          style = {{zIndex:"-3"}}
         >
-          <WhaleIcon style={whaleIconStyle} />
+          {draggable ? (
+            <DraftWhaleIcon style={whaleIconStyle} />
+          ) : (
+            <WhaleIcon style={whaleIconStyle}/>
+          )}
         </div>
       </Marker>
     );
   };
   return (
-    <>
+    <div className={classNames.Map}>
       <ReactMapGL
         {...viewport}
         style={{ width: "100%" }}
-        onViewportChange={viewport => setViewport(viewport)}
+        onViewportChange={viewport => {setViewport(viewport);console.log(viewport)}}
         mapboxApiAccessToken={process.env.REACT_APP_MAP_TOKEN}
         onClick={clickHandler}
         mapStyle={process.env.REACT_APP_MAP_LAYER}
       >
-        {state.currentPin ? renderPopup() : null}
         <GeolocateControl
           style={geoLocateStyle}
           positionOptions={{ enableHighAccuracy: true }}
           trackUserLocation={true}
+        onViewportChange={viewport => {setViewport(viewport);console.log(viewport)}}
         />
         {state.draftPin
           ? markerRender({ ...state.draftPin, draggable: true })
           : null}
         {state.pins.map(pin => markerRender({ pin, ...pin, draggable: false }))}
+                {showPopup ? renderPopup(popupPin) : null}
+
         <div style={fullscreenControlStyle}>
           <FullscreenControl />
           <div className="nav" style={navStyle}>
@@ -193,6 +236,13 @@ const Map = () => {
           </div>
         </div>
       </ReactMapGL>
+      {state.isAuth && !state.draftPin? (
+        <div className={classNames.NewButton} >
+          <RoundButton clickHandler={onNewPinClicked} >
+            <p>+</p>
+          </RoundButton>
+        </div>
+      ) : null}
       {/* Subscriptions for Creating / Updating / Deleting Pins */}
       <Subscription
         subscription={PIN_ADDED_SUBSCRIPTION}
@@ -224,7 +274,7 @@ const Map = () => {
           });
         }}
       />
-    </>
+    </div>
   );
 };
 
