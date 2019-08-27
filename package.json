@@ -4,6 +4,8 @@
   "description": "Report whale sightings in the Puget Sound",
   "main": "index.js",
   "scripts": {
+    "start": "node dist/index.js",
+    "heroku-postbuild": "babel src --out-dir dist --copy-files",
     "dev": "env-cmd -f config/dev.env nodemon --exec babel-node index.js",
     "test": "env-cmd -f config/test.env jest --watch --runInBand"
   },
