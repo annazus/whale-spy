@@ -26,7 +26,7 @@ const Auth = ({ mode, loginText }) => {
     let result;
     try {
       result = await client.query({ query: QUERY_ME });
-      console.log(result.data.me);
+      console.log("me", result.data.me);
       dispatch({
         type: actionTypes.LOGIN_USER,
         payload: { user: result.data.me }

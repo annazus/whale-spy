@@ -7,7 +7,7 @@ const getUserInfo = async req => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) throw new AuthenticationError("User has not logged in.");
-
+    console.log("authHeader", authHeader);
     const idToken = authHeader.replace("Bearer ", "");
     const ticket = await client.verifyIdToken({
       idToken,
@@ -17,7 +17,7 @@ const getUserInfo = async req => {
     if (!googleUser) throw new AuthenticationError("Google returned error");
     return googleUser;
   } catch (error) {
-    console.log(error);
+    console.log("Google returning funny");
     throw new AuthenticationError("User has not logged in.");
   }
 };
