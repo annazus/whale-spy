@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "heroku-postbuild": "babel src --out-dir dist --copy-files",
+    "heroku-postbuild": "babel . --out-dir dist --copy-files --ignore node_modules/,client/",
     "dev": "env-cmd -f config/dev.env nodemon --exec babel-node index.js",
     "test": "env-cmd -f config/test.env jest --watch --runInBand"
   },
@@ -39,13 +39,11 @@
     "sequelize": "^5.10.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.5.0",
-    "@babel/core": "^7.5.4",
-    "@babel/node": "^7.5.0",
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
     "@babel/polyfill": "^7.4.4",
-    "@babel/preset-env": "^7.5.4",
+    "@babel/preset-env": "^7.5.5",
     "apollo-boost": "^0.4.3",
-    "babel-preset-env": "^1.7.0",
     "cross-fetch": "^3.0.4",
     "graphql": "^14.4.2"
   }
