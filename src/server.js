@@ -4,7 +4,7 @@ import * as resolvers from "./resolvers";
 
 const GraphQLServerStart = async (db, pubsub) => {
   const typeDefs = gql`
-    ${fs.readFileSync("./schema.graphql", "utf8")}
+    ${fs.readFileSync("src/schema.graphql", "utf8")}
   `;
 
   const server = new ApolloServer({
