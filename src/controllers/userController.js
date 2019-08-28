@@ -13,6 +13,7 @@ const getUserInfo = async req => {
       idToken,
       audience: process.env.GOOGLE_CLIENT_ID
     });
+    console.log(ticket);
     const googleUser = ticket.getPayload();
     if (!googleUser) throw new AuthenticationError("Google returned error");
     return googleUser;
