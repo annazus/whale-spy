@@ -9,6 +9,7 @@ const getUserInfo = async req => {
     if (!authHeader) throw new AuthenticationError("User has not logged in.");
     console.log("authHeader", authHeader);
     const idToken = authHeader.replace("Bearer ", "");
+    console.log("CLIENT_ID", process.env.GOOGLE_CLIENT_ID);
     const ticket = await client.verifyIdToken({
       idToken,
       audience: process.env.GOOGLE_CLIENT_ID
