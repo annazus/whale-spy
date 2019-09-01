@@ -24,7 +24,7 @@ class FileUpload extends Component {
       });
   };
 
-  discardData = () => {
+  cardData = () => {
     this.setState({ fileToUpload: "", url: "" });
   };
 

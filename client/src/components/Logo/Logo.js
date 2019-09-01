@@ -4,17 +4,12 @@ import styles from "./logo.module.css";
 const Logo = () => {
   const logoStyle = {
     background: `url(${LogoImage})`,
-    backgroundSize: "40px 40px"
+    backgroundSize: "45px 45px"
   };
   return (
-    <>
-      <div className={styles.logoBlock}>
-        <a href="/" className={styles.logo} style={logoStyle}>
-          Whale Spy
-        </a>
-        <h4 className={styles.heading}>Whale Spy</h4>
-      </div>
-    </>
+    <a href="/" className={styles.logo} style={logoStyle}>
+      Whale Spy
+    </a>
   );
 };
 

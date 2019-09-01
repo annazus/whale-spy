@@ -1,19 +1,52 @@
 import React, { createRef, useState, useEffect } from "react";
-import FileUpload from "../FileUpload";
-import classNames from "./pin.module.css";
-import DateTimePicker from "react-datetime-picker";
+import { makeStyles } from "@material-ui/core";
 
-import {
-  SaveIcon,
-  DiscardIcon,
-  LocationIcon,
-  TimeIcon,
-  ImageIcon
-} from "../ProjectIcons";
+import IconButton from "@material-ui/core/IconButton";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
+import LocationOnIcon from "@material-ui/icons/LocationOn";
+import CloseIcon from "@material-ui/icons/Close";
+import DoneIcon from "@material-ui/icons/Done";
 
-const Image = ({ imageUrl }) => (
-  <img src={imageUrl} alt="something" className={classNames.Image} />
-);
+import InputImage from "../Inputs/ImageInput";
+import DateTimeInput from "../Inputs/DateTimeInput";
+
+const formatDate = d => {
+  const a = new Date(d).toLocaleString();
+  console.log(a);
+  return a;
+};
+
+const useStyles = makeStyles(theme => ({
+  container: {
+    padding: theme.spacing(2),
+    position: "relative"
+  },
+  imageContainer: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: theme.spacing(2)
+  },
+  closeButton: {
+    position: "absolute",
+    top: 0,
+    right: 0
+  },
+  done: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: theme.spacing(2)
+  },
+  rightIcon: {
+    marginLeft: theme.spacing(1)
+  }
+}));
 
 const Pin = ({
   mode,
@@ -24,91 +57,86 @@ const Pin = ({
   imageUrl
 }) => {
   const [isDisabled, setIsDisabled] = useState(false);
-
+  const classes = useStyles();
   useEffect(() => {
     setIsDisabled(!(pin.title && pin.content && pin.dateSpotted && pin.image));
     console.log(isDisabled);
   }, [isDisabled, pin.content, pin.dateSpotted, pin.image, pin.title]);
   const fileUploadWidget = createRef();
 
+  console.log("dateSpotted", pin.dateSpotted, pin.dateSpotted.toLocaleString());
   return (
-    <form
-      onSubmit={e => {
-        e.preventDefault();
-        handleSaveClick(fileUploadWidget);
-      }}
-      className={classNames.PinForm}
-    >
-      <div className={classNames.Row}>
-        <div className={classNames.FileUploadButton}>
-          <FileUpload ref={fileUploadWidget} changeHandler={handleOnChange}>
-            <ImageIcon />
-          </FileUpload>
-        </div>
-      </div>
-      <div className={classNames.Row}>
-        {imageUrl ? <Image imageUrl={imageUrl} /> : null}
-      </div>
+    <Paper className={classes.container}>
+      <IconButton onClick={handleDiscardClick} className={classes.closeButton}>
+        <CloseIcon></CloseIcon>
+      </IconButton>
 
-      <div className={classNames.Row}>
-        <div className={classNames.ColumnLabel}>
-          <LocationIcon />
+      <form
+        onSubmit={e => {
+          e.preventDefault();
+          handleSaveClick(fileUploadWidget);
+        }}
+      >
+        <div className={classes.imageContainer}>
+          <InputImage
+            onChange={handleOnChange}
+            imageUrl={pin.image}
+          ></InputImage>
         </div>
-        <span className={classNames.Value}>{`${pin.latitude.toFixed(
-          4
-        )}, ${pin.longitude.toFixed(4)}`}</span>
-      </div>
-      <div className={classNames.Row}>
-        <div className={classNames.ColumnLabel} />
-        <input
-          type="text"
+
+        <div>
+          <LocationOnIcon />
+          <Typography
+            variant="subtitle1"
+            component="span"
+          >{`${pin.latitude.toFixed(4)}, ${pin.longitude.toFixed(
+            4
+          )}`}</Typography>
+        </div>
+        <TextField
           value={pin.title}
           name="title"
           onChange={handleOnChange}
           placeholder="Add title"
-          className={classNames.Text}
-        />
-      </div>
-      <div className={classNames.Row}>
-        <div className={classNames.ColumnLabel} />
-        <textarea
-          rows="4"
-          name="content"
+          variant="standard"
+          margin="normal"
+          fullWidth
+        ></TextField>
+        <TextField
           placeholder="Add description"
-          value={pin.content}
+          multiline
+          variant="standard"
           onChange={handleOnChange}
-          className={classNames.TextArea}
-        />
-      </div>
-      <div className={classNames.Row}>
-        <div className={classNames.ColumnLabel}>
-          <TimeIcon />
-        </div>
-        <DateTimePicker
-          className={classNames.Time}
-          value={pin.dateSpotted}
+          name="content"
+          value={pin.content}
+          margin="normal"
+          fullWidth
+        ></TextField>
+        <DateTimeInput
+          label="Date Spotted"
+          value={formatDate(pin.dateSpotted)}
           onChange={date => {
             const e = { target: { name: "dateSpotted", value: date } };
             handleOnChange(e);
           }}
-        />
-      </div>
-      <div className={classNames.Row}>
-        <button
-          onSubmit={e => {
-            e.preventDefault();
-            handleSaveClick(fileUploadWidget);
-          }}
-          className={classNames.SaveButton}
-          disabled={isDisabled}
-        >
-          <SaveIcon style={{ backgroundColor: "#0000ff" }} />
-        </button>
-        <button onClick={handleDiscardClick}>
-          <DiscardIcon />
-        </button>
-      </div>
-    </form>
+        ></DateTimeInput>
+
+        <div className={classes.done}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={e => {
+              e.preventDefault();
+              handleSaveClick(fileUploadWidget);
+            }}
+            disabled={isDisabled}
+          >
+            Done
+            <DoneIcon color="white" className={classes.rightIcon} />
+          </Button>
+        </div>
+      </form>
+    </Paper>
   );
 };
 export default Pin;

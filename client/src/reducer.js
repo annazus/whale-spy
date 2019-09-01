@@ -5,12 +5,10 @@ const reducer = (state = {}, action) => {
   let pins = [];
   let newPins = [];
   switch (action.type) {
-        case actionTypes.ADDING_MODE:
-
+    case actionTypes.ADDING_MODE:
       return {
         ...state,
-        addingMode: true,
-
+        addingMode: true
       };
     case actionTypes.CREATE_COMMENT:
       let comments = state.currentPin.comments;
@@ -58,7 +56,7 @@ const reducer = (state = {}, action) => {
       newPins = state.pins.filter(pin => pin.id !== state.currentPin.id);
       return { ...state, isLoading: false, pins: newPins, currentPin: null };
     case actionTypes.DISCARD_DRAFT:
-      return { ...state, draftPin: null,addingMode:false };
+      return { ...state, draftPin: null, addingMode: false };
 
     case actionTypes.DISCARD_CURRENT_PIN_CHANGES:
       return { ...state, currentPin: null };
@@ -99,7 +97,7 @@ const reducer = (state = {}, action) => {
         pins: newPins,
         currentPin: null,
         draftPin: null,
-        addingMode:false
+        addingMode: false
       };
     case actionTypes.ON_PIN_ADDED:
       pins = state.pins;
@@ -147,13 +145,15 @@ const reducer = (state = {}, action) => {
       return {
         ...state,
         draftPin: null,
-        currentPin: action.payload.currentPin
+        currentPin: action.payload.currentPin,
+        showComments: false
       };
     case actionTypes.UNSELECT_CURRENT_PIN:
       return {
         ...state,
         draftPin: null,
-        currentPin: null
+        currentPin: null,
+        showComments: false
       };
     case actionTypes.SIGNOUT_USER:
       return { ...state, isAuth: false, isLoading: false };

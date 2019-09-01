@@ -3,13 +3,13 @@ import ReactMapGL, {
   GeolocateControl,
   Marker,
   Popup,
-  FullscreenControl,
   NavigationControl
 } from "react-map-gl";
+import { makeStyles } from "@material-ui/core";
+
 import { ReactComponent as WhaleIcon } from "../whaleIcon.svg";
 import { ReactComponent as DraftWhaleIcon } from "../draftWhaleIcon.svg";
-import RoundButton from "./RoundButton/RoundButton";
-import classNames from "./map.module.css";
+import NewButton from "./NewButton";
 import { Context } from "../Context";
 import { actionTypes } from "../actions";
 import { QUERY_PINS } from "../graphql/definitions/queries";
@@ -23,41 +23,43 @@ import { GRAPHQL_SERVER_URL, getClient } from "../graphql/client";
 import { Subscription, useSubscription } from "react-apollo";
 import PinInfoPopup from "./PinInfoPopup";
 const style = {};
-const fullscreenControlStyle = {
-  position: "absolute",
-  top: 0,
-  left: 0,
-  padding: "10px"
-};
-const navStyle = {
-  position: "absolute",
-  top: 36,
-  left: 0,
-  padding: "10px"
-};
 
-const geoLocateStyle = {
-  position: "absolute",
-  top: 0,
-  right: 0,
-  margin: 10
-};
+const useStyles = makeStyles(t => ({
+  root: {},
+  newPin: { position: "absolute", right: t.spacing(2), bottom: t.spacing(2) },
 
-const whaleIconStyle = {
-  width: "20px",
-  height: "20px",
-  color: "red",
-  zIndex:"0"
-};
+  navStyle: {
+    margin: t.spacing(1),
+
+    position: "absolute",
+    top: 0,
+    left: 0
+  },
+
+  geoLocateStyle: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    margin: t.spacing(1)
+  },
+
+  whaleIconStyle: {
+    width: "20px",
+    height: "20px",
+    color: "red",
+    zIndex: "0"
+  }
+}));
+
 const Map = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [popupPin, setPopupPin] = useState(null);
 
   const { state, dispatch } = useContext(Context);
-
+  const classes = useStyles();
   const initialViewport = {
+    height: window.innerHeight,
     width: "100%",
-    height: "100%",
     latitude: 47.7237,
     longitude: -122.4713,
     zoom: 12
@@ -91,32 +93,33 @@ const Map = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
-  const showSelectedPin= (pin) => {
-    console.log(pin)
-                dispatch({
-                  type: actionTypes.SET_CURRENT_PIN,
-                  payload: { currentPin: pin }
-                });
-  }
-  const onNewPinClicked = () => {
-    console.log(viewport)
-                setShowPopup(false);
-            setPopupPin(null);
-    dispatch({type:actionTypes.ADDING_MODE});
+  const showSelectedPin = pin => {
+    console.log(pin);
+    setShowPopup(false);
+
     dispatch({
-        type: actionTypes.CREATE_DRAFT_PIN,
-        payload: {
-          draftPin: {
-            ...state.draftPin,
-            dateSpotted : Date.now(),
-            longitude: viewport.longitude,
-            latitude: viewport.latitude
-          }
+      type: actionTypes.SET_CURRENT_PIN,
+      payload: { currentPin: pin }
+    });
+  };
+  const onNewPinClicked = () => {
+    console.log(viewport);
+    setShowPopup(false);
+    setPopupPin(null);
+    dispatch({ type: actionTypes.ADDING_MODE });
+    dispatch({
+      type: actionTypes.CREATE_DRAFT_PIN,
+      payload: {
+        draftPin: {
+          ...state.draftPin,
+          dateSpotted: Date.now(),
+          longitude: viewport.longitude,
+          latitude: viewport.latitude
         }
-      });
-  }
+      }
+    });
+  };
   const clickHandler = ({ lngLat, type, target }) => {
-    
     console.log(target);
     console.log(target.nodeName);
     if (!state.isAuth) return;
@@ -135,6 +138,21 @@ const Map = () => {
     });
   };
 
+  const closeHandler = () => {
+    setShowPopup(false);
+    setPopupPin(null);
+  };
+
+  const showComments = pin => {
+    setShowPopup(false);
+
+    dispatch({
+      type: actionTypes.SET_CURRENT_PIN,
+      payload: { currentPin: pin }
+    });
+    dispatch({ type: actionTypes.SHOW_COMMENTS });
+  };
+
   const renderPopup = () => {
     return (
       <Popup
@@ -143,14 +161,14 @@ const Map = () => {
         longitude={popupPin.longitude}
         latitude={popupPin.latitude}
         closeOnClick={false}
-        onClose={() => {
-          setShowPopup(false);
-          setPopupPin(null);
-
-          // dispatch({ type: actionTypes.UNSELECT_CURRENT_PIN });
-        }}
+        closeButton={false}
       >
-        <PinInfoPopup pin={popupPin} clickHandler = {showSelectedPin}/>
+        <PinInfoPopup
+          pin={popupPin}
+          showMoreHandler={showSelectedPin}
+          commentsHandler={showComments}
+          closeHandler={closeHandler}
+        />
       </Popup>
     );
   };
@@ -188,59 +206,66 @@ const Map = () => {
         draggable={draggable}
         onDragEnd={onDragEndHandler}
       >
-
         <div
           onClick={() => {
-            if (state.addingMode ) return;
+            if (state.addingMode) return;
+
             setShowPopup(true);
             setPopupPin(pin);
 
+            dispatch({
+              type: actionTypes.UNSELECT_CURRENT_PIN
+            });
+            dispatch({ type: actionTypes.HIDE_COMMENTS });
           }}
-          style = {{zIndex:"-3"}}
+          style={{ zIndex: "-3" }}
         >
           {draggable ? (
-            <DraftWhaleIcon style={whaleIconStyle} />
+            <DraftWhaleIcon className={classes.whaleIconStyle} />
           ) : (
-            <WhaleIcon style={whaleIconStyle}/>
+            <WhaleIcon className={classes.whaleIconStyle} />
           )}
         </div>
       </Marker>
     );
   };
   return (
-    <div className={classNames.Map}>
+    <>
       <ReactMapGL
         {...viewport}
         style={{ width: "100%" }}
-        onViewportChange={viewport => {setViewport(viewport);console.log(viewport)}}
+        onViewportChange={viewport => {
+          setViewport(viewport);
+          console.log(viewport);
+        }}
         mapboxApiAccessToken={process.env.REACT_APP_MAP_TOKEN}
         onClick={clickHandler}
         mapStyle={process.env.REACT_APP_MAP_LAYER}
       >
         <GeolocateControl
-          style={geoLocateStyle}
+          className={classes.geoLocateStyle}
           positionOptions={{ enableHighAccuracy: true }}
           trackUserLocation={true}
-        onViewportChange={viewport => {setViewport(viewport);console.log(viewport)}}
+          onViewportChange={viewport => {
+            setViewport(viewport);
+            console.log(viewport);
+          }}
         />
         {state.draftPin
           ? markerRender({ ...state.draftPin, draggable: true })
           : null}
         {state.pins.map(pin => markerRender({ pin, ...pin, draggable: false }))}
-                {showPopup ? renderPopup(popupPin) : null}
+        {showPopup ? renderPopup(popupPin) : null}
 
-        <div style={fullscreenControlStyle}>
-          <FullscreenControl />
-          <div className="nav" style={navStyle}>
+        <div className={classes.fullscreenControlStyle}>
+          <div className={classes.navStyle}>
             <NavigationControl />
           </div>
         </div>
       </ReactMapGL>
-      {state.isAuth && !state.draftPin? (
-        <div className={classNames.NewButton} >
-          <RoundButton clickHandler={onNewPinClicked} >
-            <p>+</p>
-          </RoundButton>
+      {state.isAuth && !state.draftPin ? (
+        <div className={classes.newPin}>
+          <NewButton onClick={onNewPinClicked}></NewButton>
         </div>
       ) : null}
       {/* Subscriptions for Creating / Updating / Deleting Pins */}
@@ -274,7 +299,7 @@ const Map = () => {
           });
         }}
       />
-    </div>
+    </>
   );
 };
 

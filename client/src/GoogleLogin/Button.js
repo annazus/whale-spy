@@ -14,10 +14,10 @@ const Button = ({ text, clickHandler, disabled }) => {
     margin: "0px",
     boxShadow: "0 2px 2px 0 rgba(0, 0, 0, .24), 0 0 1px 0 rgba(0, 0, 0, .24)",
     border: "1px solid transparent",
-    width: "100px",
+    width: "90px",
     position: "relative",
     tabIndex: 0,
-    marginRight: "10px"
+    marginRight: "5px"
   };
 
   const activeButtonStyle = {
