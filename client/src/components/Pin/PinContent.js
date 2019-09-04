@@ -21,6 +21,7 @@ const PinContent = () => {
         longitude: state.draftPin.longitude,
         dateSpotted: state.draftPin.dateSpotted
       };
+      console.log(variables);
       const newPin = await client.mutate({
         mutation: MUTATION_CREATE_PIN,
         variables

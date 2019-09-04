@@ -1,4 +1,9 @@
 import React, { useEffect, useContext, useState } from "react";
+import { makeStyles } from "@material-ui/core";
+
+import Paper from "@material-ui/core/Paper";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 import { Context } from "../Context";
 import CommentsList from "./CommentsList";
 import NewComment from "./NewComment";
@@ -8,8 +13,18 @@ import { actionTypes } from "../actions";
 import { QUERY_COMMENTS } from "../graphql/definitions/queries";
 import { COMMENT_ADDED_SUBSCRIPTION } from "../graphql/definitions/subscription";
 import { Subscription } from "react-apollo";
+
+const useStyles = makeStyles(theme => ({
+  container: { width: "100%", position: "relative" },
+  closeButton: {
+    position: "absolute",
+    right: theme.spacing(1),
+    top: theme.spacing(1)
+  }
+}));
 const CommentsContainer = () => {
   const { state, dispatch } = useContext(Context);
+  const classes = useStyles();
   useEffect(() => {
     const getComments = async () => {
       const client = new ApolloClient({
@@ -33,10 +48,15 @@ const CommentsContainer = () => {
   }, [dispatch, state.currentPin.id]);
   const closeComments = () => {
     dispatch({ type: actionTypes.HIDE_COMMENTS });
+    dispatch({ type: actionTypes.UNSELECT_CURRENT_PIN });
   };
+
   return (
-    <div>
-      <button onClick={closeComments}>Close Comments</button>
+    <Paper className={classes.container}>
+      <IconButton onClick={closeComments} className={classes.closeButton}>
+        <CloseIcon></CloseIcon>
+      </IconButton>
+
       {state.isAuth ? <NewComment /> : null}
       {state.currentPin.comments ? (
         <CommentsList commentsList={state.currentPin.comments} />
@@ -53,7 +73,7 @@ const CommentsContainer = () => {
           });
         }}
       />
-    </div>
+    </Paper>
   );
 };
 

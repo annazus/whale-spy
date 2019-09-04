@@ -22,11 +22,10 @@ import CityPin from "./CityPin";
 import { GRAPHQL_SERVER_URL, getClient } from "../graphql/client";
 import { Subscription, useSubscription } from "react-apollo";
 import PinInfoPopup from "./PinInfoPopup";
-const style = {};
 
 const useStyles = makeStyles(t => ({
   root: {},
-  newPin: { position: "absolute", right: t.spacing(2), bottom: t.spacing(2) },
+  newPin: { position: "absolute", right: t.spacing(3), bottom: t.spacing(3) },
 
   navStyle: {
     margin: t.spacing(1),
@@ -54,19 +53,24 @@ const useStyles = makeStyles(t => ({
 const Map = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [popupPin, setPopupPin] = useState(null);
-
-  const { state, dispatch } = useContext(Context);
-  const classes = useStyles();
   const initialViewport = {
-    height: window.innerHeight,
+    height: window.innerHeight - 48,
     width: "100%",
     latitude: 47.7237,
     longitude: -122.4713,
     zoom: 12
   };
-
   const [viewport, setViewport] = useState(initialViewport);
 
+  const { state, dispatch } = useContext(Context);
+  const classes = useStyles();
+
+  useEffect(() => {
+    window.addEventListener("resize", resizeMap);
+
+    return resizeRemover;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     const getData = async () => {
       const client = getClient();
@@ -79,7 +83,7 @@ const Map = () => {
       navigator.geolocation.getCurrentPosition(
         pos => {
           setViewport({
-            ...initialViewport,
+            ...viewport,
             longitude: pos.coords.longitude,
             latitude: pos.coords.latitude
           });
@@ -93,6 +97,16 @@ const Map = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
+  const resizeMap = () => {
+    _onViewportChange({ ...viewport, height: window.innerHeight - 48 });
+  };
+  const resizeRemover = () => {
+    window.removeEventListener("resize", resizeMap);
+  };
+
+  const _onViewportChange = viewport => {
+    setViewport(viewport);
+  };
   const showSelectedPin = pin => {
     console.log(pin);
     setShowPopup(false);
@@ -124,6 +138,7 @@ const Map = () => {
     console.log(target.nodeName);
     if (!state.isAuth) return;
     if (!state.addingMode) return;
+    console.log(target.nodeName);
     if (target.nodeName === "BUTTON") return;
     dispatch({
       type: actionTypes.CREATE_DRAFT_PIN,
@@ -233,11 +248,11 @@ const Map = () => {
     <>
       <ReactMapGL
         {...viewport}
-        style={{ width: "100%" }}
-        onViewportChange={viewport => {
-          setViewport(viewport);
-          console.log(viewport);
+        style={{
+          position: "relative",
+          width: "100%"
         }}
+        onViewportChange={_onViewportChange}
         mapboxApiAccessToken={process.env.REACT_APP_MAP_TOKEN}
         onClick={clickHandler}
         mapStyle={process.env.REACT_APP_MAP_LAYER}
@@ -248,7 +263,7 @@ const Map = () => {
           trackUserLocation={true}
           onViewportChange={viewport => {
             setViewport(viewport);
-            console.log(viewport);
+            console.log("recentered", viewport);
           }}
         />
         {state.draftPin
@@ -262,12 +277,16 @@ const Map = () => {
             <NavigationControl />
           </div>
         </div>
+        {state.isAuth &&
+        !state.draftPin &&
+        !state.showComments &&
+        !state.currentPin ? (
+          <div className={classes.newPin}>
+            <NewButton onClick={onNewPinClicked}></NewButton>
+          </div>
+        ) : null}
       </ReactMapGL>
-      {state.isAuth && !state.draftPin ? (
-        <div className={classes.newPin}>
-          <NewButton onClick={onNewPinClicked}></NewButton>
-        </div>
-      ) : null}
+
       {/* Subscriptions for Creating / Updating / Deleting Pins */}
       <Subscription
         subscription={PIN_ADDED_SUBSCRIPTION}

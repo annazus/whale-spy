@@ -1,13 +1,26 @@
 import React, { useContext, useState } from "react";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
+import CheckIcon from "@material-ui/icons/Check";
+import TextField from "@material-ui/core/TextField";
+import { makeStyles } from "@material-ui/core";
 import { useAuthenticatedClient } from "../graphql/client";
 import { Context } from "../Context";
 import { actionTypes } from "../actions";
 import { MUTATION_CREATE_COMMENT } from "../graphql/definitions/mutations";
-import { StatsReport } from "apollo-engine-reporting-protobuf";
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    position: "static",
+    margin: theme.spacing(5)
+  }
+}));
 const NewComment = ({ pinId }) => {
+  const classes = useStyles();
   const client = useAuthenticatedClient();
   const { state, dispatch } = useContext(Context);
   const [comment, setComment] = useState("");
+  console.log(classes.root);
   const submitHandler = async e => {
     e.preventDefault();
 
@@ -31,18 +44,28 @@ const NewComment = ({ pinId }) => {
     setComment("");
   };
   return (
-    <form onSubmit={submitHandler}>
-      <textarea
-        cols="9"
-        rows="4"
-        value={comment}
-        onChange={e => {
-          setComment(e.target.value);
-        }}
-      />
-      <button onClick={discardHandler}>Cancel</button>
-      <button onClick={submitHandler}>Submit</button>
-    </form>
+    <div className={classes.root}>
+      <form onSubmit={submitHandler}>
+        <TextField
+          multiline
+          rows="4"
+          fullWidth
+          margin="normal"
+          placeholder="Enter Comment"
+          value={comment}
+          onChange={e => {
+            setComment(e.target.value);
+          }}
+        />
+        <IconButton onClick={submitHandler}>
+          <CheckIcon></CheckIcon>
+        </IconButton>
+
+        <IconButton onClick={discardHandler}>
+          <DeleteIcon></DeleteIcon>
+        </IconButton>
+      </form>
+    </div>
   );
 };
 

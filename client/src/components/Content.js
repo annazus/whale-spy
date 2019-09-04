@@ -24,7 +24,7 @@ const Content = () => {
           </Grid>
 
           {state.showComments ? (
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <CommentsContainer />
             </Grid>
           ) : state.draftPin && state.isAuth ? (
