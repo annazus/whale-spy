@@ -20,16 +20,21 @@ const UpdatePin = () => {
       latitude: state.currentPin.latitude,
       longitude: state.currentPin.longitude,
       image: pinUrl,
-      dateSpotted: new Date().getTime()
+      dateSpotted: state.currentPin.getTime()
     };
     const updatedPin = await client.mutate({
       mutation: MUTATON_UPDATE_PIN,
       variables
     });
-    dispatch({
-      type: actionTypes.SAVE_CURRENT_PIN,
-      payload: { pin: updatedPin.data.updatePin }
-    });
+    // dispatch({
+    //   type: actionTypes.SAVE_CURRENT_PIN,
+    //   payload: {
+    //     pin: {
+    //       ...updatedPin.data.updatePin,
+    //       dateSpotted: new Date(updatedPin.data.updatePin.dateSpotted)
+    //     }
+    //   }
+    // });
   };
 
   const onChange = event => {

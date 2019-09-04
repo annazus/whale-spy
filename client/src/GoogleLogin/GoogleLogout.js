@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import GoogleButton from "./Button";
+import Button from "@material-ui/core/Button";
 
 const loadScript = (document, scriptSrc, tagName, cb) => {
   const firstScriptTag = document.getElementsByTagName(tagName)[0];
@@ -53,7 +54,9 @@ const GoogleLogout = ({
 
   //   return <div onClick={signIn}> {loginText}</div>;
   return (
-    <GoogleButton text={logoutText} clickHandler={signOutHandler} disabled />
+    <Button onClick={signOutHandler} size="small" color="inherit">
+      {logoutText}
+    </Button>
   );
 };
 export { GoogleLogout as default };

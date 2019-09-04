@@ -19,17 +19,22 @@ const PinContent = () => {
         content: state.draftPin.content,
         latitude: state.draftPin.latitude,
         longitude: state.draftPin.longitude,
-        dateSpotted: state.draftPin.dateSpotted
+        dateSpotted: state.draftPin.dateSpotted.getTime()
       };
       console.log(variables);
       const newPin = await client.mutate({
         mutation: MUTATION_CREATE_PIN,
         variables
       });
-      dispatch({
-        type: actionTypes.SAVE_DRAFT_AS_PIN,
-        payload: { pin: newPin.data.createPin }
-      });
+      // dispatch({
+      //   type: actionTypes.SAVE_DRAFT_AS_PIN,
+      //   payload: {
+      //     pin: {
+      //       ...newPin.data.createPin,
+      //       dateSpotted: new Date(newPin.data.createPin.dateSpotted)
+      //     }
+      //   }
+      // });
       console.log(newPin);
     } catch (error) {
       console.log("error saving", error);

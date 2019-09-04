@@ -108,7 +108,7 @@ const Map = () => {
     setViewport(viewport);
   };
   const showSelectedPin = pin => {
-    console.log(pin);
+    console.log("sele", pin);
     setShowPopup(false);
 
     dispatch({
@@ -126,7 +126,7 @@ const Map = () => {
       payload: {
         draftPin: {
           ...state.draftPin,
-          dateSpotted: Date.now(),
+          dateSpotted: new Date(),
           longitude: viewport.longitude,
           latitude: viewport.latitude
         }
@@ -202,14 +202,7 @@ const Map = () => {
       });
     }
   };
-  const markerRender = ({
-    pin,
-    longitude,
-    latitude,
-    title,
-    content,
-    draggable
-  }) => {
+  const markerRender = ({ pin, longitude, latitude, draggable }) => {
     // if (!activeMarker) return;
     // const { lng, lat, title } = activeMarker;
     return (
@@ -260,7 +253,7 @@ const Map = () => {
         <GeolocateControl
           className={classes.geoLocateStyle}
           positionOptions={{ enableHighAccuracy: true }}
-          trackUserLocation={true}
+          trackUserLocation={false}
           onViewportChange={viewport => {
             setViewport(viewport);
             console.log("recentered", viewport);
@@ -294,7 +287,9 @@ const Map = () => {
           const { pinAdded } = subscriptionData.data;
           dispatch({
             type: actionTypes.ON_PIN_ADDED,
-            payload: { pin: pinAdded }
+            payload: {
+              pin: { ...pinAdded, dateSpotted: new Date(pinAdded.dateSpotted) }
+            }
           });
         }}
       />
@@ -304,7 +299,12 @@ const Map = () => {
           const { pinUpdated } = subscriptionData.data;
           dispatch({
             type: actionTypes.ON_PIN_UPDATED,
-            payload: { pin: pinUpdated }
+            payload: {
+              pin: {
+                ...pinUpdated,
+                dateSpotted: new Date(pinUpdated.dateSpotted)
+              }
+            }
           });
         }}
       />

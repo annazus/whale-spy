@@ -12,13 +12,7 @@ import DoneIcon from "@material-ui/icons/Done";
 
 import InputImage from "../Inputs/ImageInput";
 import DateTimeInput from "../Inputs/DateTimeInput";
-
-const formatDate = d => {
-  const a = new Date(d).toLocaleString();
-  console.log(a);
-  return a;
-};
-
+import { formatToDisplay } from "../../Utils/DateFormatFunctions";
 const useStyles = makeStyles(theme => ({
   container: {
     padding: theme.spacing(2),
@@ -114,10 +108,19 @@ const Pin = ({
         ></TextField>
         <DateTimeInput
           label="Date Spotted"
-          value={formatDate(pin.dateSpotted)}
-          onChange={date => {
-            const e = { target: { name: "dateSpotted", value: date } };
-            handleOnChange(e);
+          name="dateSpotted"
+          value={formatToDisplay(pin.dateSpotted)}
+          onChange={e => {
+            console.log("date", e.target.value);
+            const event = {
+              target: {
+                value: new Date(
+                  e.target.value === "" ? null : e.target.value
+                ).getTime(),
+                name: "dateSpotted"
+              }
+            };
+            handleOnChange(event);
           }}
         ></DateTimeInput>
 

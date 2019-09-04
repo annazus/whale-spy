@@ -24,7 +24,8 @@ const useStyles = makeStyles(theme => ({
 const PinInfo = ({ pin, showMoreHandler, commentsHandler, closeHandler }) => {
   const classes = useStyles();
 
-  const { title, content, dateSpotted, image } = pin;
+  const { title, content, dateSpotted, image, updatedAt } = pin;
+  console.log(pin);
   return (
     <Card className={classes.card}>
       <IconButton className={classes.closeIcon} onClick={closeHandler}>
@@ -47,7 +48,7 @@ const PinInfo = ({ pin, showMoreHandler, commentsHandler, closeHandler }) => {
           gutterBottom
           color="textSecondary"
         >
-          {new Date().toLocaleString()}
+          {new Date(dateSpotted).toLocaleString()}
         </Typography>
         <Typography
           gutterbottom

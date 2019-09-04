@@ -26,7 +26,9 @@ const Comment = ({ comment }) => {
           primary={author.name}
           secondary={
             <>
-              <Typography variant="body2">{createdAt}</Typography>
+              <Typography variant="body2">
+                {new Date(createdAt).toLocaleString()}
+              </Typography>
               {text}
             </>
           }
