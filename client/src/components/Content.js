@@ -2,7 +2,8 @@ import React, { useContext, createRef } from "react";
 
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Box from "@material-ui/core/Box";
+import Typography from "@material-ui/core/Typography";
+import Link from "@material-ui/core/Link";
 
 import Grid from "@material-ui/core/Grid";
 import Header from "./Header";
@@ -11,18 +12,34 @@ import { Context } from "../Context";
 import PinContent from "./Pin/PinContent";
 import UpdatePin from "./Pin/UpdatePin";
 import CommentsContainer from "./CommentsContainer";
-
+import FilterWindow from "./Filter";
 const Content = () => {
   const { state } = useContext(Context);
   return (
     <>
       <CssBaseline />
       <Container maxWidth="lg">
-        <Grid container direction="row" alignContent="center">
+        <FilterWindow></FilterWindow>
+        <Grid container direction="row" alignItems="center">
           <Grid item xs={12}>
             <Header />
           </Grid>
-
+          {state.draftPin && state.isAuth ? (
+            <Grid item xs={12}>
+              <Typography
+                variant="subtitle2"
+                color="secondary"
+                gutterBottom
+                align="center"
+              >
+                Update the location of your sighting by moving the red whale
+                icon or clicking on the map.
+              </Typography>
+            </Grid>
+          ) : null}
+          <Grid item xs={12}>
+            <Map />
+          </Grid>
           {state.showComments ? (
             <Grid item xs={12}>
               <CommentsContainer />
@@ -36,9 +53,6 @@ const Content = () => {
               <UpdatePin />
             </Grid>
           ) : null}
-          <Grid item xs={12}>
-            <Map />
-          </Grid>
         </Grid>
       </Container>
     </>

@@ -161,6 +161,23 @@ const reducer = (state = {}, action) => {
     case actionTypes.SIGNUP_USER:
       return { ...state, isAuth: true, isLoading: false, user: action.payload };
 
+    case actionTypes.FILTER_CLOSE:
+      return { ...state, filterOpen: false };
+    case actionTypes.FILTER_OPEN:
+      return { ...state, filterOpen: true };
+
+    case actionTypes.FILTER_DATE:
+      return {
+        ...state,
+        fromDate: action.payload.fromDate,
+        toDate: action.payload.toDate
+      };
+    case actionTypes.FILTER_MARINE_MAMMAL_TYPE:
+      console.log("marines", action.payload.marineMammalTypes);
+      return {
+        ...state,
+        marineMammalTypes: action.payload.marineMammalTypes
+      };
     default:
       return state;
   }

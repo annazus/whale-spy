@@ -19,7 +19,7 @@ const PinContent = () => {
         content: state.draftPin.content,
         latitude: state.draftPin.latitude,
         longitude: state.draftPin.longitude,
-        dateSpotted: state.draftPin.dateSpotted.getTime()
+        dateSpotted: state.draftPin.dateSpotted
       };
       console.log(variables);
       const newPin = await client.mutate({

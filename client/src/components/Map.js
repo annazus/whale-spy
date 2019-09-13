@@ -72,6 +72,13 @@ const Map = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
+    if (state.draftPin)
+      setViewport({ ...viewport, height: window.innerHeight / 2 });
+    else setViewport({ ...viewport, height: window.innerHeight - 48 });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.draftPin]);
+  useEffect(() => {
     const getData = async () => {
       const client = getClient();
       const pinData = await client.query({ query: QUERY_PINS });
@@ -126,7 +133,7 @@ const Map = () => {
       payload: {
         draftPin: {
           ...state.draftPin,
-          dateSpotted: new Date(),
+          dateSpotted: new Date().getTime(),
           longitude: viewport.longitude,
           latitude: viewport.latitude
         }
@@ -139,7 +146,7 @@ const Map = () => {
     if (!state.isAuth) return;
     if (!state.addingMode) return;
     console.log(target.nodeName);
-    if (target.nodeName === "BUTTON") return;
+    if (target.nodeName === "BUTTON" || target.nodeName === "svg") return;
     dispatch({
       type: actionTypes.CREATE_DRAFT_PIN,
       payload: {
@@ -147,7 +154,7 @@ const Map = () => {
           ...state.draftPin,
           longitude: lngLat[0],
           latitude: lngLat[1],
-          dateSpotted: new Date()
+          dateSpotted: new Date().getTime()
         }
       }
     });
