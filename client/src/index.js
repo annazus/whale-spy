@@ -2,7 +2,7 @@ import React, { useState, useReducer, useContext, createRef } from "react";
 import ReactDOM from "react-dom";
 import Content from "./components/Content";
 import { Context } from "./Context";
-import reducer from "./reducer";
+import reducers from "./reducers";
 import { ApolloProvider } from "react-apollo";
 import { MuiThemeProvider } from "@material-ui/core";
 import AppTheme from "./Theme";
@@ -11,7 +11,7 @@ import { subServerClient } from "./graphql/client";
 const App = () => {
   const initialState = useContext(Context);
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducers, initialState);
 
   return (
     <ApolloProvider client={subServerClient}>
