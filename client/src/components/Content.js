@@ -1,5 +1,5 @@
 import React, { useContext, createRef } from "react";
-
+import { makeStyles } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
@@ -13,13 +13,18 @@ import PinContent from "./Pin/PinContent";
 import UpdatePin from "./Pin/UpdatePin";
 import CommentsContainer from "./CommentsContainer";
 import FilterWindow from "./Filter";
+import NavigationSideBar from "./NavigationSideBar";
+const useStyles = makeStyles(theme => ({ container: { padding: 0 } }));
 const Content = () => {
+  const classes = useStyles();
   const { state } = useContext(Context);
   return (
     <>
       <CssBaseline />
-      <Container maxWidth="lg">
+      <Container maxWidth="md" className={classes.container}>
         <FilterWindow></FilterWindow>
+        <NavigationSideBar></NavigationSideBar>
+
         <Grid container direction="row" alignItems="center">
           <Grid item xs={12}>
             <Header />

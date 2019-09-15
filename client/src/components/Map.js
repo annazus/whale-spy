@@ -9,7 +9,7 @@ import { makeStyles } from "@material-ui/core";
 
 import { ReactComponent as WhaleIcon } from "../whaleIcon.svg";
 import { ReactComponent as DraftWhaleIcon } from "../draftWhaleIcon.svg";
-import NewButton from "./NewButton";
+// import NewButton from "./NewButton";
 import { Context } from "../Context";
 import { actionTypes } from "../actions";
 import { QUERY_PINS } from "../graphql/definitions/queries";
@@ -277,14 +277,16 @@ const Map = () => {
             <NavigationControl />
           </div>
         </div>
-        {state.isAuth &&
-        !state.draftPin &&
-        !state.showComments &&
-        !state.currentPin ? (
-          <div className={classes.newPin}>
-            <NewButton onClick={onNewPinClicked}></NewButton>
-          </div>
-        ) : null}
+        {
+          //  state.isAuth &&
+          //       !state.draftPin &&
+          //       !state.showComments &&
+          //       !state.currentPin ? (
+          //         <div className={classes.newPin}>
+          //           <NewButton onClick={onNewPinClicked}></NewButton>
+          //         </div>
+          //       ) : null
+        }
       </ReactMapGL>
 
       {/* Subscriptions for Creating / Updating / Deleting Pins */}

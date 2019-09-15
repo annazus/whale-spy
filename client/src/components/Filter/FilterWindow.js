@@ -11,7 +11,7 @@ import Filter from "./Filter";
 import DateFilter from "./DateFilter";
 import { Context } from "../../Context";
 import { actionTypes } from "../../actions";
-
+import whaleSpecies from "../../Utils/whaleSpecies";
 const styles = theme => {
   return {
     container: { position: "static" },
@@ -30,18 +30,8 @@ const useStyles = makeStyles(styles);
 const FilterWindow = ({ isOpen, handleClose }) => {
   const { state, dispatch } = useContext(Context);
   const classes = useStyles();
-  const mmTypes = [
-    { name: "All", val: "All" },
-    { name: "Pacific Harbor Seal", val: "Pacific Harbor Seal" },
-    { name: "California Sea Lion", val: "California Sea Lion" },
-    { name: "Steller Sea Lion", val: "Steller Sea Lion" },
-    { name: "Northern Elephant Seal", val: "Northern Elephant Seal" },
-    { name: "Harbor Porpoise", val: "Harbor Porpoise" },
-    { name: "Dall's Porpoise", val: "Dall's Porpoise" },
-    { name: "Orca", val: "Orca" },
-    { name: "Gray Whale", val: "Gray Whale" },
-    { name: "Minke Whale", val: "Minke Whale" }
-  ];
+  const mmTypes = [{ name: "All", val: "All" }].concat(whaleSpecies);
+
   const handleMMToggle = val => {
     let marineMammalTypes;
     if (state.marineMammalTypes.includes(val)) {
@@ -87,6 +77,7 @@ const FilterWindow = ({ isOpen, handleClose }) => {
   return (
     <div className={classes.container}>
       <Drawer
+        anchor="left"
         onClose={() => dispatch({ type: actionTypes.FILTER_CLOSE })}
         open={state.filterOpen}
       >
@@ -113,8 +104,9 @@ const FilterWindow = ({ isOpen, handleClose }) => {
               color="primary"
               className={classes.resetToDefault}
               onClick={handleReset}
+              variant="outlined"
             >
-              Default
+              Reset
             </Button>
           </Grid>
         </Grid>
@@ -128,7 +120,7 @@ const FilterWindow = ({ isOpen, handleClose }) => {
         ></DateFilter>
 
         <Filter
-          title="Type of Marine Mammal"
+          title="Whale Species"
           selectedValues={state.marineMammalTypes}
           list={mmTypes}
           handleToggle={handleMMToggle}

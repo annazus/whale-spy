@@ -1,13 +1,24 @@
 import React from "react";
+import { makeStyles } from "@material-ui/core";
 import LogoImage from "./whaleIcon.svg";
-import styles from "./logo.module.css";
+
+const useStyles = makeStyles(theme => ({
+  logo: {
+    width: "35px",
+    height: "35px",
+    textIndent: "-9999px"
+  }
+}));
+
 const Logo = () => {
+  const classes = useStyles();
+
   const logoStyle = {
     background: `url(${LogoImage})`,
-    backgroundSize: "45px 45px"
+    backgroundSize: "35px 35px"
   };
   return (
-    <a href="/" className={styles.logo} style={logoStyle}>
+    <a href="/" className={classes.logo} style={logoStyle}>
       Whale Spy
     </a>
   );

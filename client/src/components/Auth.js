@@ -5,7 +5,7 @@ import { MUTATION_SIGNUP } from "../graphql/definitions/mutations";
 import { QUERY_ME } from "../graphql/definitions/queries";
 import { Context } from "../Context";
 import { actionTypes } from "../actions";
-const Auth = ({ mode, loginText }) => {
+const Auth = ({ mode, loginText, onSuccessHandler, onFailureHandler }) => {
   console.log(loginText);
   const { state, dispatch } = useContext(Context);
   const signup = async client => {
@@ -17,6 +17,7 @@ const Auth = ({ mode, loginText }) => {
         type: actionTypes.SIGNUP_USER,
         payload: { user: result.data.signup }
       });
+      if (onSuccessHandler) onSuccessHandler();
     } catch (error) {
       console.log(error);
       //if you hace already signed up let the person be logged in
@@ -31,6 +32,7 @@ const Auth = ({ mode, loginText }) => {
         type: actionTypes.LOGIN_USER,
         payload: { user: result.data.me }
       });
+      if (onSuccessHandler) onSuccessHandler();
     } catch (error) {
       console.log("error", error);
       //the person does not have an accout with this email - redirect to sign up
@@ -51,6 +53,7 @@ const Auth = ({ mode, loginText }) => {
   };
   const onFailure = () => {
     console.log("onFailure");
+    if (onFailureHandler) onFailureHandler();
   };
   const refreshToken = expiresIn => {
     setInterval(async () => {

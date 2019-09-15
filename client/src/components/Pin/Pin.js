@@ -43,6 +43,8 @@ import Direction from "../Direction";
 import InputImage from "../Inputs/ImageInput";
 import DateTimeInput from "../Inputs/DateTimeInput";
 import { formatToDisplay } from "../../Utils/DateFormatFunctions";
+
+import mmTypes from "../../Utils/whaleSpecies";
 const useStyles = makeStyles(theme => ({
   container: {
     padding: theme.spacing(2),
@@ -92,38 +94,7 @@ const Pin = ({
     console.log(isDisabled);
   }, [isDisabled, pin.content, pin.dateSpotted, pin.image, pin.title]);
   const fileUploadWidget = createRef();
-  const mmTypes = [
-    // { name: "Pacific Harbor Seal", val: "Pacific Harbor Seal" },
-    // { name: "California Sea Lion", val: "California Sea Lion" },
-    // { name: "Steller Sea Lion", val: "Steller Sea Lion" },
-    // { name: "Northern Elephant Seal", val: "Northern Elephant Seal" },
-    // { name: "Harbor Porpoise", val: "Harbor Porpoise" },
-    // { name: "Dall's Porpoise", val: "Dall's Porpoise" },
-    // { name: "Some type of Whale", val: "Whale" },
 
-    {
-      name: "Orca (Killer Whale)",
-      val: "Orca",
-      helpUrl:
-        "https://www.whalewatching.com/about-the-whales/puget-orca-whale/"
-    },
-    {
-      name: "Gray Whale",
-      val: "Gray",
-      helpUrl: "https://www.whalewatching.com/about-the-whales/gray-whale/"
-    },
-    {
-      name: "Humpback Whale",
-      val: "Humpback",
-      helpUrl: "https://www.whalewatching.com/about-the-whales/humpback-whale/"
-    },
-    {
-      name: "Minke Whale",
-      val: "Minke",
-      helpUrl: "https://www.whalewatching.com/about-the-whales/minke-whale/"
-    },
-    { name: "Unknown/Couldn't identify", val: "Unknown", helpUrl: null }
-  ];
   return (
     <Paper className={classes.container}>
       <IconButton onClick={handleDiscardClick} className={classes.closeButton}>
@@ -155,24 +126,32 @@ const Pin = ({
           <FormLabel component="legend">Whale species</FormLabel>
 
           <RadioGroup>
-            {mmTypes.map(({ name, val, helpUrl }) => {
-              return (
-                <FormControlLabel
-                  value={val}
-                  control={<Radio />}
-                  label={
-                    <span>
-                      {name}
-                      {helpUrl ? (
-                        <Link href={helpUrl} rel="noopener" target="_blank">
-                          <InfoIcon></InfoIcon>
-                        </Link>
-                      ) : null}
-                    </span>
-                  }
-                ></FormControlLabel>
-              );
-            })}
+            {mmTypes
+              .concat([
+                {
+                  name: "Unknown/Couldn't identify",
+                  val: "Unknown",
+                  helpUrl: null
+                }
+              ])
+              .map(({ name, val, helpUrl }) => {
+                return (
+                  <FormControlLabel
+                    value={val}
+                    control={<Radio />}
+                    label={
+                      <span>
+                        {name}
+                        {helpUrl ? (
+                          <Link href={helpUrl} rel="noopener" target="_blank">
+                            <InfoIcon></InfoIcon>
+                          </Link>
+                        ) : null}
+                      </span>
+                    }
+                  ></FormControlLabel>
+                );
+              })}
           </RadioGroup>
         </FormControl>
 

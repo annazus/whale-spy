@@ -84,7 +84,12 @@ const reducer = (state = {}, action) => {
         showComments: false
       };
     case actionTypes.LOGIN_USER:
-      return { ...state, isAuth: true, isLoading: false, user: action.payload };
+      return {
+        ...state,
+        isAuth: true,
+        isLoading: false,
+        user: action.payload.user
+      };
     case actionTypes.MAKE_REQUEST:
       return { ...state, isLoading: true };
     case actionTypes.SAVE_DRAFT_AS_PIN:
@@ -159,7 +164,12 @@ const reducer = (state = {}, action) => {
       return { ...state, isAuth: false, isLoading: false };
 
     case actionTypes.SIGNUP_USER:
-      return { ...state, isAuth: true, isLoading: false, user: action.payload };
+      return {
+        ...state,
+        isAuth: true,
+        isLoading: false,
+        user: action.payload.user
+      };
 
     case actionTypes.FILTER_CLOSE:
       return { ...state, filterOpen: false };
@@ -178,6 +188,10 @@ const reducer = (state = {}, action) => {
         ...state,
         marineMammalTypes: action.payload.marineMammalTypes
       };
+    case actionTypes.SHOW_NAV_SIDE:
+      return { ...state, showNavigationSideBar: true };
+    case actionTypes.HIDE_NAV_SIDE:
+      return { ...state, showNavigationSideBar: false };
     default:
       return state;
   }

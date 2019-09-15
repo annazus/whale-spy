@@ -10,20 +10,21 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import CommentIcon from "@material-ui/icons/Comment";
+import InfoIcon from "@material-ui/icons/InfoRounded";
 import IconButton from "@material-ui/core/IconButton";
+import Link from "@material-ui/core/Link";
 
 const Filter = ({ title, list, handleToggle, selectedValues }) => {
   console.log(selectedValues);
   return (
     <div>
-      <ExpansionPanel>
+      <ExpansionPanel expanded>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon></ExpandMoreIcon>}>
           <Typography>{title}</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <List>
-            {list.map(({ name, val }, indx) => {
+            {list.map(({ name, val, helpUrl }, indx) => {
               console.log(selectedValues, val);
               return (
                 <ListItem key={indx} onClick={() => handleToggle(val)}>
@@ -38,11 +39,19 @@ const Filter = ({ title, list, handleToggle, selectedValues }) => {
                     />
                   </ListItemIcon>
                   <ListItemText id={val} primary={`${name}`} />
-                  <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="comments">
-                      <CommentIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
+                  {helpUrl ? (
+                    <ListItemSecondaryAction>
+                      <Link
+                        edge="end"
+                        aria-label="info"
+                        href={helpUrl}
+                        target="_blank"
+                        rel="noopener"
+                      >
+                        <InfoIcon />
+                      </Link>
+                    </ListItemSecondaryAction>
+                  ) : null}
                 </ListItem>
               );
             })}
