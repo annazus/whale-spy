@@ -32,5 +32,13 @@ export const Context = createContext({
     sightings: [],
     me: []
   },
-  mapCenterPosition: { lat: null, lng: null }
+  map: {
+    viewport: {
+      height: window.innerHeight - 52,
+      width: "100vw",
+      latitude: 47.7237,
+      longitude: -122.4713,
+      zoom: 8
+    }
+  }
 });

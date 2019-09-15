@@ -7,21 +7,20 @@ import ReactMapGL, {
 } from "react-map-gl";
 import { makeStyles } from "@material-ui/core";
 
-import { ReactComponent as WhaleIcon } from "../whaleIcon.svg";
-import { ReactComponent as DraftWhaleIcon } from "../draftWhaleIcon.svg";
+import { ReactComponent as WhaleIcon } from "./whaleIcon.svg";
+import { ReactComponent as DraftWhaleIcon } from "./draftWhaleIcon.svg";
 // import NewButton from "./NewButton";
-import { Context } from "../Context";
-import { actionTypes } from "../actions";
-import { QUERY_PINS } from "../graphql/definitions/queries";
+import { Context } from "../../Context";
+import { actionTypes } from "../../actions";
+import { QUERY_PINS } from "../../graphql/definitions/queries";
 import {
   PIN_ADDED_SUBSCRIPTION,
   PIN_DELETED_SUBSCRIPTION,
   PIN_UPDATED_SUBSCRIPTION
-} from "../graphql/definitions/subscription";
-import CityPin from "./CityPin";
-import { GRAPHQL_SERVER_URL, getClient } from "../graphql/client";
-import { Subscription, useSubscription } from "react-apollo";
-import PinInfoPopup from "./PinInfoPopup";
+} from "../../graphql/definitions/subscription";
+import { getClient } from "../../graphql/client";
+import { Subscription } from "react-apollo";
+import PinInfoPopup from "../PinInfoPopup";
 
 const useStyles = makeStyles(t => ({
   root: {},
@@ -53,31 +52,31 @@ const useStyles = makeStyles(t => ({
 const Map = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [popupPin, setPopupPin] = useState(null);
-  const initialViewport = {
-    height: window.innerHeight - 48,
-    width: "100%",
-    latitude: 47.7237,
-    longitude: -122.4713,
-    zoom: 12
-  };
-  const [viewport, setViewport] = useState(initialViewport);
+  // const initialViewport = {
+  //   height: window.innerHeight - 48,
+  //   width: "100%",
+  //   latitude: 47.7237,
+  //   longitude: -122.4713,
+  //   zoom: 12
+  // };
+  // const [viewport, setViewport] = useState(initialViewport);
 
   const { state, dispatch } = useContext(Context);
   const classes = useStyles();
 
-  useEffect(() => {
-    window.addEventListener("resize", resizeMap);
+  // useEffect(() => {
+  //   window.addEventListener("resize", resizeMap);
 
-    return resizeRemover;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  useEffect(() => {
-    if (state.draftPin)
-      setViewport({ ...viewport, height: window.innerHeight / 2 });
-    else setViewport({ ...viewport, height: window.innerHeight - 48 });
+  //   return resizeRemover;
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+  // useEffect(() => {
+  //   if (state.draftPin)
+  //     setViewport({ ...viewport, height: window.innerHeight / 2 });
+  //   else setViewport({ ...viewport, height: window.innerHeight - 48 });
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.draftPin]);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [state.draftPin]);
   useEffect(() => {
     const getData = async () => {
       const client = getClient();
@@ -87,32 +86,34 @@ const Map = () => {
         payload: { pins: pinData.data.pins }
       });
 
-      navigator.geolocation.getCurrentPosition(
-        pos => {
-          setViewport({
-            ...viewport,
-            longitude: pos.coords.longitude,
-            latitude: pos.coords.latitude
-          });
-        },
-        error => {
-          console.log(error);
-        }
-      );
+      // navigator.geolocation.getCurrentPosition(
+      //   pos => {
+      //     setViewport({
+      //       ...viewport,
+      //       longitude: pos.coords.longitude,
+      //       latitude: pos.coords.latitude
+      //     });
+      //   },
+      //   error => {
+      //     console.log(error);
+      //   }
+      // );
     };
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
-  const resizeMap = () => {
-    _onViewportChange({ ...viewport, height: window.innerHeight - 48 });
-  };
-  const resizeRemover = () => {
-    window.removeEventListener("resize", resizeMap);
-  };
+  // const resizeMap = () => {
+  //   _onViewportChange({ ...viewport, height: window.innerHeight - 48 });
+  // };
+  // const resizeRemover = () => {
+  //   window.removeEventListener("resize", resizeMap);
+  // };
 
   const _onViewportChange = viewport => {
-    setViewport(viewport);
+    // setViewport(viewport);
+
+    dispatch({ type: actionTypes.UPDATE_VIEWPORT, payload: { viewport } });
   };
   const showSelectedPin = pin => {
     console.log("sele", pin);
@@ -123,41 +124,35 @@ const Map = () => {
       payload: { currentPin: pin }
     });
   };
-  const onNewPinClicked = () => {
-    console.log(viewport);
-    setShowPopup(false);
-    setPopupPin(null);
-    dispatch({ type: actionTypes.ADDING_MODE });
-    dispatch({
-      type: actionTypes.CREATE_DRAFT_PIN,
-      payload: {
-        draftPin: {
-          ...state.draftPin,
-          dateSpotted: new Date().getTime(),
-          longitude: viewport.longitude,
-          latitude: viewport.latitude
-        }
-      }
-    });
-  };
+  // const onNewPinClicked = () => {
+  //   setShowPopup(false);
+  //   setPopupPin(null);
+  //   // dispatch({ type: actionTypes.ADDING_MODE });
+  //   dispatch({
+  //     type: actionTypes.CREATE_DRAFT_PIN,
+  //     payload: {
+  //       draftPin: {
+  //         ...state.draftPin,
+  //         dateSpotted: new Date().getTime(),
+  //         longitude: state.map.viewport.longitude,
+  //         latitude: state.map.viewport.latitude
+  //       }
+  //     }
+  //   });
+  // };
   const clickHandler = ({ lngLat, type, target }) => {
-    console.log(target);
     console.log(target.nodeName);
-    if (!state.isAuth) return;
-    if (!state.addingMode) return;
-    console.log(target.nodeName);
+    if (!state.appState.isAuth) return;
     if (target.nodeName === "BUTTON" || target.nodeName === "svg") return;
-    dispatch({
-      type: actionTypes.CREATE_DRAFT_PIN,
-      payload: {
-        draftPin: {
-          ...state.draftPin,
+    if (state.appState.isNewSighting) {
+      dispatch({
+        type: actionTypes.UPDATE_DRAFT_LOCATION,
+        payload: {
           longitude: lngLat[0],
-          latitude: lngLat[1],
-          dateSpotted: new Date().getTime()
+          latitude: lngLat[1]
         }
-      }
-    });
+      });
+    }
   };
 
   const closeHandler = () => {
@@ -196,15 +191,12 @@ const Map = () => {
   };
 
   const onDragEndHandler = ({ lngLat }) => {
-    if (state.draftPin) {
+    if (state.appState.isNewSighting) {
       dispatch({
-        type: actionTypes.CREATE_DRAFT_PIN,
+        type: actionTypes.UPDATE_DRAFT_LOCATION,
         payload: {
-          draftPin: {
-            ...state.draftPin,
-            longitude: lngLat[0],
-            latitude: lngLat[1]
-          }
+          longitude: lngLat[0],
+          latitude: lngLat[1]
         }
       });
     }
@@ -223,7 +215,7 @@ const Map = () => {
       >
         <div
           onClick={() => {
-            if (state.addingMode) return;
+            if (state.appState.isNewSighting) return;
 
             setShowPopup(true);
             setPopupPin(pin);
@@ -247,11 +239,7 @@ const Map = () => {
   return (
     <>
       <ReactMapGL
-        {...viewport}
-        style={{
-          position: "relative",
-          width: "100%"
-        }}
+        {...state.map.viewport}
         onViewportChange={_onViewportChange}
         mapboxApiAccessToken={process.env.REACT_APP_MAP_TOKEN}
         onClick={clickHandler}
@@ -260,11 +248,9 @@ const Map = () => {
         <GeolocateControl
           className={classes.geoLocateStyle}
           positionOptions={{ enableHighAccuracy: true }}
-          trackUserLocation={false}
-          onViewportChange={viewport => {
-            setViewport(viewport);
-            console.log("recentered", viewport);
-          }}
+          trackUserLocation={true}
+          fitBoundsOptions={{ maxZoom: 8 }}
+          onViewportChange={_onViewportChange}
         />
         {state.draftPin
           ? markerRender({ ...state.draftPin, draggable: true })
@@ -331,4 +317,4 @@ const Map = () => {
   );
 };
 
-export default Map;
+export { Map as default };

@@ -97,10 +97,6 @@ const Pin = ({
 
   return (
     <Paper className={classes.container}>
-      <IconButton onClick={handleDiscardClick} className={classes.closeButton}>
-        <CloseIcon></CloseIcon>
-      </IconButton>
-
       <form
         onSubmit={e => {
           e.preventDefault();

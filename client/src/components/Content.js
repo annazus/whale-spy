@@ -9,6 +9,7 @@ import Grid from "@material-ui/core/Grid";
 import Header from "./Header";
 import Map from "./Map";
 import { Context } from "../Context";
+import { SightingHeader } from "./Sightings";
 import PinContent from "./Pin/PinContent";
 import UpdatePin from "./Pin/UpdatePin";
 import CommentsContainer from "./CommentsContainer";
@@ -29,19 +30,10 @@ const Content = () => {
           <Grid item xs={12}>
             <Header />
           </Grid>
-          {state.draftPin && state.isAuth ? (
-            <Grid item xs={12}>
-              <Typography
-                variant="subtitle2"
-                color="secondary"
-                gutterBottom
-                align="center"
-              >
-                Update the location of your sighting by moving the red whale
-                icon or clicking on the map.
-              </Typography>
-            </Grid>
-          ) : null}
+          <Grid item xs={12}>
+            <SightingHeader></SightingHeader>
+          </Grid>
+
           <Grid item xs={12}>
             <Map />
           </Grid>

@@ -5,11 +5,10 @@ const reducer = (state = {}, action) => {
   let pins = [];
   let newPins = [];
   switch (action.type) {
-    case actionTypes.ADDING_MODE:
-      return {
-        ...state,
-        addingMode: true
-      };
+    // case actionTypes.ADDING_MODE:
+    //   return {
+    //     ...state,
+    //   };
     case actionTypes.CREATE_COMMENT:
       let comments = state.currentPin.comments;
 
@@ -42,7 +41,27 @@ const reducer = (state = {}, action) => {
       return {
         ...state,
         draftPin: { ...action.payload.draftPin },
+        appState: {
+          ...state.appState,
+          isNewSighting: true,
+          isEditingSighting: false,
+          showSightingSummary: false,
+          showNavigationSideBar: false,
+          showFilterWindow: false
+        },
+        map: {
+          viewport: { ...state.map.viewport, width: "100%", height: "300px" }
+        },
         currentPin: null
+      };
+    case actionTypes.UPDATE_DRAFT_LOCATION:
+      return {
+        ...state,
+        draftPin: {
+          ...state.draftPin,
+          latitude: action.payload.latitude,
+          longitude: action.payload.longitude
+        }
       };
     case actionTypes.UPDATE_CURRENT_PIN:
       return {
@@ -56,7 +75,21 @@ const reducer = (state = {}, action) => {
       newPins = state.pins.filter(pin => pin.id !== state.currentPin.id);
       return { ...state, isLoading: false, pins: newPins, currentPin: null };
     case actionTypes.DISCARD_DRAFT:
-      return { ...state, draftPin: null, addingMode: false };
+      return {
+        ...state,
+        draftPin: null,
+        appState: {
+          ...state.appState,
+          isNewSighting: false
+        },
+        map: {
+          viewport: {
+            ...state.map.viewport,
+            width: "100%",
+            height: window.innerHeight - 52
+          }
+        }
+      };
 
     case actionTypes.DISCARD_CURRENT_PIN_CHANGES:
       return { ...state, currentPin: null };
@@ -88,7 +121,9 @@ const reducer = (state = {}, action) => {
         ...state,
         isAuth: true,
         isLoading: false,
-        user: action.payload.user
+        user: action.payload.user,
+        appState: { ...state.appState, isAuth: true },
+        appData: { ...state.appData, me: action.payload.user }
       };
     case actionTypes.MAKE_REQUEST:
       return { ...state, isLoading: true };
@@ -101,8 +136,8 @@ const reducer = (state = {}, action) => {
         isLoading: false,
         pins: newPins,
         currentPin: null,
-        draftPin: null,
-        addingMode: false
+        draftPin: null
+        // addingMode: false
       };
     case actionTypes.ON_PIN_ADDED:
       pins = state.pins;
@@ -161,14 +196,27 @@ const reducer = (state = {}, action) => {
         showComments: false
       };
     case actionTypes.SIGNOUT_USER:
-      return { ...state, isAuth: false, isLoading: false };
+      return {
+        ...state,
+        isAuth: false,
+        isLoading: false,
+        appState: {
+          ...state.appState,
+          isAuth: false,
+          isNewSighting: false,
+          isEditingSighting: false
+        },
+        appData: { ...state.appData, me: null }
+      };
 
     case actionTypes.SIGNUP_USER:
       return {
         ...state,
         isAuth: true,
         isLoading: false,
-        user: action.payload.user
+        user: action.payload.user,
+        appState: { ...state.appState, isAuth: true },
+        appData: { ...state.appData, me: action.payload.user }
       };
 
     case actionTypes.FILTER_CLOSE:
@@ -192,6 +240,8 @@ const reducer = (state = {}, action) => {
       return { ...state, showNavigationSideBar: true };
     case actionTypes.HIDE_NAV_SIDE:
       return { ...state, showNavigationSideBar: false };
+    case actionTypes.UPDATE_VIEWPORT:
+      return { ...state, map: { viewport: action.payload.viewport } };
     default:
       return state;
   }

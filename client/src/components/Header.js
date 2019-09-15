@@ -72,54 +72,64 @@ const Header = () => {
           >
             <SearchIcon color="inherit" />
           </IconButton>
-          <Divider
-            className={classes.divider}
-            orientation="vertical"
-            light={true}
-          />
+          {!state.appState.isNewSighting &&
+          !state.appState.isEditingSighting ? (
+            <Divider
+              className={classes.divider}
+              orientation="vertical"
+              light={true}
+            />
+          ) : null}
 
-          <Tooltip title="Add a sighting">
-            <IconButton
-              color="inherit"
-              edge="end"
-              onClick={() => {
-                dispatch({ type: actionTypes.ADDING_MODE });
-
-                dispatch({
-                  type: actionTypes.CREATE_DRAFT_PIN,
-                  payload: {
-                    draftPin: {
-                      ...state.draftPin,
-                      dateSpotted: new Date().getTime(),
-                      longitude: 43.3,
-                      latitude: 90.0
+          {state.appState.isAuth &&
+          !state.appState.isNewSighting &&
+          !state.appState.isEditingSighting ? (
+            <Tooltip title="Add a sighting">
+              <IconButton
+                color="inherit"
+                edge="end"
+                onClick={() => {
+                  dispatch({
+                    type: actionTypes.CREATE_DRAFT_PIN,
+                    payload: {
+                      draftPin: {
+                        ...state.draftPin,
+                        dateSpotted: new Date().getTime(),
+                        longitude: state.map.viewport.longitude,
+                        latitude: state.map.viewport.latitude
+                      }
                     }
-                  }
-                });
-              }}
-            >
-              <EyeIcon fontSize="normal"></EyeIcon>
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Filter sightings">
-            <IconButton
-              className={classes.filterButton}
-              color="inherit"
-              edge="end"
-              onClick={() => dispatch({ type: actionTypes.FILTER_OPEN })}
-            >
-              <FilterListIcon fontSize="normal"></FilterListIcon>
-            </IconButton>
-          </Tooltip>
+                  });
+                }}
+              >
+                <EyeIcon fontSize="normal"></EyeIcon>
+              </IconButton>
+            </Tooltip>
+          ) : null}
+          {!state.appState.isNewSighting &&
+          !state.appState.isEditingSighting ? (
+            <>
+              <Tooltip title="Filter sightings">
+                <IconButton
+                  className={classes.filterButton}
+                  color="inherit"
+                  edge="end"
+                  onClick={() => dispatch({ type: actionTypes.FILTER_OPEN })}
+                >
+                  <FilterListIcon fontSize="normal"></FilterListIcon>
+                </IconButton>
+              </Tooltip>
 
-          <IconButton
-            color="inherit"
-            className={classes.menuButton}
-            edge="end"
-            onClick={() => dispatch({ type: actionTypes.SHOW_NAV_SIDE })}
-          >
-            <MenuIcon fontSize="large"></MenuIcon>
-          </IconButton>
+              <IconButton
+                color="inherit"
+                className={classes.menuButton}
+                edge="end"
+                onClick={() => dispatch({ type: actionTypes.SHOW_NAV_SIDE })}
+              >
+                <MenuIcon fontSize="large"></MenuIcon>
+              </IconButton>
+            </>
+          ) : null}
         </Toolbar>
       </AppBar>
     </div>
