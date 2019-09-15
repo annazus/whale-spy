@@ -18,6 +18,11 @@ const whaleSpecies = [
     name: "Minke Whale",
     val: "Minke",
     helpUrl: "https://www.whalewatching.com/about-the-whales/minke-whale/"
+  },
+  {
+    name: "Unknown",
+    val: "Unknown",
+    helpUrl: "https://www.whalewatching.com/about-the-whales/"
   }
 ];
 
