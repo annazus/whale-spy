@@ -1,2 +1,3 @@
 import SightingHeader from "./SightingHeader";
-export { SightingHeader };
+import SightingContainer from "./SightingsContainer";
+export { SightingContainer as default, SightingHeader };

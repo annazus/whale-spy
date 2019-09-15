@@ -45,7 +45,7 @@ const SightingHeader = () => {
           <CloseIcon></CloseIcon>
         </IconButton>
         <Typography variant="h6" color="primary" align="center">
-          New Sighting
+          {state.appState.isNewSighting ? "New" : "Update"} Sighting
         </Typography>
         <Typography variant="subtitle2" color="secondary" align="center">
           Update the location of your sighting by dragging the red whale icon or

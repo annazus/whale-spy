@@ -64,7 +64,7 @@ const useStyles = makeStyles(theme => ({
     position: "relative"
   }
 }));
-const Direction = () => {
+const Direction = ({ id, name, value, onChange }) => {
   const classes = useStyles();
   return (
     <FormControl
@@ -75,7 +75,7 @@ const Direction = () => {
       required
     >
       <FormLabel component="legend">Direction whale was swimming</FormLabel>
-      <RadioGroup>
+      <RadioGroup id={id} name={name} value={value} onChange={onChange}>
         <div className={classes.container}>
           <FormControlLabel
             value="N"

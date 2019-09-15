@@ -10,7 +10,7 @@ import Header from "./Header";
 import Map from "./Map";
 import { Context } from "../Context";
 import { SightingHeader } from "./Sightings";
-import PinContent from "./Pin/PinContent";
+import Sightings from "./Sightings";
 import UpdatePin from "./Pin/UpdatePin";
 import CommentsContainer from "./CommentsContainer";
 import FilterWindow from "./Filter";
@@ -41,9 +41,9 @@ const Content = () => {
             <Grid item xs={12}>
               <CommentsContainer />
             </Grid>
-          ) : state.draftPin && state.isAuth ? (
+          ) : state.appState.isNewSighting ? (
             <Grid item xs={12}>
-              <PinContent />
+              <Sightings />
             </Grid>
           ) : state.currentPin && state.isAuth ? (
             <Grid item xs={12}>
