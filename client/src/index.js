@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useContext, createRef } from "react";
+import React, { useReducer, useContext } from "react";
 import ReactDOM from "react-dom";
 import Content from "./components/Content";
 import { Context } from "./Context";

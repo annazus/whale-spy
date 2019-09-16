@@ -1,18 +1,19 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import { useAuthenticatedClient } from "../../graphql/client";
 import { Context } from "../../Context";
 import { actionTypes } from "../../actions";
 import { MUTATION_CREATE_PIN } from "../../graphql/definitions/mutations";
 import Sightings from "./Sightings";
 import { uploadToCloudinary } from "../../Utils/UploadToCloudinary";
+
 const SightingContainer = () => {
   const { state, dispatch } = useContext(Context);
   const client = useAuthenticatedClient();
 
-  const handlePinSubmit = async () => {
+  const newSightingSaveHandler = async () => {
     try {
+      dispatch({ type: actionTypes.START_BUSY });
       const pinUrl = await uploadToCloudinary(state.draftPin.image);
-      console.log("draftPin", state.draftPin);
       const variables = {
         image: pinUrl,
         title: state.draftPin.title,
@@ -21,28 +22,18 @@ const SightingContainer = () => {
         longitude: state.draftPin.longitude,
         dateSpotted: state.draftPin.dateSpotted
       };
-      console.log(variables);
-      const newPin = await client.mutate({
+      const newSighting = await client.mutate({
         mutation: MUTATION_CREATE_PIN,
         variables
       });
-      // dispatch({
-      //   type: actionTypes.SAVE_DRAFT_AS_PIN,
-      //   payload: {
-      //     pin: {
-      //       ...newPin.data.createPin,
-      //       dateSpotted: new Date(newPin.data.createPin.dateSpotted)
-      //     }
-      //   }
-      // });
-      console.log(newPin);
+      dispatch({ type: actionTypes.END_BUSY });
     } catch (error) {
+      dispatch({ type: actionTypes.END_BUSY });
       console.log("error saving", error);
     }
   };
 
   const onChange = event => {
-    console.log(event, state.draftPin);
     dispatch({
       type: actionTypes.CREATE_DRAFT_PIN,
       payload: {
@@ -54,7 +45,7 @@ const SightingContainer = () => {
   return (
     <Sightings
       sighting={state.draftPin}
-      saveHandler={handlePinSubmit}
+      saveHandler={newSightingSaveHandler}
       changeHandler={onChange}
       imageUrl={state.draftPin.image}
     />

@@ -16,12 +16,13 @@ export const Context = createContext({
   //
   appState: {
     isAuth: false,
-    isLoading: false,
+    isBusy: false,
     isNewSighting: false,
     isEditingSighting: false,
     showSightingSummary: false,
     showNavigationSideBar: false,
-    showFilterWindow: false
+    showFilterWindow: false,
+    showComments: false
   },
   filterCriteria: {
     fromDate: null,

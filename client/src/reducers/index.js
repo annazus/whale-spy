@@ -242,6 +242,11 @@ const reducer = (state = {}, action) => {
       return { ...state, showNavigationSideBar: false };
     case actionTypes.UPDATE_VIEWPORT:
       return { ...state, map: { viewport: action.payload.viewport } };
+    case actionTypes.START_BUSY:
+      return { ...state, appState: { ...state.appState, isBusy: true } };
+    case actionTypes.END_BUSY:
+      return { ...state, appState: { ...state.appState, isBusy: false } };
+
     default:
       return state;
   }

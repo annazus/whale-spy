@@ -15,8 +15,6 @@ import { makeStyles } from "@material-ui/core";
 
 import { Context } from "../Context";
 import { actionTypes } from "../actions";
-import Auth from "./Auth";
-import Logout from "./Logout";
 import Logo from "./Logo";
 
 const useStyles = makeStyles(theme => ({
@@ -117,7 +115,7 @@ const Header = () => {
                   edge="end"
                   onClick={() => dispatch({ type: actionTypes.FILTER_OPEN })}
                 >
-                  <FilterListIcon fontSize="normal"></FilterListIcon>
+                  <FilterListIcon fontSize="small"></FilterListIcon>
                 </IconButton>
               </Tooltip>
 

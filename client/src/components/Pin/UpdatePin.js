@@ -1,11 +1,8 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import { useAuthenticatedClient } from "../../graphql/client";
 import { Context } from "../../Context";
 import { actionTypes } from "../../actions";
-import {
-  MUTATON_UPDATE_PIN,
-  MUTATION_DELETE_PIN
-} from "../../graphql/definitions/mutations";
+import { MUTATON_UPDATE_PIN } from "../../graphql/definitions/mutations";
 import Pin from "./Pin";
 
 const UpdatePin = () => {
@@ -26,15 +23,6 @@ const UpdatePin = () => {
       mutation: MUTATON_UPDATE_PIN,
       variables
     });
-    // dispatch({
-    //   type: actionTypes.SAVE_CURRENT_PIN,
-    //   payload: {
-    //     pin: {
-    //       ...updatedPin.data.updatePin,
-    //       dateSpotted: new Date(updatedPin.data.updatePin.dateSpotted)
-    //     }
-    //   }
-    // });
   };
 
   const onChange = event => {

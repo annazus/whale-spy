@@ -9,7 +9,6 @@ import { makeStyles } from "@material-ui/core";
 
 import { ReactComponent as WhaleIcon } from "./whaleIcon.svg";
 import { ReactComponent as DraftWhaleIcon } from "./draftWhaleIcon.svg";
-// import NewButton from "./NewButton";
 import { Context } from "../../Context";
 import { actionTypes } from "../../actions";
 import { QUERY_PINS } from "../../graphql/definitions/queries";
@@ -64,12 +63,28 @@ const Map = () => {
   const { state, dispatch } = useContext(Context);
   const classes = useStyles();
 
-  // useEffect(() => {
-  //   window.addEventListener("resize", resizeMap);
+  useEffect(() => {
+    window.addEventListener("resize", resizeMap);
 
-  //   return resizeRemover;
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+    return resizeRemover;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const resizeMap = () => {
+    console.log("resizing window");
+    dispatch({
+      type: actionTypes.UPDATE_VIEWPORT,
+      payload: {
+        viewport: {
+          ...state.map.viewport,
+          width: "100%",
+          height: state.appState.isNewSighting ? 300 : window.innerHeight - 48
+        }
+      }
+    });
+  };
+  const resizeRemover = () => {
+    window.removeEventListener("resize", resizeMap);
+  };
   // useEffect(() => {
   //   if (state.draftPin)
   //     setViewport({ ...viewport, height: window.innerHeight / 2 });
@@ -103,17 +118,19 @@ const Map = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
-  // const resizeMap = () => {
-  //   _onViewportChange({ ...viewport, height: window.innerHeight - 48 });
-  // };
-  // const resizeRemover = () => {
-  //   window.removeEventListener("resize", resizeMap);
-  // };
-
   const _onViewportChange = viewport => {
     // setViewport(viewport);
 
-    dispatch({ type: actionTypes.UPDATE_VIEWPORT, payload: { viewport } });
+    dispatch({
+      type: actionTypes.UPDATE_VIEWPORT,
+      payload: {
+        viewport: {
+          ...viewport,
+          width: "100%",
+          height: state.appState.isNewSighting ? 300 : window.innerHeight - 48
+        }
+      }
+    });
   };
   const showSelectedPin = pin => {
     console.log("sele", pin);
@@ -206,6 +223,7 @@ const Map = () => {
     // const { lng, lat, title } = activeMarker;
     return (
       <Marker
+        key={pin.id}
         latitude={latitude}
         longitude={longitude}
         offsetLeft={-20}
@@ -253,7 +271,7 @@ const Map = () => {
           onViewportChange={_onViewportChange}
         />
         {state.draftPin
-          ? markerRender({ ...state.draftPin, draggable: true })
+          ? markerRender({ ...state.draftPin, draggable: true, pin: { id: 0 } })
           : null}
         {state.pins.map(pin => markerRender({ pin, ...pin, draggable: false }))}
         {showPopup ? renderPopup(popupPin) : null}

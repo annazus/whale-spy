@@ -11,7 +11,6 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import InfoIcon from "@material-ui/icons/InfoRounded";
-import IconButton from "@material-ui/core/IconButton";
 import Link from "@material-ui/core/Link";
 
 const Filter = ({ title, list, handleToggle, selectedValues }) => {
