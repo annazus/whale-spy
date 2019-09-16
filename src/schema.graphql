@@ -1,8 +1,9 @@
 type Query {
   me: User!
-  pins: [Pin!]!
-  myPins: [Pin!]!
-  comments(pinId: ID!): [Comment!]!
+  sightings: [Sighting!]!
+  mySightings: [Sighting!]!
+  comments(sightingId: ID!): [Comment!]!
+  users: [User!]!
 }
 
 type User {
@@ -14,25 +15,33 @@ type User {
   updatedAt: Date!
 }
 
-type Pin {
+type Sighting {
   id: ID!
   latitude: Float!
   longitude: Float!
-  title: String!
-  content: String!
+  species: String!
+  content: String
   dateSpotted: Date!
+  countYoung: String
+  countAdults: String
+  direction: String
+  vocalizing: Boolean
+  activity: String
+  observerInteraction: String
+  observerLocation: String
+  observerDistance: String
   createdAt: Date!
   updatedAt: Date!
   author: User!
+  images: [Image!]!
   comments: [Comment!]!
-  image: String!
 }
 
 type Image {
   id: ID!
   url: String!
   isHero: Boolean!
-  pin: Pin!
+  sighting: Sighting!
   createdAt: Date!
 }
 
@@ -41,40 +50,56 @@ type Comment {
   text: String!
   author: User!
   createdAt: Date!
-  pin: Pin!
+  sighting: Sighting!
 }
 
 type Mutation {
   signUp: User!
-  createPin(pin: CreatePinInput!): Pin!
-  deletePin(pin: ID!): Pin!
-  updatePin(pinId: ID!, pin: UpdatePinInput!): Pin!
-  createComment(pinId: ID!, text: String!): Comment!
+  # createSighting(sighting: String!): Sighting
+  createSighting(sighting: CreateSightingInput!): Sighting!
+
+  deleteSighting(sighting: ID!): Sighting!
+  updateSighting(sightingId: ID!, sighting: UpdateSightingInput!): Sighting!
+  createComment(sightingId: ID!, text: String!): Comment!
   deleteComment(commentId: ID!): Comment!
-  createImage(pinId: ID!, url: String!, isHero: Boolean): Image!
+  createImage(sightingId: ID!, url: String!, isHero: Boolean): Image!
   deleteImage(imageId: ID!): Image!
 }
 
-input CreatePinInput {
-  latitude: Float!
+input CreateSightingInput {
   longitude: Float!
-  title: String!
-  content: String!
+  latitude: Float!
+  species: String!
+  content: String
   dateSpotted: Float!
-  image: String!
+  countYoung: String
+  countAdults: String
+  direction: String
+  vocalizing: Boolean
+  activity: String
+  observerInteraction: String
+  observerLocation: String
+  observerDistance: String
 }
-input UpdatePinInput {
+
+input UpdateSightingInput {
   latitude: Float
   longitude: Float
-  title: String
+  species: String
   content: String
-  dateSpotted: Float
-  image: String
+  dateSpotted: Date
+  direction: String
+  speed: String
+  vocalizing: Boolean
+  activity: String
+  observerInteraction: String
+  observerLocation: String
+  observerDistance: String
 }
 type Subscription {
-  pinAdded: Pin!
-  pinDeleted: Pin!
-  pinUpdated: Pin!
-  commentAdded(pinId: ID!): Comment!
+  sightingAdded: Sighting!
+  sightingDeleted: Sighting!
+  sightingUpdated: Sighting!
+  commentAdded(sightingId: ID!): Comment!
 }
 scalar Date

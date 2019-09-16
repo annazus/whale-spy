@@ -4,8 +4,8 @@ const Comment = {
     user.email = "";
     return user;
   },
-  pin({ pinId }, args, { req, db }, info) {
-    return db.Pin.findByPk(pinId);
+  sighting({ sightingId }, args, { req, db }, info) {
+    return db.Sighting.findByPk(sightingId);
   }
 };
 export default Comment;

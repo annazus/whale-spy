@@ -90,6 +90,22 @@ const reducer = (state = {}, action) => {
           }
         }
       };
+    case actionTypes.DRAFT_SAVED_SUCCESSFULLY:
+      return {
+        ...state,
+        draftPin: null,
+        appState: {
+          ...state.appState,
+          isNewSighting: false
+        },
+        map: {
+          viewport: {
+            ...state.map.viewport,
+            width: "100%",
+            height: window.innerHeight - 52
+          }
+        }
+      };
 
     case actionTypes.DISCARD_CURRENT_PIN_CHANGES:
       return { ...state, currentPin: null };
@@ -100,11 +116,11 @@ const reducer = (state = {}, action) => {
         isLoading: false,
         currentPin: { ...state.currentPin, comments: action.payload.comments }
       };
-    case actionTypes.GET_PINS:
+    case actionTypes.GET_SIGHTINGS:
       return {
         ...state,
         isLoading: false,
-        pins: action.payload.pins
+        appData: action.payload
       };
     case actionTypes.SHOW_COMMENTS:
       return {

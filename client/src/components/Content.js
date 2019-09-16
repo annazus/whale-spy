@@ -9,7 +9,6 @@ import Map from "./Map";
 import { Context } from "../Context";
 import { SightingHeader } from "./Sightings";
 import Sightings from "./Sightings";
-import UpdatePin from "./Pin/UpdatePin";
 import CommentsContainer from "./CommentsContainer";
 import FilterWindow from "./Filter";
 import NavigationSideBar from "./NavigationSideBar";
@@ -47,10 +46,6 @@ const Content = () => {
           ) : state.appState.isNewSighting ? (
             <Grid item xs={12}>
               <Sightings />
-            </Grid>
-          ) : state.currentPin && state.isAuth ? (
-            <Grid item xs={12}>
-              <UpdatePin />
             </Grid>
           ) : null}
         </Grid>

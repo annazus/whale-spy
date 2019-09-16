@@ -13,7 +13,7 @@ const User = connection => {
     picture: { type: Sequelize.STRING, allowNull: true }
   });
   user.associate = models => {
-    user.hasMany(models.Pin);
+    user.hasMany(models.Sighting);
     user.hasMany(models.Comment);
   };
   return user;

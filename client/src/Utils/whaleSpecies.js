@@ -1,27 +1,27 @@
 const whaleSpecies = [
   {
     name: "Orca (Killer Whale)",
-    val: "Orca",
+    val: "ORCA",
     helpUrl: "https://www.whalewatching.com/about-the-whales/puget-orca-whale/"
   },
   {
     name: "Gray Whale",
-    val: "Gray",
+    val: "GRAY",
     helpUrl: "https://www.whalewatching.com/about-the-whales/gray-whale/"
   },
   {
     name: "Humpback Whale",
-    val: "Humpback",
+    val: "HUMPBACK",
     helpUrl: "https://www.whalewatching.com/about-the-whales/humpback-whale/"
   },
   {
     name: "Minke Whale",
-    val: "Minke",
+    val: "MINK",
     helpUrl: "https://www.whalewatching.com/about-the-whales/minke-whale/"
   },
   {
     name: "Unknown",
-    val: "Unknown",
+    val: "UNKNOWN",
     helpUrl: "https://www.whalewatching.com/about-the-whales/"
   }
 ];

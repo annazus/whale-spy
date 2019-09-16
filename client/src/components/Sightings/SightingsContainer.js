@@ -1,8 +1,12 @@
 import React, { useContext } from "react";
-import { useAuthenticatedClient } from "../../graphql/client";
+import { useAuthenticatedClient, getClient } from "../../graphql/client";
 import { Context } from "../../Context";
 import { actionTypes } from "../../actions";
-import { MUTATION_CREATE_PIN } from "../../graphql/definitions/mutations";
+import {
+  MUTATION_CREATE_SIGHTING,
+  MUTATION_CREATE_COMMENT
+} from "../../graphql/definitions/mutations";
+import { QUERY_ME } from "../../graphql/definitions/queries";
 import Sightings from "./Sightings";
 import { uploadToCloudinary } from "../../Utils/UploadToCloudinary";
 
@@ -13,19 +17,49 @@ const SightingContainer = () => {
   const newSightingSaveHandler = async () => {
     try {
       dispatch({ type: actionTypes.START_BUSY });
-      const pinUrl = await uploadToCloudinary(state.draftPin.image);
+      // const imageUrl = await uploadToCloudinary(state.draftPin.image);
+
       const variables = {
-        image: pinUrl,
-        title: state.draftPin.title,
-        content: state.draftPin.content,
+        // image: pinUrl,
         latitude: state.draftPin.latitude,
         longitude: state.draftPin.longitude,
-        dateSpotted: state.draftPin.dateSpotted
+        countYoung: state.draftPin.countYoung
+          ? state.draftPin.countYoung
+          : null,
+        countAdults: state.draftPin.countAdults
+          ? state.draftPin.countAdults
+          : null,
+        species: state.draftPin.species,
+        content: state.draftPin.content ? state.draftPin.content : null,
+        dateSpotted: state.draftPin.dateSpotted,
+        direction: state.draftPin.direction ? state.draftPin.direction : null,
+        vocalizing: state.draftPin.vocalizing
+          ? state.draftPin.vocalizing
+          : null,
+        activity: state.draftPin.activity ? state.draftPin.activity : null,
+        observerInteraction: state.draftPin.observerInteraction
+          ? state.draftPin.observerInteraction
+          : null,
+        observerDistance: state.draftPin.observerDistance
+          ? state.draftPin.observerDistance
+          : null,
+        observerLocation: state.draftPin.observerLocation
+          ? state.draftPin.observerLocation
+          : null
       };
+      console.log(variables);
+      const { id_token } = window.gapi.auth2
+        .getAuthInstance()
+        .currentUser.get()
+        .getAuthResponse();
+      console.log("idtoken", id_token);
+      const client = getClient(id_token);
       const newSighting = await client.mutate({
-        mutation: MUTATION_CREATE_PIN,
+        mutation: MUTATION_CREATE_SIGHTING,
         variables
       });
+      console.log(newSighting);
+      dispatch({ type: actionTypes.DRAFT_SAVED_SUCCESSFULLY });
       dispatch({ type: actionTypes.END_BUSY });
     } catch (error) {
       dispatch({ type: actionTypes.END_BUSY });

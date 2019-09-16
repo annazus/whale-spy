@@ -17,13 +17,22 @@ const useStyles = makeStyles(theme => ({
     alignItems: "center",
     justifyContent: "center"
   },
-  progress: {}
+  progress: {
+    position: "fixed",
+    left: "50%",
+    top: "50%",
+    marginLeft: "-12px",
+    marginTop: "-12px"
+  }
 }));
 const FullScreenProgressIndicator = () => {
   const classes = useStyles();
   return (
     <Paper className={classes.background} square>
-      <CircularProgress color="secondary"></CircularProgress>
+      <CircularProgress
+        color="secondary"
+        className={classes.progress}
+      ></CircularProgress>
     </Paper>
   );
 };

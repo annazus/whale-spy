@@ -25,6 +25,7 @@ const getUserInfo = async req => {
   }
 };
 const authenticated = next => async (parent, args, ctx, info) => {
+  console.log("authenti");
   const { db, req } = ctx;
   const { email, picture, name } = await getUserInfo(req);
   const currentUser = await db.User.findOne({

@@ -13,7 +13,7 @@ const Image = connection => {
   });
 
   image.associate = models => {
-    image.belongsTo(models.Pin);
+    image.belongsTo(models.Sighting);
   };
 
   return image;

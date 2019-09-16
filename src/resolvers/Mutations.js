@@ -1,9 +1,9 @@
 import { AuthenticationError } from "apollo-server";
 import { getUserInfo, authenticated } from "../controllers";
 import {
-  PIN_ADDED,
-  PIN_UPDATED,
-  PIN_DELETED,
+  SIGHTING_ADDED,
+  SIGHTING_UPDATED,
+  SIGHTING_DELETED,
   COMMENT_ADDED
 } from "./SubscriptionTypes";
 const Mutation = {
@@ -16,68 +16,131 @@ const Mutation = {
     }
     return db.User.create({ name, email, picture });
   },
-  createPin: authenticated(
-    async (parent, { pin }, { currentUser, db, pubsub }) => {
-      const { latitude, longitude, title, image, content, dateSpotted } = pin;
-      const newPin = await db.Pin.create({
-        dateSpotted: dateSpotted,
-        content,
-        latitude,
-        longitude,
-        title,
-        image,
+  createSighting: authenticated(
+    async (parent, { sighting }, { currentUser, db, pubsub }) => {
+      console.log("inputs", sighting);
+
+      const newSighting = await db.Sighting.create({
+        ...sighting,
         userId: currentUser.id
       });
-      console.log(newPin.dataValues);
-      pubsub.publish(PIN_ADDED, { pinAdded: newPin.dataValues });
-      return newPin.dataValues;
+      console.log(newSighting);
+      pubsub.publish(SIGHTING_ADDED, { sightingAdded: newSighting.dataValues });
+      return newSighting.dataValues;
     }
   ),
-  updatePin: authenticated(
-    async (parent, { pinId, pin }, { currentUser, db, pubsub }) => {
-      console.log(pinId, pin);
-      const pinToUpdate = await db.Pin.findByPk(pinId);
-      if (!pinToUpdate) throw new Error("Pin cannot be found");
-      if (pinToUpdate.userId !== currentUser.id) {
-        throw new Error("You are not the author of this pin");
+  // createSighting: authenticated(
+  //   async (parent, { sighting }, { currentUser, db, pubsub }) => {
+  //     console.log(sighting);
+
+  //     return "Hello";
+  //     // try {
+  //     //   const {
+  //     //     latitude,
+  //     //     longitude,
+  //     //     dateSpotted,
+  //     //     species,
+  //     //     content,
+  //     //     countYoung,
+  //     //     countAdults,
+  //     //     direction,
+  //     //     speed,
+  //     //     vocalizing,
+  //     //     activity,
+  //     //     observerInteraction,
+  //     //     observerDistance,
+  //     //     observerLocation
+  //     //   } = sighting;
+  //     //   const newSighting = await db.Sighting.create({
+  //     //     latitude,
+  //     //     longitude,
+  //     //     dateSpotted,
+  //     //     countYoung,
+  //     //     countAdult,
+  //     //     species,
+  //     //     content,
+  //     //     direction,
+  //     //     speed,
+  //     //     vocalizing,
+  //     //     activity,
+  //     //     observerInteraction,
+  //     //     observerDistance,
+  //     //     observerLocation,
+  //     //     userId: currentUser.id
+  //     //   });
+  //     //   pubsub.publish(SIGHTING_ADDED, {
+  //     //     sightingAdded: newSighting.dataValues
+  //     //   });
+  //     //   return newSighting.dataValues;
+  //     // } catch (error) {
+  //     //   console.log(error);
+  //     // }
+  //   }
+  // ),
+  updateSighting: authenticated(
+    async (parent, { sightingId, sighting }, { currentUser, db, pubsub }) => {
+      console.log(sightingId, sighting);
+      const sightingToUpdate = await db.Sighting.findByPk(sightingId);
+      if (!sightingToUpdate) throw new Error("Sighting cannot be found");
+      if (sightingToUpdate.userId !== currentUser.id) {
+        throw new Error("You are not the author of this sighting");
       }
-      const { latitude, longitude, title, content, dateSpotted, image } = pin;
-      const rowsAffected = await db.Pin.update(
+      const {
+        latitude,
+        longitude,
+        dateSpotted,
+        countYoung,
+        countAdult,
+        species,
+        content,
+        direction,
+        speed,
+        vocalizing,
+        activity,
+        observerInteraction,
+        observerDistance,
+        observerLocation
+      } = sighting;
+      const rowsAffected = await db.Sighting.update(
         {
-          dateSpotted: dateSpotted ? dateSpotted : pinToUpdate.dateSpotted,
-          content: content ? content : pinToUpdate.content,
-          latitude: latitude ? latitude : pinToUpdate.latitude,
-          longitude: longitude ? longitude : pinToUpdate.longitude,
-          title: title ? title : pinToUpdate.title,
-          image: image ? image : pinToUpdate.image
+          dateSpotted: dateSpotted ? dateSpotted : sightingToUpdate.dateSpotted,
+          content: content ? content : sightingToUpdate.content,
+          latitude: latitude ? latitude : sightingToUpdate.latitude,
+          longitude: longitude ? longitude : sightingToUpdate.longitude
         },
-        { where: { id: pinId } }
+        { where: { id: sightingId } }
       );
       console.log(rowsAffected);
-      const updatedPin = await db.Pin.findByPk(pinId);
-      pubsub.publish(PIN_UPDATED, { pinUpdated: updatedPin.dataValues });
+      const updatedSighting = await db.Sighting.findByPk(sightingId);
+      pubsub.publish(SIGHTING_UPDATED, {
+        sightingUpdated: updatedSighting.dataValues
+      });
 
-      return updatedPin.dataValues;
+      return updatedSighting.dataValues;
     }
   ),
-  deletePin: authenticated(
-    async (parent, { pin }, { db, currentUser, pubsub }) => {
-      const pinToDelete = await db.Pin.findByPk(pin);
-      if (!pinToDelete) throw new Error("Pin cannot be found");
-      if (pinToDelete.dataValues.userId !== currentUser.id)
-        throw new Error("You must be the author of the pin to delete it");
-      const affectedRows = await db.Pin.destroy({ where: { id: pin } });
-      pubsub.publish(PIN_DELETED, { pinDeleted: pinToDelete.dataValues });
+  deleteSighting: authenticated(
+    async (parent, { sighting }, { db, currentUser, pubsub }) => {
+      const sightingToDelete = await db.Sighting.findByPk(sighting);
+      if (!sightingToDelete) throw new Error("Sighting cannot be found");
+      if (sightingToDelete.dataValues.userId !== currentUser.id)
+        throw new Error("You must be the author of the sighting to delete it");
+      const affectedRows = await db.Sighting.destroy({
+        where: { id: sighting }
+      });
+      pubsub.publish(SIGHTING_DELETED, {
+        sightingDeleted: sightingToDelete.dataValues
+      });
 
-      return pinToDelete.dataValues;
+      return sightingToDelete.dataValues;
     }
   ),
 
   createComment: authenticated(
-    async (parent, { pinId, text }, { currentUser, db, pubsub }) => {
+    async (parent, { sightingId, text }, { currentUser, db, pubsub }) => {
       const comment = await db.Comment.create({
         text,
-        pinId,
+        sightingId,
         userId: currentUser.id
       });
 
@@ -99,10 +162,14 @@ const Mutation = {
     }
   ),
   createImage: authenticated(
-    async (parent, { pinId, url, isHero }, { currentUser, db, pubsub }) => {
+    async (
+      parent,
+      { sightingId, url, isHero },
+      { currentUser, db, pubsub }
+    ) => {
       const image = await db.Image.create({
         url,
-        pinId,
+        sightingId,
         userId: currentUser.id,
         isHero: isHero ? true : false
       });

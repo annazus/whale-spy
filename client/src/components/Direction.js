@@ -106,7 +106,7 @@ const Direction = ({ id, name, value, onChange }) => {
         <FormControlLabel
           value="U"
           control={<Radio />}
-          label="Unknown"
+          label="UNKNOWN"
           className={classes.unknown}
         ></FormControlLabel>
         <Divider></Divider>

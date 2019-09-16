@@ -12,7 +12,7 @@ const Comment = connection => {
   });
 
   comment.associate = models => {
-    comment.belongsTo(models.Pin);
+    comment.belongsTo(models.Sighting);
     comment.belongsTo(models.User);
   };
 

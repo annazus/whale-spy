@@ -71,8 +71,8 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
   const saveIsDisabled = () => {
     const isDisabled =
       !sighting.dateSpotted ||
-      !sighting.whaleSpecies ||
-      !(sighting.adultCount || sighting.juvenileCount) ||
+      !sighting.species ||
+      !(sighting.countAdult || sighting.countYoung) ||
       !sighting.direction;
 
     console.log("isDisabled", isDisabled);
@@ -107,8 +107,8 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
           <FormLabel component="legend">Whale species</FormLabel>
 
           <RadioGroup
-            name="whaleSpecies"
-            value={sighting.whaleSpecies}
+            name="species"
+            value={sighting.species}
             onChange={changeHandler}
           >
             {mmTypes.map(({ name, val, helpUrl }) => {
@@ -132,7 +132,7 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
           </RadioGroup>
         </FormControl>
 
-        {sighting.whaleSpecies === "Orca" ? (
+        {sighting.species === "Orca" ? (
           <FormControl
             component="fieldset"
             fullWidth
@@ -183,17 +183,17 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
         </MuiPickersUtilsProvider>
 
         <FormControl fullWidth variant="standard" margin="normal" required>
-          <InputLabel htmlFor="adultCount">Count of adults</InputLabel>
+          <InputLabel htmlFor="countAdult">Count of adults</InputLabel>
 
           <Select
-            value={sighting.adultCount}
+            value={sighting.countAdult}
             onChange={changeHandler}
             inputProps={{
-              name: "adultCount",
-              id: "adultCount"
+              name: "countAdult",
+              id: "countAdult"
             }}
           >
-            {[0, 1, 2, 3, 4, 5, 6, "6+"].map(value => {
+            {["0", "1", "2", "3", "4", "5", "6", "7+"].map(value => {
               return <MenuItem value={value}>{value}</MenuItem>;
             })}
           </Select>
@@ -202,15 +202,15 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
           <InputLabel htmlFor="babyCount">Count of juveniles</InputLabel>
 
           <Select
-            id="juvenileCount"
-            value={sighting.juvenileCount}
+            id="countYoung"
+            value={sighting.countYoung}
             onChange={changeHandler}
             inputProps={{
-              name: "juvenileCount",
-              id: "juvenileCount"
+              name: "countYoung",
+              id: "countYoung"
             }}
           >
-            {[0, 1, 2, 3, 4, 5, 6, "6+"].map(value => {
+            {["0", "1", "2", "3", "4", "5", "6", "7+"].map(value => {
               return <MenuItem value={value}>{value}</MenuItem>;
             })}
           </Select>
@@ -241,22 +241,22 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
               <FormControlLabel
                 control={
                   <Switch
-                    checked={sighting.isVocalizing}
-                    value={sighting.isVocalizing}
+                    checked={sighting.vocalizing}
+                    value={sighting.vocalizing}
                     onChange={changeHandler}
-                    name="isVocalizing"
+                    name="vocalizing"
                   />
                 }
                 label="Vocalizing"
               />
             </FormControl>
             <FormControl fullWidth variant="standard" margin="normal">
-              <InputLabel htmlFor="whaleActivity">Activity</InputLabel>
+              <InputLabel htmlFor="activity">Activity</InputLabel>
 
               <Select
-                id="whaleActivity"
-                name="whaleActivity"
-                value={sighting.whaleActivity}
+                id="activity"
+                name="activity"
+                value={sighting.activity}
                 onChange={changeHandler}
               >
                 {[
@@ -272,14 +272,14 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
               </Select>
             </FormControl>
             <FormControl fullWidth variant="standard" margin="normal">
-              <InputLabel htmlFor="interactionObserver">
+              <InputLabel htmlFor="observerInteraction">
                 Interaction with Observers
               </InputLabel>
 
               <Select
-                id="interactionObserver"
-                name="interactionObserver"
-                value={sighting.interactionObserver}
+                id="observerInteraction"
+                name="observerInteraction"
+                value={sighting.observerInteraction}
                 onChange={changeHandler}
               >
                 {[
@@ -309,12 +309,12 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
               </InputLabel>
 
               <Select
-                id="observerPosition"
-                name="observerPosition"
-                value={sighting.observerPosition}
+                id="observerLocation"
+                name="observerLocation"
+                value={sighting.observerLocation}
                 onChange={changeHandler}
               >
-                {["", "Land", "Boat", "Air"].map(value => {
+                {["", "Water", "Land", "Air"].map(value => {
                   return <MenuItem value={value}>{value}</MenuItem>;
                 })}
               </Select>
@@ -374,7 +374,7 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
               e.preventDefault();
               saveHandler();
             }}
-            disabled={saveIsDisabled()}
+            // disabled={saveIsDisabled()}
           >
             Save
             <DoneIcon color="white" className={classes.rightIcon} />

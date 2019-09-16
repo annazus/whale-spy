@@ -1,16 +1,16 @@
 import { Sequelize } from "sequelize";
 
-const Pin = {
+const Sighting = {
   async author({ userId }, args, { req, db }, info) {
     let user = await db.User.findByPk(userId);
     user.email = "";
     return user;
   },
   comments({ id }, args, { req, db }, info) {
-    return db.Comment.findAll({ where: { pinId: id } });
+    return db.Comment.findAll({ where: { sightingId: id } });
+  },
+  images({ id }, args, { req, db }, info) {
+    return db.Image.findAll({ where: { sightingId: id } });
   }
-  // images({ id }, args, { req, db }, info) {
-  //   return db.Image.findAll({ where: { pinId: id } });
-  // }
 };
-export default Pin;
+export default Sighting;

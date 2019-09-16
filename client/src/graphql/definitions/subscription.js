@@ -1,58 +1,86 @@
 import { gql } from "apollo-boost";
 
-export const PIN_ADDED_SUBSCRIPTION = gql`
-  subscription PinAdded {
-    pinAdded {
+export const SIGHTING_ADDED_SUBSCRIPTION = gql`
+  subscription SightingAdded {
+    sightingAdded {
       id
-      title
-      content
       latitude
       longitude
       dateSpotted
-      image
+      countYoung
+      countAdultS
+      species
+      content
+      direction
+      vocalizing
+      activity
+      observerInteraction
+      observerDistance
+      observerLocation
+      image {
+        id
+        url
+        isHero
+      }
       author {
         id
         name
+        picture
       }
       createdAt
+      updatedAt
     }
   }
 `;
-export const PIN_UPDATED_SUBSCRIPTION = gql`
-  subscription PinUpdated {
-    pinUpdated {
+export const SIGHTING_UPDATED_SUBSCRIPTION = gql`
+  subscription SightingUpdated {
+    sightingUpdated {
       id
-      title
-      content
       latitude
       longitude
       dateSpotted
-      image
+      countYoung
+      countAdultS
+      species
+      content
+      direction
+      vocalizing
+      activity
+      observerInteraction
+      observerDistance
+      observerLocation
+      image {
+        id
+        url
+        isHero
+      }
       author {
         id
         name
+        picture
       }
       createdAt
+      updatedAt
     }
   }
 `;
-export const PIN_DELETED_SUBSCRIPTION = gql`
-  subscription PinDeleted {
-    pinDeleted {
+export const SIGHTING_DELETED_SUBSCRIPTION = gql`
+  subscription SightingDeleted {
+    sightingDeleted {
       id
     }
   }
 `;
 export const COMMENT_ADDED_SUBSCRIPTION = gql`
-  subscription CommentAdded($pinId: ID!) {
-    commentAdded(pinId: $pinId) {
+  subscription CommentAdded($sightingId: ID!) {
+    commentAdded(sightingId: $sightingId) {
       text
       createdAt
       author {
         name
         picture
       }
-      pin {
+      sighting {
         id
       }
     }

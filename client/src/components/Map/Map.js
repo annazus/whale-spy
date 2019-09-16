@@ -11,11 +11,11 @@ import { ReactComponent as WhaleIcon } from "./whaleIcon.svg";
 import { ReactComponent as DraftWhaleIcon } from "./draftWhaleIcon.svg";
 import { Context } from "../../Context";
 import { actionTypes } from "../../actions";
-import { QUERY_PINS } from "../../graphql/definitions/queries";
+import { QUERY_SIGHTINGS } from "../../graphql/definitions/queries";
 import {
-  PIN_ADDED_SUBSCRIPTION,
-  PIN_DELETED_SUBSCRIPTION,
-  PIN_UPDATED_SUBSCRIPTION
+  SIGHTING_ADDED_SUBSCRIPTION,
+  SIGHTING_DELETED_SUBSCRIPTION,
+  SIGHTING_UPDATED_SUBSCRIPTION
 } from "../../graphql/definitions/subscription";
 import { getClient } from "../../graphql/client";
 import { Subscription } from "react-apollo";
@@ -64,6 +64,25 @@ const Map = () => {
   const classes = useStyles();
 
   useEffect(() => {
+    const getData = async () => {
+      const client = getClient();
+      console.log("get data");
+      try {
+        const sightingsData = await client.query({ query: QUERY_SIGHTINGS });
+        console.log(sightingsData);
+        dispatch({
+          type: actionTypes.GET_SIGHTINGS,
+          payload: sightingsData.data
+        });
+      } catch (error) {
+        console.log("Fetching sightings data", error);
+      }
+    };
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     window.addEventListener("resize", resizeMap);
 
     return resizeRemover;
@@ -92,31 +111,6 @@ const Map = () => {
 
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [state.draftPin]);
-  useEffect(() => {
-    const getData = async () => {
-      const client = getClient();
-      const pinData = await client.query({ query: QUERY_PINS });
-      dispatch({
-        type: actionTypes.GET_PINS,
-        payload: { pins: pinData.data.pins }
-      });
-
-      // navigator.geolocation.getCurrentPosition(
-      //   pos => {
-      //     setViewport({
-      //       ...viewport,
-      //       longitude: pos.coords.longitude,
-      //       latitude: pos.coords.latitude
-      //     });
-      //   },
-      //   error => {
-      //     console.log(error);
-      //   }
-      // );
-    };
-    getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
 
   const _onViewportChange = viewport => {
     // setViewport(viewport);
@@ -137,7 +131,7 @@ const Map = () => {
     setShowPopup(false);
 
     dispatch({
-      type: actionTypes.SET_CURRENT_PIN,
+      type: actionTypes.SET_CURRENT_SIGHTING,
       payload: { currentPin: pin }
     });
   };
@@ -146,7 +140,7 @@ const Map = () => {
   //   setPopupPin(null);
   //   // dispatch({ type: actionTypes.ADDING_MODE });
   //   dispatch({
-  //     type: actionTypes.CREATE_DRAFT_PIN,
+  //     type: actionTypes.CREATE_DRAFT_SIGHTING,
   //     payload: {
   //       draftPin: {
   //         ...state.draftPin,
@@ -181,7 +175,7 @@ const Map = () => {
     setShowPopup(false);
 
     dispatch({
-      type: actionTypes.SET_CURRENT_PIN,
+      type: actionTypes.SET_CURRENT_SIGHTING,
       payload: { currentPin: pin }
     });
     dispatch({ type: actionTypes.SHOW_COMMENTS });
@@ -239,7 +233,7 @@ const Map = () => {
             setPopupPin(pin);
 
             dispatch({
-              type: actionTypes.UNSELECT_CURRENT_PIN
+              type: actionTypes.UNSELECT_CURRENT_SIGHTING
             });
             dispatch({ type: actionTypes.HIDE_COMMENTS });
           }}
@@ -273,7 +267,9 @@ const Map = () => {
         {state.draftPin
           ? markerRender({ ...state.draftPin, draggable: true, pin: { id: 0 } })
           : null}
-        {state.pins.map(pin => markerRender({ pin, ...pin, draggable: false }))}
+        {state.appData.sightings.map(pin =>
+          markerRender({ pin, ...pin, draggable: false })
+        )}
         {showPopup ? renderPopup(popupPin) : null}
 
         <div className={classes.fullscreenControlStyle}>
@@ -295,11 +291,11 @@ const Map = () => {
 
       {/* Subscriptions for Creating / Updating / Deleting Pins */}
       <Subscription
-        subscription={PIN_ADDED_SUBSCRIPTION}
+        subscription={SIGHTING_ADDED_SUBSCRIPTION}
         onSubscriptionData={({ subscriptionData }) => {
           const { pinAdded } = subscriptionData.data;
           dispatch({
-            type: actionTypes.ON_PIN_ADDED,
+            type: actionTypes.ON_SIGHTING_ADDED,
             payload: {
               pin: { ...pinAdded, dateSpotted: new Date(pinAdded.dateSpotted) }
             }
@@ -307,11 +303,11 @@ const Map = () => {
         }}
       />
       <Subscription
-        subscription={PIN_UPDATED_SUBSCRIPTION}
+        subscription={SIGHTING_UPDATED_SUBSCRIPTION}
         onSubscriptionData={({ subscriptionData }) => {
           const { pinUpdated } = subscriptionData.data;
           dispatch({
-            type: actionTypes.ON_PIN_UPDATED,
+            type: actionTypes.ON_SIGHTING_UPDATED,
             payload: {
               pin: {
                 ...pinUpdated,
@@ -322,11 +318,11 @@ const Map = () => {
         }}
       />
       <Subscription
-        subscription={PIN_DELETED_SUBSCRIPTION}
+        subscription={SIGHTING_DELETED_SUBSCRIPTION}
         onSubscriptionData={({ subscriptionData }) => {
           const { pinDeleted } = subscriptionData.data;
           dispatch({
-            type: actionTypes.ON_PIN_DELETED,
+            type: actionTypes.ON_SIGHTING_DELETED,
             payload: { pinId: pinDeleted.id }
           });
         }}

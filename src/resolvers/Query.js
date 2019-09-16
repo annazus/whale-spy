@@ -8,18 +8,20 @@ const Query = {
     const { db, currentUser } = ctx;
     return db.User.findByPk(currentUser.id);
   }),
-  pins(parent, args, { db }, info) {
-    console.log(db);
-    return db.Pin.findAll({});
+  sightings: async (parent, args, { db }, info) => {
+    console.log("get sightings");
+    const data = await db.Sighting.findAll({});
+    console.log(data);
+    return data;
   },
-  myPins(parent, args, { req, db }, info) {
-    return db.Pin.findAll({});
+  mySightings(parent, args, { req, db }, info) {
+    return db.Sighting.findAll({});
   },
-  comments: (parent, { pinId }, { db }, info) => {
-    return db.Comment.findAll({ where: { pinId: pinId } });
+  comments: (parent, { sightingId }, { db }, info) => {
+    return db.Comment.findAll({ where: { sightingId: sightingId } });
   }
-  //   images(parent, { pinId }, { request, db }, info) {
-  //     return db.Image.findAll({ where: { pinId: pinId } });
+  //   images(parent, { sightingId }, { request, db }, info) {
+  //     return db.Image.findAll({ where: { sightingId: sightingId } });
   //   }
 };
 

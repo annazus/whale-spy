@@ -8,15 +8,13 @@ import { createHttpLink } from "apollo-link-http";
 import { split } from "apollo-link";
 import { getMainDefinition } from "apollo-utilities";
 
-// export const GRAPHQL_SERVER_URL = `http://${process.env.REACT_APP_HOST}:${
-//   process.env.REACT_APP_PORT
-// }`;
-export const GRAPHQL_SERVER_URL = `https://${process.env.REACT_APP_HOST}`;
-// export const GRAPHQL_SUBSERVER_URL = `ws://${process.env.REACT_APP_HOST}
-// :4000/graphql`;
-export const GRAPHQL_SUBSERVER_URL = `wss://${
-  process.env.REACT_APP_HOST
-}/graphql`;
+export const GRAPHQL_SERVER_URL = `http://${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}`;
+// export const GRAPHQL_SERVER_URL = `https://${process.env.REACT_APP_HOST}`;
+export const GRAPHQL_SUBSERVER_URL = `ws://${process.env.REACT_APP_HOST}:4000/graphql`;
+
+// export const GRAPHQL_SUBSERVER_URL = `wss://${
+//   process.env.REACT_APP_HOST
+// }/graphql`;
 
 const httpLink = new createHttpLink({
   uri: GRAPHQL_SERVER_URL // use https for secure endpoint
@@ -76,6 +74,7 @@ export const getClient = idToken => {
 
   return new ApolloClient({
     link: link,
-    cache: cache
+    cache: cache,
+    onError: e => console.log("GRAPHQL ERROR", e)
   });
 };

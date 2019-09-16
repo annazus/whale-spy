@@ -92,7 +92,6 @@ const Header = () => {
                     payload: {
                       draftPin: {
                         ...state.draftPin,
-                        whaleSpecies: null,
                         dateSpotted: new Date().getTime(),
                         longitude: state.map.viewport.longitude,
                         latitude: state.map.viewport.latitude

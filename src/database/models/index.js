@@ -1,6 +1,6 @@
 import User from "./User";
-import Pin from "./Pin";
+import Sighting from "./Sighting";
 import Comment from "./Comment";
 import Image from "./Image";
 
-export { User, Pin, Comment, Image };
+export { User, Sighting, Comment, Image };

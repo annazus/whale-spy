@@ -24,22 +24,35 @@ export const QUERY_COMMENTS = gql`
   }
 `;
 
-export const QUERY_PINS = gql`
-  query Pins {
-    pins {
+export const QUERY_SIGHTINGS = gql`
+  query Sightings {
+    sightings {
       id
-      title
-      content
       latitude
       longitude
       dateSpotted
-      image
-      author {
-        id
-        name
-      }
-      createdAt
-      updatedAt
+      countYoung
+      countAdults
+      species
+      content
+      direction
+      vocalizing
+      activity
+      observerInteraction
+      observerDistance
+      observerLocation
+      #   image {
+      #     id
+      #     url
+      #     isHero
+      #   }
+      #   author {
+      #     id
+      #     name
+      #     picture
+      #   }
+      #   createdAt
+      #   updatedAt
     }
   }
 `;
