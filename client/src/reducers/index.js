@@ -155,17 +155,20 @@ const reducer = (state = {}, action) => {
         draftPin: null
         // addingMode: false
       };
-    case actionTypes.ON_PIN_ADDED:
-      pins = state.pins;
-      if (pins.find(pin => pin.id === action.payload.pin.id)) return state;
-      newPins = state.pins.concat(action.payload.pin);
-      return {
-        ...state,
-        isLoading: false,
-        pins: newPins,
-        currentPin: null,
-        draftPin: null
-      };
+    case actionTypes.ON_SIGHTING_ADDED:
+      const sightings = state.appData.sightings;
+      if (
+        !sightings.find(sighting => sighting.id === action.payload.sighting.id)
+      ) {
+        newPins = state.pins.concat(action.payload.pin);
+        return {
+          ...state,
+          appData: {
+            ...state.appData,
+            sightings: state.appData.sightings.concat(action.payload.sighting)
+          }
+        };
+      } else return state;
     case actionTypes.ON_PIN_UPDATED:
       const updatedPin1 = action.payload.pin;
       const oldPinList1 = state.pins;

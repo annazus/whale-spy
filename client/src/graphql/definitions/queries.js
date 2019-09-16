@@ -41,18 +41,17 @@ export const QUERY_SIGHTINGS = gql`
       observerInteraction
       observerDistance
       observerLocation
-      #   image {
-      #     id
-      #     url
-      #     isHero
-      #   }
-      #   author {
-      #     id
-      #     name
-      #     picture
-      #   }
-      #   createdAt
-      #   updatedAt
+      images {
+        id
+        url
+      }
+      author {
+        id
+        name
+        picture
+      }
+      createdAt
+      updatedAt
     }
   }
 `;

@@ -293,11 +293,14 @@ const Map = () => {
       <Subscription
         subscription={SIGHTING_ADDED_SUBSCRIPTION}
         onSubscriptionData={({ subscriptionData }) => {
-          const { pinAdded } = subscriptionData.data;
+          const { sightingAdded } = subscriptionData.data;
           dispatch({
             type: actionTypes.ON_SIGHTING_ADDED,
             payload: {
-              pin: { ...pinAdded, dateSpotted: new Date(pinAdded.dateSpotted) }
+              sighting: {
+                ...sightingAdded,
+                dateSpotted: new Date(sightingAdded.dateSpotted)
+              }
             }
           });
         }}

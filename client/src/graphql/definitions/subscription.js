@@ -8,7 +8,7 @@ export const SIGHTING_ADDED_SUBSCRIPTION = gql`
       longitude
       dateSpotted
       countYoung
-      countAdultS
+      countAdults
       species
       content
       direction
@@ -17,7 +17,7 @@ export const SIGHTING_ADDED_SUBSCRIPTION = gql`
       observerInteraction
       observerDistance
       observerLocation
-      image {
+      images {
         id
         url
         isHero
