@@ -9,9 +9,6 @@ export const Context = createContext({
   showComments: false,
   filterOpen: false,
   showNavigationSideBar: false,
-  // marineMammalTypes: ["Orca", "Gray", "Minke", "Humpback"],
-  // fromDate: new Date("1/1/1969"),
-  // toDate: new Date("1/1/2050"),
 
   //
   appState: {
@@ -25,8 +22,8 @@ export const Context = createContext({
     showComments: false
   },
   filterCriteria: {
-    fromDate: new Date("1/1/1969"),
-    toDate: new Date("1/1/2050"),
+    fromDate: null,
+    toDate: null,
     speciesList: ["ORCA", "GRAY", "MINK", "HUMPBACK", "UNKNOWN"]
   },
   appData: {

@@ -33,7 +33,9 @@ const DateFilter = ({
             >
               <Grid item xs={12}>
                 <KeyboardDateTimePicker
+                  clearable
                   fullWidth
+                  maxDate={toDate}
                   label="From Date"
                   value={fromDate}
                   onChange={handleFromDateChange}
@@ -41,8 +43,10 @@ const DateFilter = ({
               </Grid>
               <Grid item xs={12}>
                 <KeyboardDateTimePicker
+                  clearable
                   fullWidth
                   value={toDate}
+                  minDate={fromDate}
                   label="To Date"
                   onChange={handleToDateChange}
                 ></KeyboardDateTimePicker>

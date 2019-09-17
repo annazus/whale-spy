@@ -246,8 +246,11 @@ const reducer = (state = {}, action) => {
     case actionTypes.FILTER_DATE:
       return {
         ...state,
-        fromDate: action.payload.fromDate,
-        toDate: action.payload.toDate
+        filterCriteria: {
+          ...state.filterCriteria,
+          fromDate: action.payload.fromDate,
+          toDate: action.payload.toDate
+        }
       };
     case actionTypes.FILTER_MARINE_MAMMAL_TYPE:
       console.log("marines", action.payload.marineMammalTypes);

@@ -59,7 +59,7 @@ const FilterWindow = ({ isOpen, handleClose }) => {
   const handleReset = () => {
     dispatch({
       type: actionTypes.FILTER_DATE,
-      payload: { fromDate: new Date("1/1/1969"), toDate: new Date("1/1/2050") }
+      payload: { fromDate: null, toDate: null }
     });
     dispatch({
       type: actionTypes.FILTER_MARINE_MAMMAL_TYPE,
@@ -71,7 +71,7 @@ const FilterWindow = ({ isOpen, handleClose }) => {
     console.log(date);
     dispatch({
       type: actionTypes.FILTER_DATE,
-      payload: { fromDate: new Date(date), toDate: state.toDate }
+      payload: { fromDate: new Date(date), toDate: state.filterCriteria.toDate }
     });
   };
 
@@ -79,7 +79,10 @@ const FilterWindow = ({ isOpen, handleClose }) => {
     console.log(date);
     dispatch({
       type: actionTypes.FILTER_DATE,
-      payload: { fromDate: state.fromDate, toDate: new Date(date) }
+      payload: {
+        fromDate: state.filterCriteria.fromDate,
+        toDate: new Date(date)
+      }
     });
   };
   return (
@@ -121,8 +124,8 @@ const FilterWindow = ({ isOpen, handleClose }) => {
 
         <DateFilter
           title="Date Window"
-          fromDate={state.fromDate}
-          toDate={state.toDate}
+          fromDate={state.filterCriteria.fromDate}
+          toDate={state.filterCriteria.toDate}
           handleFromDateChange={handleFromDateChange}
           handleToDateChange={handleToDateChange}
         ></DateFilter>
