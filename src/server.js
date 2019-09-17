@@ -10,6 +10,7 @@ const GraphQLServerStart = async (db, pubsub) => {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
+    introspection: true,
     context: ({ req, connection }) => {
       if (req) return { req, db, pubsub };
       else return { db, pubsub };
