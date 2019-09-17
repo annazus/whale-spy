@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import Typography from "@material-ui/core/Typography";
 
 import Grid from "@material-ui/core/Grid";
 import Header from "./Header";
@@ -13,16 +14,24 @@ import CommentsContainer from "./CommentsContainer";
 import FilterWindow from "./Filter";
 import NavigationSideBar from "./NavigationSideBar";
 import FullScreenProgressIndicator from "./ProgressIndicator";
+import useGoogleAuth from "../GoogleLogin/GoogleAuth";
 const useStyles = makeStyles(theme => ({
   container: { position: "relative", padding: 0 }
 }));
 const Content = () => {
   const classes = useStyles();
   const { state } = useContext(Context);
+  const { isSignedIn, googleUser } = useGoogleAuth();
+  console.log("googleUser", googleUser);
   return (
     <>
       <CssBaseline />
+
       <Container maxWidth="md" className={classes.container}>
+        <Typography>
+          {isSignedIn}
+          {googleUser ? googleUser.email : null}
+        </Typography>
         {state.appState.isBusy ? (
           <FullScreenProgressIndicator></FullScreenProgressIndicator>
         ) : null}

@@ -4,17 +4,17 @@ import PropTypes from "prop-types";
 import GoogleButton from "./Button";
 import Button from "@material-ui/core/Button";
 
-const loadScript = (document, scriptSrc, tagName, cb) => {
-  const firstScriptTag = document.getElementsByTagName(tagName)[0];
-  const googleApiTag = document.createElement(tagName);
-  googleApiTag.src = scriptSrc;
-  if (firstScriptTag && firstScriptTag.parentNode) {
-    firstScriptTag.parentNode.insertBefore(googleApiTag, firstScriptTag);
-  } else {
-    document.head.appendChild(googleApiTag);
-  }
-  googleApiTag.onload = cb;
-};
+// const loadScript = (document, scriptSrc, tagName, cb) => {
+//   const firstScriptTag = document.getElementsByTagName(tagName)[0];
+//   const googleApiTag = document.createElement(tagName);
+//   googleApiTag.src = scriptSrc;
+//   if (firstScriptTag && firstScriptTag.parentNode) {
+//     firstScriptTag.parentNode.insertBefore(googleApiTag, firstScriptTag);
+//   } else {
+//     document.head.appendChild(googleApiTag);
+//   }
+//   googleApiTag.onload = cb;
+// };
 
 const GoogleLogout = ({
   logoutText,
@@ -23,21 +23,21 @@ const GoogleLogout = ({
   disabled,
   onLogoutSuccess
 }) => {
-  useEffect(() => {
-    console.log("useEffect to load Google Auth");
-    loadScript(document, googleAuthApiSrc, "script", initializeApi);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   console.log("useEffect to load Google Auth");
+  //   loadScript(document, googleAuthApiSrc, "script", initializeApi);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
-  const initializeApi = () => {
-    window.gapi.load(
-      "auth2",
-      () => {},
-      error => {
-        console.log(error);
-      }
-    );
-  };
+  // const initializeApi = () => {
+  //   window.gapi.load(
+  //     "auth2",
+  //     () => {},
+  //     error => {
+  //       console.log(error);
+  //     }
+  //   );
+  // };
 
   const signOutHandler = () => {
     if (disabled) return;
