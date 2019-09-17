@@ -1,7 +1,7 @@
 import Sequelize from "sequelize";
 
 const Image = connection => {
-  const image = connection.define("picture", {
+  const image = connection.define("image", {
     id: {
       type: Sequelize.UUID,
       primaryKey: true,

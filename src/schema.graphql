@@ -80,6 +80,7 @@ input CreateSightingInput {
   observerInteraction: String
   observerLocation: String
   observerDistance: String
+  imageUrl: String
 }
 
 input UpdateSightingInput {

@@ -41,6 +41,7 @@ export const MUTATION_CREATE_SIGHTING = gql`
     $observerInteraction: String
     $observerDistance: String
     $observerLocation: String
+    $imageUrl: String
   ) {
     createSighting(
       sighting: {
@@ -57,6 +58,7 @@ export const MUTATION_CREATE_SIGHTING = gql`
         observerInteraction: $observerInteraction
         observerDistance: $observerDistance
         observerLocation: $observerLocation
+        imageUrl: $imageUrl
       }
     ) {
       id

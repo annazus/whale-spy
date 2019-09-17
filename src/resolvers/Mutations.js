@@ -19,11 +19,20 @@ const Mutation = {
   createSighting: authenticated(
     async (parent, { sighting }, { currentUser, db, pubsub }) => {
       console.log("inputs", sighting);
-
+      const { imageUrl, ...rest } = sighting;
+      console.log(rest);
       const newSighting = await db.Sighting.create({
-        ...sighting,
+        ...rest,
         userId: currentUser.id
       });
+
+      if (imageUrl) {
+        const newImage = await db.Image.create({
+          sightingId: newSighting.id,
+          url: imageUrl,
+          isHero: true
+        });
+      }
       console.log(newSighting);
       pubsub.publish(SIGHTING_ADDED, { sightingAdded: newSighting.dataValues });
       return newSighting.dataValues;

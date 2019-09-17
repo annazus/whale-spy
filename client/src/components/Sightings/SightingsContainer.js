@@ -17,10 +17,13 @@ const SightingContainer = () => {
   const newSightingSaveHandler = async () => {
     try {
       dispatch({ type: actionTypes.START_BUSY });
-      // const imageUrl = await uploadToCloudinary(state.draftPin.image);
+
+      let imageUrl;
+
+      if (state.draftPin.image)
+        imageUrl = await uploadToCloudinary(state.draftPin.image);
 
       const variables = {
-        // image: pinUrl,
         latitude: state.draftPin.latitude,
         longitude: state.draftPin.longitude,
         countYoung: state.draftPin.countYoung
@@ -45,7 +48,8 @@ const SightingContainer = () => {
           : null,
         observerLocation: state.draftPin.observerLocation
           ? state.draftPin.observerLocation
-          : null
+          : null,
+        imageUrl
       };
       console.log(variables);
       const { id_token } = window.gapi.auth2

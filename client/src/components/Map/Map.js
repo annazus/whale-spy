@@ -19,7 +19,7 @@ import {
 } from "../../graphql/definitions/subscription";
 import { getClient } from "../../graphql/client";
 import { Subscription } from "react-apollo";
-import PinInfoPopup from "../PinInfoPopup";
+import { SightingPopup } from "../Sightings";
 
 const useStyles = makeStyles(t => ({
   root: {},
@@ -191,8 +191,8 @@ const Map = () => {
         closeOnClick={false}
         closeButton={false}
       >
-        <PinInfoPopup
-          pin={popupPin}
+        <SightingPopup
+          sighting={popupPin}
           showMoreHandler={showSelectedPin}
           commentsHandler={showComments}
           closeHandler={closeHandler}
@@ -212,12 +212,13 @@ const Map = () => {
       });
     }
   };
-  const markerRender = ({ pin, longitude, latitude, draggable }) => {
+  const markerRender = ({ sighting, longitude, latitude, draggable }) => {
     // if (!activeMarker) return;
     // const { lng, lat, title } = activeMarker;
+    console.log(sighting);
     return (
       <Marker
-        key={pin.id}
+        key={sighting.id}
         latitude={latitude}
         longitude={longitude}
         offsetLeft={-20}
@@ -230,7 +231,7 @@ const Map = () => {
             if (state.appState.isNewSighting) return;
 
             setShowPopup(true);
-            setPopupPin(pin);
+            setPopupPin(sighting);
 
             dispatch({
               type: actionTypes.UNSELECT_CURRENT_SIGHTING
@@ -265,10 +266,14 @@ const Map = () => {
           onViewportChange={_onViewportChange}
         />
         {state.draftPin
-          ? markerRender({ ...state.draftPin, draggable: true, pin: { id: 0 } })
+          ? markerRender({
+              ...state.draftPin,
+              draggable: true,
+              sighting: { id: 0 }
+            })
           : null}
-        {state.appData.sightings.map(pin =>
-          markerRender({ pin, ...pin, draggable: false })
+        {state.appData.sightings.map(sighting =>
+          markerRender({ sighting, ...sighting, draggable: false })
         )}
         {showPopup ? renderPopup(popupPin) : null}
 
