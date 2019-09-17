@@ -13,7 +13,7 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import InfoIcon from "@material-ui/icons/InfoRounded";
 import Link from "@material-ui/core/Link";
 
-const Filter = ({ title, list, handleToggle, selectedValues }) => {
+const Filter = ({ title, list, onChangeHandler, selectedValues }) => {
   console.log(selectedValues);
   return (
     <div>
@@ -26,10 +26,11 @@ const Filter = ({ title, list, handleToggle, selectedValues }) => {
             {list.map(({ name, val, helpUrl }, indx) => {
               console.log(selectedValues, val);
               return (
-                <ListItem key={indx} onClick={() => handleToggle(val)}>
+                <ListItem key={indx}>
                   <ListItemIcon>
                     <Checkbox
                       edge="start"
+                      onChange={onChangeHandler}
                       checked={selectedValues.includes(val)}
                       value={val}
                       inputProps={{

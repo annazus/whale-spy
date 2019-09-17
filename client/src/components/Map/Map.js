@@ -20,7 +20,7 @@ import {
 import { getClient } from "../../graphql/client";
 import { Subscription } from "react-apollo";
 import { SightingPopup } from "../Sightings";
-
+import getFilteredSightings from "../../Utils/getFilteredSightings";
 const useStyles = makeStyles(t => ({
   root: {},
   newPin: { position: "absolute", right: t.spacing(3), bottom: t.spacing(3) },
@@ -96,7 +96,7 @@ const Map = () => {
         viewport: {
           ...state.map.viewport,
           width: "100%",
-          height: state.appState.isNewSighting ? 300 : window.innerHeight - 48
+          height: state.appState.isNewSighting ? 300 : window.innerHeight - 52
         }
       }
     });
@@ -121,7 +121,7 @@ const Map = () => {
         viewport: {
           ...viewport,
           width: "100%",
-          height: state.appState.isNewSighting ? 300 : window.innerHeight - 48
+          height: state.appState.isNewSighting ? 300 : window.innerHeight - 52
         }
       }
     });
@@ -272,7 +272,10 @@ const Map = () => {
               sighting: { id: 0 }
             })
           : null}
-        {state.appData.sightings.map(sighting =>
+        {getFilteredSightings(
+          state.appData.sightings,
+          state.filterCriteria
+        ).map(sighting =>
           markerRender({ sighting, ...sighting, draggable: false })
         )}
         {showPopup ? renderPopup(popupPin) : null}

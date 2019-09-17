@@ -253,7 +253,10 @@ const reducer = (state = {}, action) => {
       console.log("marines", action.payload.marineMammalTypes);
       return {
         ...state,
-        marineMammalTypes: action.payload.marineMammalTypes
+        filterCriteria: {
+          ...state.filterCriteria,
+          speciesList: action.payload.marineMammalTypes
+        }
       };
     case actionTypes.SHOW_NAV_SIDE:
       return { ...state, showNavigationSideBar: true };

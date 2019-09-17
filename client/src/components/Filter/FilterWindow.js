@@ -30,18 +30,26 @@ const useStyles = makeStyles(styles);
 const FilterWindow = ({ isOpen, handleClose }) => {
   const { state, dispatch } = useContext(Context);
   const classes = useStyles();
-  const mmTypes = [{ name: "All", val: "All" }].concat(whaleSpecies);
+  const mmTypes = [{ name: "All", val: "ALL" }].concat(whaleSpecies);
 
-  const handleMMToggle = val => {
+  const onChangeSpeciesHandler = event => {
     let marineMammalTypes;
-    if (state.marineMammalTypes.includes(val)) {
-      marineMammalTypes = state.marineMammalTypes.filter(item => item !== val);
-    } else {
-      if (val === "All") {
+
+    if (event.target.value === "ALL") {
+      if (event.target.checked)
         marineMammalTypes = mmTypes.map(({ name, val }) => val);
-        console.log("all", marineMammalTypes);
-      } else marineMammalTypes = state.marineMammalTypes.concat([val]);
+      else marineMammalTypes = [];
+    } else {
+      if (event.target.checked)
+        marineMammalTypes = state.filterCriteria.speciesList.concat([
+          event.target.value
+        ]);
+      else
+        marineMammalTypes = state.filterCriteria.speciesList.filter(
+          item => item !== event.target.value
+        );
     }
+
     dispatch({
       type: actionTypes.FILTER_MARINE_MAMMAL_TYPE,
       payload: { marineMammalTypes }
@@ -121,9 +129,13 @@ const FilterWindow = ({ isOpen, handleClose }) => {
 
         <Filter
           title="Whale Species"
-          selectedValues={state.marineMammalTypes}
+          selectedValues={
+            state.filterCriteria.speciesList.length === whaleSpecies.length
+              ? state.filterCriteria.speciesList.concat(["ALL"])
+              : state.filterCriteria.speciesList
+          }
           list={mmTypes}
-          handleToggle={handleMMToggle}
+          onChangeHandler={onChangeSpeciesHandler}
         ></Filter>
       </Drawer>
     </div>
