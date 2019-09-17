@@ -25,6 +25,7 @@ const Content = () => {
   const classes = useStyles();
   const { state, dispatch } = useContext(Context);
   const { isSignedIn, googleUser } = useGoogleAuth();
+
   useEffect(() => {
     let idToken, client;
     if (googleUser) {
@@ -54,10 +55,6 @@ const Content = () => {
       <CssBaseline />
 
       <Container maxWidth="md" className={classes.container}>
-        <Typography>
-          {isSignedIn}
-          {googleUser ? googleUser.email : null}
-        </Typography>
         {state.appState.isBusy ? (
           <FullScreenProgressIndicator></FullScreenProgressIndicator>
         ) : null}
