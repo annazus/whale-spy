@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { makeStyles } from "@material-ui/core";
 import Drawer from "@material-ui/core/Drawer";
 import Divider from "@material-ui/core/Divider";
@@ -35,15 +35,25 @@ const useStyles = makeStyles(theme => ({
   menu: {},
   menuItem: {
     margin: theme.spacing(2)
+  },
+  error: {
+    marginTop: theme.spacing(2)
   }
 }));
 const NavigationSideBar = () => {
+  const [error, setError] = useState(null);
   const { state, dispatch } = useContext(Context);
   const classes = useStyles();
 
   const onSuccessHandler = () => {
     dispatch({ type: actionTypes.HIDE_NAV_SIDE });
   };
+
+  const onFailureHandler = error => {
+    console.log(error);
+    setError(error);
+  };
+
   return (
     <div className={classes.container}>
       <Drawer
@@ -104,6 +114,13 @@ const NavigationSideBar = () => {
           <Grid item xs={12}>
             <Divider></Divider>
           </Grid>
+          {error ? (
+            <Grid item xs={12} className={classes.error}>
+              <Typography variant="subtitle2" align="center" color="error">
+                {error}
+              </Typography>
+            </Grid>
+          ) : null}
           <Grid item xs={12} className={classes.menuItem}>
             {!state.isAuth ? (
               <Grid
@@ -117,11 +134,13 @@ const NavigationSideBar = () => {
                   mode="SIGNUP"
                   loginText="Signup"
                   onSuccessHandler={onSuccessHandler}
+                  onFailureHandler={onFailureHandler}
                 />
                 <Auth
                   mode="LOGIN"
                   loginText="Login"
                   onSuccessHandler={onSuccessHandler}
+                  onFailureHandler={onFailureHandler}
                 />
               </Grid>
             ) : (

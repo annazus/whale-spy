@@ -20,6 +20,8 @@ const Auth = ({ mode, loginText, onSuccessHandler, onFailureHandler }) => {
       if (onSuccessHandler) onSuccessHandler();
     } catch (error) {
       console.log(error);
+      onFailureHandler(error.message.replace("GraphQL error: ", ""));
+
       //if you hace already signed up let the person be logged in
     }
   };
@@ -35,6 +37,7 @@ const Auth = ({ mode, loginText, onSuccessHandler, onFailureHandler }) => {
       if (onSuccessHandler) onSuccessHandler();
     } catch (error) {
       console.log("error", error);
+      onFailureHandler(error.message.replace("GraphQL error: ", ""));
       //the person does not have an accout with this email - redirect to sign up
     }
   };
@@ -53,7 +56,7 @@ const Auth = ({ mode, loginText, onSuccessHandler, onFailureHandler }) => {
   };
   const onFailure = () => {
     console.log("onFailure");
-    if (onFailureHandler) onFailureHandler();
+    if (onFailureHandler) onFailureHandler("Google couldn't log you in");
   };
   const refreshToken = expiresIn => {
     setInterval(async () => {
