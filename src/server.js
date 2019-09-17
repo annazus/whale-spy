@@ -11,6 +11,8 @@ const GraphQLServerStart = async (db, pubsub) => {
     typeDefs,
     resolvers,
     introspection: true,
+    playground: true,
+
     context: ({ req, connection }) => {
       if (req) return { req, db, pubsub };
       else return { db, pubsub };
