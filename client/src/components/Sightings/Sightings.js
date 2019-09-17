@@ -68,12 +68,7 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
   const classes = useStyles();
 
   const saveIsDisabled = () => {
-    const isDisabled =
-      !sighting.dateSpotted ||
-      !sighting.species ||
-      !(sighting.countAdult || sighting.countYoung) ||
-      !sighting.direction;
-
+    const isDisabled = !sighting.dateSpotted || !sighting.species;
     console.log("isDisabled", isDisabled);
     return isDisabled;
   };
@@ -181,7 +176,7 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
           />
         </MuiPickersUtilsProvider>
 
-        <FormControl fullWidth variant="standard" margin="normal" required>
+        <FormControl fullWidth variant="standard" margin="normal">
           <InputLabel htmlFor="countAdult">Count of adults</InputLabel>
 
           <Select
@@ -197,7 +192,7 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
             })}
           </Select>
         </FormControl>
-        <FormControl fullWidth variant="standard" margin="normal" required>
+        <FormControl fullWidth variant="standard" margin="normal">
           <InputLabel htmlFor="babyCount">Count of juveniles</InputLabel>
 
           <Select
@@ -373,7 +368,7 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
               e.preventDefault();
               saveHandler();
             }}
-            // disabled={saveIsDisabled()}
+            disabled={saveIsDisabled()}
           >
             Save
             <DoneIcon color="white" className={classes.rightIcon} />
