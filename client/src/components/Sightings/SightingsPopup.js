@@ -16,6 +16,7 @@ import InfoIcon from "@material-ui/icons/Info";
 import Typography from "@material-ui/core/Typography";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import whaleSpecies from "../../Utils/whaleSpecies";
+import { formatToDisplay } from "../../Utils/DateFormatFunctions";
 const useStyles = makeStyles(theme => ({
   card: { maxWidth: 240, position: "relative" },
   closeIcon: {
@@ -84,7 +85,7 @@ const SightingsPopup = ({
           )}`}</Typography>
         </div>
         <Typography variant="subtitle2" gutterBottom color="textSecondary">
-          Spotted @ {new Date(dateSpotted).toLocaleString()}
+          Spotted @ {formatToDisplay(dateSpotted)}
         </Typography>
       </CardContent>
       {

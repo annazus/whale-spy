@@ -14,6 +14,9 @@ export const formatToDisplay = dateInSeconds => {
     .getMinutes()
     .toString()
     .padStart(2, "0");
-  const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
+
+  const ampm = hours > 12 ? "PM" : "AM";
+  const formattedDate = `${year}-${month}-${day} ${hours %
+    12}:${minutes} ${ampm}`;
   return formattedDate;
 };
