@@ -32,8 +32,7 @@ import InfoIcon from "@material-ui/icons/Info";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import DoneIcon from "@material-ui/icons/Done";
 
-import Direction from "../Direction";
-import InputImage from "../Inputs/ImageInput";
+import { Direction, ImageInput } from "../Inputs";
 
 import mmTypes from "../../Utils/whaleSpecies";
 
@@ -223,10 +222,10 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
         ></Direction>
 
         <div className={classes.imageContainer}>
-          <InputImage
+          <ImageInput
             onChange={changeHandler}
             imageUrl={sighting.image}
-          ></InputImage>
+          ></ImageInput>
         </div>
         <ExpansionPanel className={classes.expansionPanel}>
           <ExpansionPanelSummary

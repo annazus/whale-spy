@@ -11,7 +11,7 @@ import CloseIcon from "@material-ui/icons/CloseRounded";
 import { Context } from "../../Context";
 import { actionTypes } from "../../actions";
 import Auth from "../Auth";
-import Logout from "../Logout";
+import { Logout } from "../Auth";
 
 const useStyles = makeStyles(theme => ({
   container: {

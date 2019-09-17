@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import GoogleLogout from "../GoogleLogin/GoogleLogout";
-import { Context } from "../Context";
-import { actionTypes } from "../actions";
+import GoogleLogout from "../../GoogleLogin/GoogleLogout";
+import { Context } from "../../Context";
+import { actionTypes } from "../../actions";
 const Logout = ({ onSuccessHandler }) => {
   const { state, dispatch } = useContext(Context);
   const onLogoutSuccess = () => {

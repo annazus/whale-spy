@@ -13,9 +13,9 @@ import Tooltip from "@material-ui/core/Tooltip";
 
 import { makeStyles } from "@material-ui/core";
 
-import { Context } from "../Context";
-import { actionTypes } from "../actions";
-import Logo from "./Logo";
+import { Context } from "../../Context";
+import { actionTypes } from "../../actions";
+import Logo from "../Logo";
 
 const useStyles = makeStyles(theme => ({
   container: {},

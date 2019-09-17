@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
-import { GoogleLogin } from "../GoogleLogin";
-import { getClient } from "../graphql/client";
-import { MUTATION_SIGNUP } from "../graphql/definitions/mutations";
-import { QUERY_ME } from "../graphql/definitions/queries";
-import { Context } from "../Context";
-import { actionTypes } from "../actions";
+import { GoogleLogin } from "../../GoogleLogin";
+import { getClient } from "../../graphql/client";
+import { MUTATION_SIGNUP } from "../../graphql/definitions/mutations";
+import { QUERY_ME } from "../../graphql/definitions/queries";
+import { Context } from "../../Context";
+import { actionTypes } from "../../actions";
 const Auth = ({ mode, loginText, onSuccessHandler, onFailureHandler }) => {
   console.log(loginText);
   const { state, dispatch } = useContext(Context);
