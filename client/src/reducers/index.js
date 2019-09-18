@@ -136,7 +136,6 @@ const reducer = (state = {}, action) => {
         ...state,
         isAuth: true,
         isLoading: false,
-        user: action.payload.user,
         appState: { ...state.appState, isAuth: true },
         appData: { ...state.appData, me: action.payload.user }
       };
@@ -231,7 +230,6 @@ const reducer = (state = {}, action) => {
         ...state,
         isAuth: true,
         isLoading: false,
-        user: action.payload.user,
         appState: { ...state.appState, isAuth: true },
         appData: { ...state.appData, me: action.payload.user }
       };

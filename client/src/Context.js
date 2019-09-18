@@ -5,7 +5,6 @@ export const Context = createContext({
   currentPin: null,
   draftPin: null,
   pins: [],
-  user: {},
   showComments: false,
   filterOpen: false,
   showNavigationSideBar: false,

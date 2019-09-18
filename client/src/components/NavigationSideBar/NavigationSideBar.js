@@ -77,8 +77,8 @@ const NavigationSideBar = () => {
           {state.isAuth ? (
             <Avatar
               className={classes.avatar}
-              alt={state.user.name}
-              src={state.user.picture}
+              alt={state.appData.me.name}
+              src={state.appData.me.picture}
             ></Avatar>
           ) : null}
         </div>
