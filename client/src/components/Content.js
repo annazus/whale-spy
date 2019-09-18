@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from "react";
 import { makeStyles } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Grid from "@material-ui/core/Grid";
 import Header from "./Header";
 import Map from "./Map";
 import { Context } from "../Context";
@@ -55,27 +54,16 @@ const Content = () => {
         ) : null}
         <FilterWindow></FilterWindow>
         <NavigationSideBar></NavigationSideBar>
-        <Grid container direction="row" alignItems="center">
-          <Grid item xs={12}>
-            <Header />
-          </Grid>
-          <Grid item xs={12}>
-            <SightingHeader></SightingHeader>
-          </Grid>
+        <Header />
+        <SightingHeader></SightingHeader>
 
-          <Grid item xs={12}>
-            <Map />
-          </Grid>
-          {state.showComments ? (
-            <Grid item xs={12}>
-              <CommentsContainer />
-            </Grid>
-          ) : state.appState.isNewSighting ? (
-            <Grid item xs={12}>
-              <Sightings />
-            </Grid>
-          ) : null}
-        </Grid>
+        <Map />
+
+        {state.showComments ? (
+          <CommentsContainer />
+        ) : state.appState.isNewSighting ? (
+          <Sightings />
+        ) : null}
       </Container>
     </>
   );

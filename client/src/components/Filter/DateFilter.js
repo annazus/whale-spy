@@ -30,8 +30,9 @@ const DateFilter = ({
               direction="row"
               justify="center"
               alignItems="center"
+              spacing={2}
             >
-              <Grid item xs={12}>
+              <Grid item md={12} lg={6}>
                 <KeyboardDateTimePicker
                   clearable
                   fullWidth
@@ -41,7 +42,7 @@ const DateFilter = ({
                   onChange={handleFromDateChange}
                 ></KeyboardDateTimePicker>
               </Grid>
-              <Grid item xs={12}>
+              <Grid item md={12} lg={6}>
                 <KeyboardDateTimePicker
                   clearable
                   fullWidth

@@ -15,8 +15,10 @@ import { Logout } from "../Auth";
 
 const useStyles = makeStyles(theme => ({
   container: {
-    position: "relative",
-    width: "100%"
+    position: "relative"
+  },
+  drawerContents: {
+    width: "320px"
   },
   avatar: {
     margin: theme.spacing(2)
@@ -32,12 +34,11 @@ const useStyles = makeStyles(theme => ({
     top: theme.spacing(0),
     right: theme.spacing(0)
   },
-  menu: {},
   menuItem: {
     margin: theme.spacing(2)
   },
   error: {
-    marginTop: theme.spacing(2)
+    margin: theme.spacing(2)
   }
 }));
 const NavigationSideBar = () => {
@@ -57,6 +58,8 @@ const NavigationSideBar = () => {
   return (
     <div className={classes.container}>
       <Drawer
+        className={classes.drawer}
+        PaperProps={{ square: true }}
         open={state.showNavigationSideBar}
         anchor="right"
         onClose={() => {
@@ -85,12 +88,13 @@ const NavigationSideBar = () => {
 
         <Grid
           container
-          className={classes.menu}
           direction="column"
           alignItems="center"
-          justifyContent="center"
+          justify="center"
+          wrap="nowrap"
+          className={classes.drawerContents}
         >
-          <Grid item xs={12} className={classes.menuItem}>
+          <Grid item xl={12} className={classes.menuItem}>
             <Link
               href="https://www.bewhalewise.org"
               target="_blank"
@@ -98,14 +102,13 @@ const NavigationSideBar = () => {
               rel="noopener"
               variant="body1"
             >
-              <Typography variant=""></Typography>
-              Be Whale Wise
+              <Typography variant="body1"> Be Whale Wise</Typography>
             </Link>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xl={12}>
             <Divider></Divider>
           </Grid>
-          <Grid item xs={12} className={classes.menuItem}>
+          <Grid item xl={12} className={classes.menuItem}>
             <Link
               href="https://www.www.org"
               target="_blank"
@@ -113,11 +116,10 @@ const NavigationSideBar = () => {
               rel="noopener"
               variant="body1"
             >
-              <Typography variant=""></Typography>
-              About
+              <Typography variant="body1"> About</Typography>
             </Link>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xl={12}>
             <Divider></Divider>
           </Grid>
           {error ? (
@@ -127,26 +129,31 @@ const NavigationSideBar = () => {
               </Typography>
             </Grid>
           ) : null}
-          <Grid item xs={12} className={classes.menuItem}>
-            {!state.isAuth ? (
+          <Grid item xl={12} className={classes.menuItem}>
+            {!state.appState.isAuth ? (
               <Grid
                 container
                 direction="row"
                 alignItems="center"
                 justify="center"
+                wrap="nowrap"
               >
-                <Auth
-                  mode="SIGNUP"
-                  loginText="Signup"
-                  onSuccessHandler={onSuccessHandler}
-                  onFailureHandler={onFailureHandler}
-                />
-                <Auth
-                  mode="LOGIN"
-                  loginText="Login"
-                  onSuccessHandler={onSuccessHandler}
-                  onFailureHandler={onFailureHandler}
-                />
+                <Grid item xl={6}>
+                  <Auth
+                    mode="SIGNUP"
+                    loginText="Signup"
+                    onSuccessHandler={onSuccessHandler}
+                    onFailureHandler={onFailureHandler}
+                  />
+                </Grid>
+                <Grid item xl={6}>
+                  <Auth
+                    mode="LOGIN"
+                    loginText="Login"
+                    onSuccessHandler={onSuccessHandler}
+                    onFailureHandler={onFailureHandler}
+                  />
+                </Grid>
               </Grid>
             ) : (
               <Logout logoutText="Logout" onSuccessHandler={onSuccessHandler} />

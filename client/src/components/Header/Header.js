@@ -67,6 +67,9 @@ const Header = () => {
             className={classes.iconButton}
             aria-label="search"
             color="inherit"
+            onClick={() =>
+              alert("The search map functionality has not been implemented")
+            }
           >
             <SearchIcon color="inherit" />
           </IconButton>

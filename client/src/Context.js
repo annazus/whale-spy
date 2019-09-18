@@ -8,6 +8,7 @@ export const Context = createContext({
   showComments: false,
   filterOpen: false,
   showNavigationSideBar: false,
+  isAuth: false,
 
   //
   appState: {
