@@ -2,7 +2,7 @@ import Sequelize from "sequelize";
 import * as definitions from "./models";
 let connection;
 const connectToDB = async force => {
-  connection = new Sequelize(process.env.POSTGRES_URI, {
+  connection = new Sequelize(process.env.DATABASE_URL, {
     dialect: "postgres",
     logging: false,
     dialectOptions: {
