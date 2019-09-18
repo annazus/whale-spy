@@ -18,24 +18,21 @@ const useGoogleAuth = () => {
           const signedIn = googleAuth.isSignedIn.get();
           setIsSignedIn(signedIn);
           const googleUser = googleAuth.currentUser.get();
+          if (!googleUser) return;
           const profile = googleUser.getBasicProfile();
-          const {
-            access_token,
-            id_token,
-            expires_in
-          } = googleUser.getAuthResponse(true);
+          const authResponse = googleUser.getAuthResponse(true);
+          if (!profile || !authResponse) return;
           const userInfo = {
             name: profile.getName(),
             email: profile.getEmail(),
             imageUrl: profile.getImageUrl(),
-            accessToken: access_token,
-            idToken: id_token
+            idToken: authResponse.id_token
           };
           setGoogleUser(userInfo);
-          //   if (refreshToken) refreshToken(expires_in);
         },
         error => {
           // onFailure(error);
+          console.log(error);
         }
       );
     });
