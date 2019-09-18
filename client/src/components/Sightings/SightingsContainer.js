@@ -51,18 +51,15 @@ const SightingContainer = () => {
           : null,
         imageUrl
       };
-      console.log(variables);
       const { id_token } = window.gapi.auth2
         .getAuthInstance()
         .currentUser.get()
         .getAuthResponse();
-      console.log("idtoken", id_token);
       const client = getClient(id_token);
       const newSighting = await client.mutate({
         mutation: MUTATION_CREATE_SIGHTING,
         variables
       });
-      console.log(newSighting);
       dispatch({ type: actionTypes.DRAFT_SAVED_SUCCESSFULLY });
       dispatch({ type: actionTypes.END_BUSY });
     } catch (error) {

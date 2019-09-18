@@ -9,9 +9,7 @@ const Query = {
     return db.User.findByPk(currentUser.id);
   }),
   sightings: async (parent, args, { db }, info) => {
-    console.log("get sightings");
     const data = await db.Sighting.findAll({});
-    console.log(data);
     return data;
   },
   mySightings(parent, args, { req, db }, info) {

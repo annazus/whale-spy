@@ -41,11 +41,9 @@ const Comment = ({ comment }) => {
 const CommentsList = ({ commentsList }) => {
   const classes = useStyles();
 
-  console.log(commentsList);
   const content = () => {
     return commentsList.map(comment => <Comment comment={comment} />);
   };
-  console.log(content());
   return <List className={classes.root}>{content()}</List>;
 };
 export default CommentsList;

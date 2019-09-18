@@ -57,10 +57,8 @@ const commentTwo = {
 };
 
 export const initDatabase = async db => {
-  console.log("wiping out");
   //Wipe out data
   Object.keys(db).forEach(table => {
-    console.log(table);
     db[table].truncate({ cascade: true });
   });
 

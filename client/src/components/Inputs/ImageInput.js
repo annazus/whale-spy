@@ -54,7 +54,6 @@ const ImageInput = ({ onChange, imageUrl }) => {
   const [localUrl, setLocalUrl] = useState("");
 
   const onClickPhoto = () => {
-    console.log("onClickPhoto");
     if (!showTrashPhotoButton) setShowTrashPhotoButton(true);
   };
   const deletePhoto = e => {

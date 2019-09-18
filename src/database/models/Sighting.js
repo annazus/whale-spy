@@ -12,7 +12,7 @@ const Sighting = connection => {
     longitude: { type: Sequelize.FLOAT, allowNull: false },
     dateSpotted: { type: Sequelize.DATE, allowNull: false },
     species: {
-      type: Sequelize.ENUM("ORCA", "GRAY", "MINK", "HUMPBACK", "UNKNOWN"),
+      type: Sequelize.ENUM("ORCA", "GRAY", "MINKE", "HUMPBACK", "UNKNOWN"),
       allowNull: false
     },
     countAdults: {
@@ -24,22 +24,23 @@ const Sighting = connection => {
       allowNull: true
     },
     direction: {
-      type: Sequelize.ENUM("UNKNOWN", "N", "S", "E", "W"),
+      type: Sequelize.ENUM("Unknown", "N", "S", "E", "W"),
       allowNull: true
     },
     speed: {
-      type: Sequelize.ENUM("STATIONARY", "SLOW", "FAST"),
+      type: Sequelize.ENUM("Stationary", "Slow", "Fast"),
       allowNull: true
     },
     content: { type: Sequelize.TEXT, allowNull: true },
     vocalizing: { type: Sequelize.BOOLEAN, allowNull: true },
     activity: {
       type: Sequelize.ENUM(
+        "Breaching",
         "Feeding",
         "Hunting",
-        "Breaching",
         "Sleeping",
-        "Playing"
+        "Playing",
+        "Spyhopping"
       ),
       allowNull: true
     },

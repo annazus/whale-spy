@@ -68,7 +68,6 @@ const FilterWindow = ({ isOpen, handleClose }) => {
   };
 
   const handleFromDateChange = date => {
-    console.log(date);
     dispatch({
       type: actionTypes.FILTER_DATE,
       payload: { fromDate: new Date(date), toDate: state.filterCriteria.toDate }
@@ -76,7 +75,6 @@ const FilterWindow = ({ isOpen, handleClose }) => {
   };
 
   const handleToDateChange = date => {
-    console.log(date);
     dispatch({
       type: actionTypes.FILTER_DATE,
       payload: {

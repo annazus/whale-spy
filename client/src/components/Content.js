@@ -36,20 +36,17 @@ const Content = () => {
     const login = async () => {
       try {
         const result = await client.query({ query: QUERY_ME });
-        console.log("me", result.data.me);
         dispatch({
           type: actionTypes.LOGIN_USER,
           payload: { user: result.data.me }
         });
       } catch (error) {
-        console.log("error", error);
         //the person does not have an accout with this email - redirect to sign up
       }
     };
     if (idToken) login();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [googleUser]);
-  console.log("googleUser", googleUser);
   return (
     <>
       <CssBaseline />

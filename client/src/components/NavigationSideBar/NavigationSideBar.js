@@ -50,7 +50,6 @@ const NavigationSideBar = () => {
   };
 
   const onFailureHandler = error => {
-    console.log(error);
     setError(error);
   };
 

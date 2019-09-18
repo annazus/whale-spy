@@ -37,7 +37,6 @@ const CommentsContainer = () => {
         query: QUERY_COMMENTS,
         variables
       });
-      console.log(commentData);
       if (commentData)
         dispatch({
           type: actionTypes.GET_COMMENTS,
@@ -65,7 +64,6 @@ const CommentsContainer = () => {
         subscription={COMMENT_ADDED_SUBSCRIPTION}
         variables={{ pinId: state.currentPin.id }}
         onSubscriptionData={({ subscriptionData }) => {
-          console.log("subcomment", subscriptionData);
           const { commentAdded } = subscriptionData.data;
           dispatch({
             type: actionTypes.ON_COMMENT_ADDED,

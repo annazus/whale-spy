@@ -72,7 +72,6 @@ const Direction = ({ id, name, value, onChange }) => {
       fullWidth
       variant="standard"
       margin="normal"
-      required
     >
       <FormLabel component="legend">Direction whale was swimming</FormLabel>
       <RadioGroup id={id} name={name} value={value} onChange={onChange}>
@@ -104,9 +103,9 @@ const Direction = ({ id, name, value, onChange }) => {
         </div>
 
         <FormControlLabel
-          value="U"
+          value="Uknown"
           control={<Radio />}
-          label="UNKNOWN"
+          label="Unknown"
           className={classes.unknown}
         ></FormControlLabel>
         <Divider></Divider>

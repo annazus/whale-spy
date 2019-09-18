@@ -1,5 +1,5 @@
 import { createContext } from "react";
-
+import whaleSpecies from "./Utils/whaleSpecies";
 export const Context = createContext({
   isLoading: false,
   currentPin: null,
@@ -24,7 +24,7 @@ export const Context = createContext({
   filterCriteria: {
     fromDate: null,
     toDate: null,
-    speciesList: ["ORCA", "GRAY", "MINK", "HUMPBACK", "UNKNOWN"]
+    speciesList: whaleSpecies.map(({ val }) => val)
   },
   appData: {
     sightings: [],

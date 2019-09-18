@@ -65,7 +65,6 @@ export const getClient = idToken => {
     uri: GRAPHQL_SERVER_URL,
     headers: idToken ? { authorization: `Bearer ${idToken}` } : null
   });
-  console.log("GRAPHQL_SERVER_URL", GRAPHQL_SERVER_URL);
 
   return new ApolloClient({
     link: link,

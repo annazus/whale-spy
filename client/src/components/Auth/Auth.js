@@ -6,20 +6,17 @@ import { QUERY_ME } from "../../graphql/definitions/queries";
 import { Context } from "../../Context";
 import { actionTypes } from "../../actions";
 const Auth = ({ mode, loginText, onSuccessHandler, onFailureHandler }) => {
-  console.log(loginText);
   const { state, dispatch } = useContext(Context);
   const signup = async client => {
     let result;
     try {
       result = await client.mutate({ mutation: MUTATION_SIGNUP });
-      console.log(result.data.signUp);
       dispatch({
         type: actionTypes.SIGNUP_USER,
         payload: { user: result.data.signup }
       });
       if (onSuccessHandler) onSuccessHandler();
     } catch (error) {
-      console.log(error);
       onFailureHandler(error.message.replace("GraphQL error: ", ""));
 
       //if you hace already signed up let the person be logged in
@@ -29,14 +26,12 @@ const Auth = ({ mode, loginText, onSuccessHandler, onFailureHandler }) => {
     let result;
     try {
       result = await client.query({ query: QUERY_ME });
-      console.log("me", result.data.me);
       dispatch({
         type: actionTypes.LOGIN_USER,
         payload: { user: result.data.me }
       });
       if (onSuccessHandler) onSuccessHandler();
     } catch (error) {
-      console.log("error", error);
       onFailureHandler(error.message.replace("GraphQL error: ", ""));
       //the person does not have an accout with this email - redirect to sign up
     }
@@ -45,7 +40,6 @@ const Auth = ({ mode, loginText, onSuccessHandler, onFailureHandler }) => {
 
   const onSuccess = async googleUser => {
     const { name, email, imageUrl, idToken } = googleUser;
-    console.log("onSuccess", name, email, imageUrl, idToken);
     // const client = getClient(idToken);
     const client = getClient(idToken);
     if (mode === "SIGNUP") {
@@ -55,7 +49,6 @@ const Auth = ({ mode, loginText, onSuccessHandler, onFailureHandler }) => {
     }
   };
   const onFailure = () => {
-    console.log("onFailure");
     if (onFailureHandler) onFailureHandler("Google couldn't log you in");
   };
   const refreshToken = expiresIn => {
@@ -64,7 +57,6 @@ const Auth = ({ mode, loginText, onSuccessHandler, onFailureHandler }) => {
         .getAuthInstance()
         .currentUser.get()
         .reloadAuthResponse();
-      console.log("here", expires_in, id_token);
       refreshToken(expires_in);
     }, expiresIn * 1000);
   };

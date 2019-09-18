@@ -66,16 +66,13 @@ const Map = () => {
   useEffect(() => {
     const getData = async () => {
       const client = getClient();
-      console.log("get data");
       try {
         const sightingsData = await client.query({ query: QUERY_SIGHTINGS });
-        console.log(sightingsData);
         dispatch({
           type: actionTypes.GET_SIGHTINGS,
           payload: sightingsData.data
         });
       } catch (error) {
-        console.log("Fetching sightings data", error);
       }
     };
     getData();
@@ -89,7 +86,6 @@ const Map = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const resizeMap = () => {
-    console.log("resizing window");
     dispatch({
       type: actionTypes.UPDATE_VIEWPORT,
       payload: {
@@ -127,7 +123,6 @@ const Map = () => {
     });
   };
   const showSelectedPin = pin => {
-    console.log("sele", pin);
     setShowPopup(false);
 
     dispatch({
@@ -152,7 +147,6 @@ const Map = () => {
   //   });
   // };
   const clickHandler = ({ lngLat, type, target }) => {
-    console.log(target.nodeName);
     if (!state.appState.isAuth) return;
     if (target.nodeName === "BUTTON" || target.nodeName === "svg") return;
     if (state.appState.isNewSighting) {
@@ -215,7 +209,6 @@ const Map = () => {
   const markerRender = ({ sighting, longitude, latitude, draggable }) => {
     // if (!activeMarker) return;
     // const { lng, lat, title } = activeMarker;
-    console.log(sighting);
     return (
       <Marker
         key={sighting.id}

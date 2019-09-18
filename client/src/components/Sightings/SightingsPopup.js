@@ -44,7 +44,6 @@ const SightingsPopup = ({
     images,
     updatedAt
   } = sighting;
-  console.log(sighting);
 
   let imageUrl;
   if (sighting.images.length > 0) {

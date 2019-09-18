@@ -59,11 +59,9 @@ const GoogleLogin = ({
 
   const returnUserInfo = googleUser => {
     const profile = googleUser.getBasicProfile();
-    console.log(profile);
     const { access_token, id_token, expires_in } = googleUser.getAuthResponse(
       true
     );
-    console.log("expires in", expires_in);
     const userInfo = {
       name: profile.getName(),
       email: profile.getEmail(),

@@ -14,7 +14,6 @@ import InfoIcon from "@material-ui/icons/InfoRounded";
 import Link from "@material-ui/core/Link";
 
 const Filter = ({ title, list, onChangeHandler, selectedValues }) => {
-  console.log(selectedValues);
   return (
     <div>
       <ExpansionPanel expanded>
@@ -24,7 +23,6 @@ const Filter = ({ title, list, onChangeHandler, selectedValues }) => {
         <ExpansionPanelDetails>
           <List>
             {list.map(({ name, val, helpUrl }, indx) => {
-              console.log(selectedValues, val);
               return (
                 <ListItem key={indx}>
                   <ListItemIcon>

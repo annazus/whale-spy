@@ -19,13 +19,11 @@ const useGoogleAuth = () => {
           setIsSignedIn(signedIn);
           const googleUser = googleAuth.currentUser.get();
           const profile = googleUser.getBasicProfile();
-          console.log(profile);
           const {
             access_token,
             id_token,
             expires_in
           } = googleUser.getAuthResponse(true);
-          console.log("expires in", expires_in);
           const userInfo = {
             name: profile.getName(),
             email: profile.getEmail(),
@@ -35,12 +33,9 @@ const useGoogleAuth = () => {
           };
           setGoogleUser(userInfo);
           //   if (refreshToken) refreshToken(expires_in);
-
-          console.log(userInfo);
         },
         error => {
           // onFailure(error);
-          console.log(error);
         }
       );
     });
@@ -59,7 +54,6 @@ const useGoogleAuth = () => {
   };
 
   useEffect(() => {
-    console.log("loading script");
     loadScript();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

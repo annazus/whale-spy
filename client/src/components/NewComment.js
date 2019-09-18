@@ -20,7 +20,6 @@ const NewComment = ({ pinId }) => {
   const client = useAuthenticatedClient();
   const { state, dispatch } = useContext(Context);
   const [comment, setComment] = useState("");
-  console.log(classes.root);
   const submitHandler = async e => {
     e.preventDefault();
 
@@ -37,7 +36,6 @@ const NewComment = ({ pinId }) => {
       });
       setComment("");
     } catch (error) {
-      console.log(error);
     }
   };
   const discardHandler = e => {

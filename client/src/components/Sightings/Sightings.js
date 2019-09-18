@@ -69,7 +69,6 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
 
   const saveIsDisabled = () => {
     const isDisabled = !sighting.dateSpotted || !sighting.species;
-    console.log("isDisabled", isDisabled);
     return isDisabled;
   };
 
@@ -126,7 +125,7 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
           </RadioGroup>
         </FormControl>
 
-        {sighting.species === "Orca" ? (
+        {sighting.species === "ORCA" ? (
           <FormControl
             component="fieldset"
             fullWidth
@@ -164,7 +163,6 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
             id="date-picker-inline"
             label="Date and Time of sighting"
             onChange={date => {
-              console.log("date", date);
               const event = {
                 target: {
                   value: new Date(date).getTime(),
@@ -255,11 +253,12 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
               >
                 {[
                   "",
+                  "Breaching",
                   "Feeding",
                   "Hunting",
-                  "Breaching",
                   "Sleeping",
-                  "Playing"
+                  "Playing",
+                  "Spyhopping"
                 ].map(value => {
                   return <MenuItem value={value}>{value}</MenuItem>;
                 })}
@@ -325,6 +324,7 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
                 onChange={changeHandler}
               >
                 {[
+                  "",
                   "<100 meters",
                   "100 meters",
                   "200 meters",
@@ -339,7 +339,7 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
                   href="https://www.bewhalewise.org"
                   target="_blank"
                   textAlign="center"
-                  color="error"
+                  color="secondary"
                   rel="noopener"
                 >
                   (Recommendations to Be Whale Wise)
