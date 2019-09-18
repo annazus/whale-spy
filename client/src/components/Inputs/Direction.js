@@ -107,7 +107,7 @@ const Direction = ({ id, name, value, onChange }) => {
         </div>
 
         <FormControlLabel
-          value="Uknown"
+          value="Unknown"
           control={<Radio />}
           label="Unknown"
           tabIndex="5"
