@@ -2,8 +2,6 @@ import React, { useContext, useEffect } from "react";
 import { makeStyles } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Typography from "@material-ui/core/Typography";
-
 import Grid from "@material-ui/core/Grid";
 import Header from "./Header";
 import Map from "./Map";
@@ -24,7 +22,7 @@ const useStyles = makeStyles(theme => ({
 const Content = () => {
   const classes = useStyles();
   const { state, dispatch } = useContext(Context);
-  const { isSignedIn, googleUser } = useGoogleAuth();
+  const { googleUser } = useGoogleAuth();
 
   useEffect(() => {
     let idToken, client;

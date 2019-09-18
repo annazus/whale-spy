@@ -46,6 +46,7 @@ const NavigationSideBar = () => {
   const classes = useStyles();
 
   const onSuccessHandler = () => {
+    setError(null);
     dispatch({ type: actionTypes.HIDE_NAV_SIDE });
   };
 
@@ -58,11 +59,17 @@ const NavigationSideBar = () => {
       <Drawer
         open={state.showNavigationSideBar}
         anchor="right"
-        onClose={() => dispatch({ type: actionTypes.HIDE_NAV_SIDE })}
+        onClose={() => {
+          setError(null);
+          dispatch({ type: actionTypes.HIDE_NAV_SIDE });
+        }}
       >
         <IconButton
           className={classes.closeButton}
-          onClick={() => dispatch({ type: actionTypes.HIDE_NAV_SIDE })}
+          onClick={() => {
+            setError(null);
+            dispatch({ type: actionTypes.HIDE_NAV_SIDE });
+          }}
         >
           <CloseIcon fontSize="normal"></CloseIcon>
         </IconButton>

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { GoogleLogin } from "../../GoogleLogin";
 import { getClient } from "../../graphql/client";
 import { MUTATION_SIGNUP } from "../../graphql/definitions/mutations";
@@ -6,14 +6,14 @@ import { QUERY_ME } from "../../graphql/definitions/queries";
 import { Context } from "../../Context";
 import { actionTypes } from "../../actions";
 const Auth = ({ mode, loginText, onSuccessHandler, onFailureHandler }) => {
-  const { state, dispatch } = useContext(Context);
+  const { dispatch } = useContext(Context);
   const signup = async client => {
     let result;
     try {
       result = await client.mutate({ mutation: MUTATION_SIGNUP });
       dispatch({
         type: actionTypes.SIGNUP_USER,
-        payload: { user: result.data.signup }
+        payload: { user: result.data.signUp }
       });
       if (onSuccessHandler) onSuccessHandler();
     } catch (error) {
@@ -39,8 +39,7 @@ const Auth = ({ mode, loginText, onSuccessHandler, onFailureHandler }) => {
   const onRequest = googleUser => {};
 
   const onSuccess = async googleUser => {
-    const { name, email, imageUrl, idToken } = googleUser;
-    // const client = getClient(idToken);
+    const { idToken } = googleUser;
     const client = getClient(idToken);
     if (mode === "SIGNUP") {
       await signup(client);
@@ -53,7 +52,7 @@ const Auth = ({ mode, loginText, onSuccessHandler, onFailureHandler }) => {
   };
   const refreshToken = expiresIn => {
     setInterval(async () => {
-      const { expires_in, id_token } = await window.gapi.auth2
+      const { expires_in } = await window.gapi.auth2
         .getAuthInstance()
         .currentUser.get()
         .reloadAuthResponse();
