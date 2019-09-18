@@ -51,6 +51,8 @@ const reducer = (state = {}, action) => {
         map: {
           viewport: { ...state.map.viewport, width: "100%", height: "300px" }
         },
+        appData: { ...state.appData, popup: null },
+
         currentPin: null
       };
     case actionTypes.UPDATE_DRAFT_LOCATION:
@@ -76,6 +78,8 @@ const reducer = (state = {}, action) => {
     case actionTypes.DISCARD_DRAFT:
       return {
         ...state,
+        appData: { ...state.appData, error: null },
+
         draftPin: null,
         appState: {
           ...state.appState,
@@ -92,6 +96,8 @@ const reducer = (state = {}, action) => {
     case actionTypes.DRAFT_SAVED_SUCCESSFULLY:
       return {
         ...state,
+        appData: { ...state.appData, error: null },
+
         draftPin: null,
         appState: {
           ...state.appState,
@@ -141,18 +147,7 @@ const reducer = (state = {}, action) => {
       };
     case actionTypes.MAKE_REQUEST:
       return { ...state, isLoading: true };
-    case actionTypes.SAVE_DRAFT_AS_PIN:
-      pins = state.pins;
-      if (pins.find(pin => pin.id === action.payload.pin.id)) return state;
-      newPins = state.pins.concat(action.payload.pin);
-      return {
-        ...state,
-        isLoading: false,
-        pins: newPins,
-        currentPin: null,
-        draftPin: null
-        // addingMode: false
-      };
+
     case actionTypes.ON_SIGHTING_ADDED:
       const sightings = state.appData.sightings;
       if (
@@ -163,7 +158,8 @@ const reducer = (state = {}, action) => {
           ...state,
           appData: {
             ...state.appData,
-            sightings: state.appData.sightings.concat(action.payload.sighting)
+            sightings: state.appData.sightings.concat(action.payload.sighting),
+            error: null
           }
         };
       } else return state;
@@ -237,7 +233,11 @@ const reducer = (state = {}, action) => {
     case actionTypes.FILTER_CLOSE:
       return { ...state, filterOpen: false };
     case actionTypes.FILTER_OPEN:
-      return { ...state, filterOpen: true };
+      return {
+        ...state,
+        filterOpen: true,
+        appData: { ...state.appData, popup: null }
+      };
 
     case actionTypes.FILTER_DATE:
       return {
@@ -257,7 +257,11 @@ const reducer = (state = {}, action) => {
         }
       };
     case actionTypes.SHOW_NAV_SIDE:
-      return { ...state, showNavigationSideBar: true };
+      return {
+        ...state,
+        showNavigationSideBar: true,
+        appData: { ...state.appData, popup: null }
+      };
     case actionTypes.HIDE_NAV_SIDE:
       return { ...state, showNavigationSideBar: false };
     case actionTypes.UPDATE_VIEWPORT:
@@ -266,7 +270,16 @@ const reducer = (state = {}, action) => {
       return { ...state, appState: { ...state.appState, isBusy: true } };
     case actionTypes.END_BUSY:
       return { ...state, appState: { ...state.appState, isBusy: false } };
-
+    case actionTypes.SET_POPUP:
+      return {
+        ...state,
+        appData: { ...state.appData, popup: action.payload }
+      };
+    case actionTypes.SET_ERROR:
+      return {
+        ...state,
+        appData: { ...state.appData, error: action.payload }
+      };
     default:
       return state;
   }

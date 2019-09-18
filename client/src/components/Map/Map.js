@@ -45,12 +45,16 @@ const useStyles = makeStyles(t => ({
     height: "20px",
     color: "red",
     zIndex: "0"
+  },
+  draftWhaleIconStyle: {
+    width: "30px",
+    height: "30px",
+    color: "red",
+    zIndex: "0"
   }
 }));
 
 const Map = () => {
-  const [showPopup, setShowPopup] = useState(false);
-  const [popupPin, setPopupPin] = useState(null);
   // const initialViewport = {
   //   height: window.innerHeight - 48,
   //   width: "100%",
@@ -73,6 +77,7 @@ const Map = () => {
           payload: sightingsData.data
         });
       } catch (error) {
+        console.log(error);
       }
     };
     getData();
@@ -85,6 +90,13 @@ const Map = () => {
     return resizeRemover;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const setPopupPin = popup => {
+    dispatch({
+      type: actionTypes.SET_POPUP,
+      payload: popup
+    });
+  };
   const resizeMap = () => {
     dispatch({
       type: actionTypes.UPDATE_VIEWPORT,
@@ -123,8 +135,6 @@ const Map = () => {
     });
   };
   const showSelectedPin = pin => {
-    setShowPopup(false);
-
     dispatch({
       type: actionTypes.SET_CURRENT_SIGHTING,
       payload: { currentPin: pin }
@@ -161,12 +171,11 @@ const Map = () => {
   };
 
   const closeHandler = () => {
-    setShowPopup(false);
     setPopupPin(null);
   };
 
   const showComments = pin => {
-    setShowPopup(false);
+    setPopupPin(null);
 
     dispatch({
       type: actionTypes.SET_CURRENT_SIGHTING,
@@ -180,13 +189,13 @@ const Map = () => {
       <Popup
         tipSize={5}
         anchor="top"
-        longitude={popupPin.longitude}
-        latitude={popupPin.latitude}
+        longitude={state.appData.popup.longitude}
+        latitude={state.appData.popup.latitude}
         closeOnClick={false}
         closeButton={false}
       >
         <SightingPopup
-          sighting={popupPin}
+          sighting={state.appData.popup}
           showMoreHandler={showSelectedPin}
           commentsHandler={showComments}
           closeHandler={closeHandler}
@@ -223,7 +232,6 @@ const Map = () => {
           onClick={() => {
             if (state.appState.isNewSighting) return;
 
-            setShowPopup(true);
             setPopupPin(sighting);
 
             dispatch({
@@ -234,7 +242,7 @@ const Map = () => {
           style={{ zIndex: "-3" }}
         >
           {draggable ? (
-            <DraftWhaleIcon className={classes.whaleIconStyle} />
+            <DraftWhaleIcon className={classes.draftWhaleIconStyle} />
           ) : (
             <WhaleIcon className={classes.whaleIconStyle} />
           )}
@@ -271,23 +279,13 @@ const Map = () => {
         ).map(sighting =>
           markerRender({ sighting, ...sighting, draggable: false })
         )}
-        {showPopup ? renderPopup(popupPin) : null}
+        {state.appData.popup ? renderPopup(state.appData.popup) : null}
 
         <div className={classes.fullscreenControlStyle}>
           <div className={classes.navStyle}>
             <NavigationControl />
           </div>
         </div>
-        {
-          //  state.isAuth &&
-          //       !state.draftPin &&
-          //       !state.showComments &&
-          //       !state.currentPin ? (
-          //         <div className={classes.newPin}>
-          //           <NewButton onClick={onNewPinClicked}></NewButton>
-          //         </div>
-          //       ) : null
-        }
       </ReactMapGL>
 
       {/* Subscriptions for Creating / Updating / Deleting Pins */}

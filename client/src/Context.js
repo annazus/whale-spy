@@ -27,7 +27,9 @@ export const Context = createContext({
   },
   appData: {
     sightings: [],
-    me: []
+    me: [],
+    error: null,
+    popup: null
   },
   map: {
     viewport: {

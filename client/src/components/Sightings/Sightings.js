@@ -107,6 +107,7 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
             {mmTypes.map(({ name, val, helpUrl }) => {
               return (
                 <FormControlLabel
+                  key={val}
                   value={val}
                   control={<Radio />}
                   label={
@@ -143,6 +144,7 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
               {["Unknown", "J", "K", "L", "Transient"].map(val => {
                 return (
                   <FormControlLabel
+                    key={val}
                     value={val}
                     control={<Radio />}
                     label={val}
@@ -186,7 +188,11 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
             }}
           >
             {["0", "1", "2", "3", "4", "5", "6", "7+"].map(value => {
-              return <MenuItem value={value}>{value}</MenuItem>;
+              return (
+                <MenuItem key={value} value={value}>
+                  {value}
+                </MenuItem>
+              );
             })}
           </Select>
         </FormControl>
@@ -203,7 +209,11 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
             }}
           >
             {["0", "1", "2", "3", "4", "5", "6", "7+"].map(value => {
-              return <MenuItem value={value}>{value}</MenuItem>;
+              return (
+                <MenuItem key={value} value={value}>
+                  {value}
+                </MenuItem>
+              );
             })}
           </Select>
         </FormControl>
@@ -235,7 +245,14 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
                   <Switch
                     checked={sighting.vocalizing}
                     value={sighting.vocalizing}
-                    onChange={changeHandler}
+                    onChange={e => {
+                      changeHandler({
+                        target: {
+                          name: "vocalizing",
+                          value: e.target.checked
+                        }
+                      });
+                    }}
                     name="vocalizing"
                   />
                 }
@@ -260,7 +277,11 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
                   "Playing",
                   "Spyhopping"
                 ].map(value => {
-                  return <MenuItem value={value}>{value}</MenuItem>;
+                  return (
+                    <MenuItem key={value} value={value}>
+                      {value}
+                    </MenuItem>
+                  );
                 })}
               </Select>
             </FormControl>
@@ -281,7 +302,11 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
                   "Appeared interested in observers",
                   "Moved away"
                 ].map(value => {
-                  return <MenuItem value={value}>{value}</MenuItem>;
+                  return (
+                    <MenuItem key={value} value={value}>
+                      {value}
+                    </MenuItem>
+                  );
                 })}
               </Select>
             </FormControl>
@@ -308,7 +333,11 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
                 onChange={changeHandler}
               >
                 {["", "Water", "Land", "Air"].map(value => {
-                  return <MenuItem value={value}>{value}</MenuItem>;
+                  return (
+                    <MenuItem key={value} value={value}>
+                      {value}
+                    </MenuItem>
+                  );
                 })}
               </Select>
             </FormControl>
@@ -331,14 +360,17 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
                   "1 mile",
                   "> 1 mile"
                 ].map(value => {
-                  return <MenuItem value={value}>{value}</MenuItem>;
+                  return (
+                    <MenuItem key={value} value={value}>
+                      {value}
+                    </MenuItem>
+                  );
                 })}
               </Select>
               <FormHelperText>
                 <Link
                   href="https://www.bewhalewise.org"
                   target="_blank"
-                  textAlign="center"
                   color="secondary"
                   rel="noopener"
                 >
@@ -350,7 +382,9 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
         </ExpansionPanel>
 
         <TextField
-          placeholder="Other information"
+          placeholder="Notes"
+          rows={4}
+          rowsMax={4}
           multiline
           variant="standard"
           onChange={changeHandler}
@@ -371,7 +405,7 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
             disabled={saveIsDisabled()}
           >
             Save
-            <DoneIcon color="white" className={classes.rightIcon} />
+            <DoneIcon className={classes.rightIcon} />
           </Button>
         </div>
       </form>

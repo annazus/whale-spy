@@ -47,6 +47,12 @@ const SightingHeader = () => {
         <Typography variant="h6" color="primary" align="center">
           {state.appState.isNewSighting ? "New" : "Update"} Sighting
         </Typography>
+        {state.appData.error ? (
+          <Typography variant="subtitle1" color="error" align="center">
+            {state.appData.error}
+          </Typography>
+        ) : null}
+
         <Typography variant="subtitle2" color="secondary" align="center">
           Update the location of your sighting by dragging the red whale icon or
           clicking at the new location.

@@ -77,6 +77,7 @@ const Direction = ({ id, name, value, onChange }) => {
       <RadioGroup id={id} name={name} value={value} onChange={onChange}>
         <div className={classes.container}>
           <FormControlLabel
+            tabIndex="1"
             value="N"
             control={<Radio />}
             label="N"
@@ -84,12 +85,14 @@ const Direction = ({ id, name, value, onChange }) => {
           ></FormControlLabel>
           <FormControlLabel
             value="E"
+            tabIndex="2"
             control={<Radio />}
             label="E"
             className={classes.east}
           ></FormControlLabel>
           <FormControlLabel
             value="S"
+            tabIndex="3"
             control={<Radio />}
             label="S"
             className={classes.south}
@@ -98,6 +101,7 @@ const Direction = ({ id, name, value, onChange }) => {
             value="W"
             control={<Radio />}
             label="W"
+            tabIndex="4"
             className={classes.west}
           ></FormControlLabel>
         </div>
@@ -106,6 +110,7 @@ const Direction = ({ id, name, value, onChange }) => {
           value="Uknown"
           control={<Radio />}
           label="Unknown"
+          tabIndex="5"
           className={classes.unknown}
         ></FormControlLabel>
         <Divider></Divider>

@@ -14,7 +14,7 @@ import { actionTypes } from "../../actions";
 import whaleSpecies from "../../Utils/whaleSpecies";
 const styles = theme => {
   return {
-    container: { position: "relative" },
+    container: { position: "relative", width: "100%" },
     closeButton: {
       position: "absolute",
       top: theme.spacing(1),
@@ -96,23 +96,17 @@ const FilterWindow = ({ isOpen, handleClose }) => {
         onClose={() => dispatch({ type: actionTypes.FILTER_CLOSE })}
         open={state.filterOpen}
       >
-        <IconButton
-          className={classes.closeButton}
-          onClick={() => dispatch({ type: actionTypes.FILTER_CLOSE })}
-        >
-          <CloseIcon></CloseIcon>
-        </IconButton>
         <div className={classes.appBar}>
           <Grid
             container
             className={classes.title}
-            flexDirection="row"
+            direction="row"
             alignItems="center"
           >
             <Grid item xs={6}>
               <Typography variant="h6">Filter</Typography>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={4}>
               <Button
                 size="medium"
                 color="primary"
@@ -125,8 +119,14 @@ const FilterWindow = ({ isOpen, handleClose }) => {
             </Grid>
           </Grid>
         </div>
+        <IconButton
+          className={classes.closeButton}
+          onClick={() => dispatch({ type: actionTypes.FILTER_CLOSE })}
+        >
+          <CloseIcon></CloseIcon>
+        </IconButton>
         <DateFilter
-          title="Date Window"
+          title="Date of Sighting Filter"
           fromDate={state.filterCriteria.fromDate}
           toDate={state.filterCriteria.toDate}
           handleFromDateChange={handleFromDateChange}
@@ -134,7 +134,7 @@ const FilterWindow = ({ isOpen, handleClose }) => {
         ></DateFilter>
 
         <Filter
-          title="Whale Species"
+          title="Whale Species Filter"
           selectedValues={
             state.filterCriteria.speciesList.length === whaleSpecies.length
               ? state.filterCriteria.speciesList.concat(["ALL"])

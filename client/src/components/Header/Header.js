@@ -100,7 +100,7 @@ const Header = () => {
                   });
                 }}
               >
-                <EyeIcon fontSize="normal"></EyeIcon>
+                <EyeIcon></EyeIcon>
               </IconButton>
             </Tooltip>
           ) : null}

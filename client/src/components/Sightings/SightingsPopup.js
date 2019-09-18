@@ -19,10 +19,11 @@ import whaleSpecies from "../../Utils/whaleSpecies";
 import { formatToDisplay } from "../../Utils/DateFormatFunctions";
 const useStyles = makeStyles(theme => ({
   card: { maxWidth: 240, position: "relative" },
+  picture: { height: 140 },
   closeIcon: {
     position: "absolute",
-    top: theme.spacing(1),
-    right: theme.spacing(1),
+    top: theme.spacing(0),
+    right: theme.spacing(0),
     margin: 0,
     padding: 0
   }
@@ -57,20 +58,18 @@ const SightingsPopup = ({
       </IconButton>
       {imageUrl ? (
         <CardMedia
-          component="img"
-          alt={sighting.species}
+          className={classes.picture}
           image={imageUrl}
-          height="140"
           title={sighting.species}
         ></CardMedia>
       ) : null}
       <CardContent>
-        <Grid container justifyContent="center" alignItems="center">
+        <Grid container justify="center" alignItems="center">
           <Typography variant="h6" component="h2">
             {speciesInfo.name}
           </Typography>
           <Link href={speciesInfo.helpUrl} target="_blank">
-            <InfoIcon></InfoIcon>
+            <InfoIcon fontSize="small"></InfoIcon>
           </Link>
         </Grid>
 
@@ -86,6 +85,11 @@ const SightingsPopup = ({
         <Typography variant="subtitle2" gutterBottom color="textSecondary">
           Spotted @ {formatToDisplay(dateSpotted)}
         </Typography>
+        {sighting.content ? (
+          <Typography variant="body2" gutterBottom color="textPrimary">
+            {sighting.content}
+          </Typography>
+        ) : null}
       </CardContent>
       {
         //   <CardActions>

@@ -16,7 +16,7 @@ import { Logout } from "../Auth";
 const useStyles = makeStyles(theme => ({
   container: {
     position: "relative",
-    width: "80vw"
+    width: "100%"
   },
   avatar: {
     margin: theme.spacing(2)
@@ -86,7 +86,7 @@ const NavigationSideBar = () => {
         <Grid
           container
           className={classes.menu}
-          flexDirection="column"
+          direction="column"
           alignItems="center"
           justifyContent="center"
         >
@@ -131,9 +131,8 @@ const NavigationSideBar = () => {
             {!state.isAuth ? (
               <Grid
                 container
-                flexDirection="row"
+                direction="row"
                 alignItems="center"
-                justifyContent="center"
                 justify="center"
               >
                 <Auth
