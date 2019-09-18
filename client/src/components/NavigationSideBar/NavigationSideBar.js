@@ -15,7 +15,7 @@ import { Logout } from "../Auth";
 
 const useStyles = makeStyles(theme => ({
   container: {
-    position: "static",
+    position: "relative",
     width: "80vw"
   },
   avatar: {
@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   },
   appBar: {
     height: "64px",
-    width: "100vw",
+    width: "100%",
     backgroundColor: theme.palette.grey[100]
   },
   closeButton: {

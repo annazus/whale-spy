@@ -16,7 +16,7 @@ import Link from "@material-ui/core/Link";
 const Filter = ({ title, list, onChangeHandler, selectedValues }) => {
   return (
     <div>
-      <ExpansionPanel expanded>
+      <ExpansionPanel defaultExpanded square>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon></ExpandMoreIcon>}>
           <Typography>{title}</Typography>
         </ExpansionPanelSummary>

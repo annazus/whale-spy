@@ -14,15 +14,21 @@ import { actionTypes } from "../../actions";
 import whaleSpecies from "../../Utils/whaleSpecies";
 const styles = theme => {
   return {
-    container: { position: "static" },
+    container: { position: "relative" },
     closeButton: {
       position: "absolute",
       top: theme.spacing(1),
       right: theme.spacing(1)
     },
-    title: {
-      margin: theme.spacing(2)
-    }
+    appBar: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "64px",
+      width: "100%",
+      backgroundColor: theme.palette.grey[100]
+    },
+    title: { margin: theme.spacing(2) }
   };
 };
 
@@ -96,30 +102,29 @@ const FilterWindow = ({ isOpen, handleClose }) => {
         >
           <CloseIcon></CloseIcon>
         </IconButton>
-
-        <Grid
-          container
-          className={classes.title}
-          flexDirection="row"
-          justify="space-between"
-          alignItems="center"
-        >
-          <Grid item xs={6}>
-            <Typography variant="h6">Filter</Typography>
+        <div className={classes.appBar}>
+          <Grid
+            container
+            className={classes.title}
+            flexDirection="row"
+            alignItems="center"
+          >
+            <Grid item xs={6}>
+              <Typography variant="h6">Filter</Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Button
+                size="medium"
+                color="primary"
+                className={classes.resetToDefault}
+                onClick={handleReset}
+                variant="outlined"
+              >
+                Reset
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item xs={6}>
-            <Button
-              size="medium"
-              color="primary"
-              className={classes.resetToDefault}
-              onClick={handleReset}
-              variant="outlined"
-            >
-              Reset
-            </Button>
-          </Grid>
-        </Grid>
-
+        </div>
         <DateFilter
           title="Date Window"
           fromDate={state.filterCriteria.fromDate}

@@ -20,7 +20,7 @@ const DateFilter = ({
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <div>
-        <ExpansionPanel expanded>
+        <ExpansionPanel defaultExpanded square>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon></ExpandMoreIcon>}>
             <Typography>{title}</Typography>
           </ExpansionPanelSummary>
