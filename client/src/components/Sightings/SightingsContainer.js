@@ -6,7 +6,6 @@ import {
   MUTATION_CREATE_SIGHTING,
   MUTATION_CREATE_COMMENT
 } from "../../graphql/definitions/mutations";
-import { QUERY_ME } from "../../graphql/definitions/queries";
 import Sightings from "./Sightings";
 import { uploadToCloudinary } from "../../Utils/UploadToCloudinary";
 

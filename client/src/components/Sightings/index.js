@@ -1,5 +1,10 @@
 import SightingHeader from "./SightingHeader";
 import SightingContainer from "./SightingsContainer";
 import SightingPopup from "./SightingsPopup";
-
-export { SightingContainer as default, SightingHeader, SightingPopup };
+import ViewSighting from "./ViewSighting";
+export {
+  SightingContainer as default,
+  SightingHeader,
+  SightingPopup,
+  ViewSighting
+};

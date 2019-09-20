@@ -94,7 +94,7 @@ const FilterWindow = ({ isOpen, handleClose }) => {
       <Drawer
         anchor="left"
         onClose={() => dispatch({ type: actionTypes.FILTER_CLOSE })}
-        open={state.filterOpen}
+        open={state.appState.filterOpen}
       >
         <div className={classes.appBar}>
           <Grid

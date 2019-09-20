@@ -6,8 +6,6 @@ export const Context = createContext({
   draftPin: null,
   pins: [],
   showComments: false,
-  filterOpen: false,
-  showNavigationSideBar: false,
   isAuth: false,
 
   //
@@ -18,8 +16,10 @@ export const Context = createContext({
     isEditingSighting: false,
     showSightingSummary: false,
     showNavigationSideBar: false,
-    showFilterWindow: false,
-    showComments: false
+    filterOpen: false,
+    showComments: false,
+    showPhotoFullScreen: false,
+    showSighting: false
   },
   filterCriteria: {
     fromDate: null,
@@ -30,7 +30,8 @@ export const Context = createContext({
     sightings: [],
     me: [],
     error: null,
-    popup: null
+    popup: null,
+    imageUrl: null
   },
   map: {
     viewport: {

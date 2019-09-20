@@ -57,34 +57,38 @@ const Header = () => {
             Whale Spy
           </Typography>
           <div className={classes.grow}></div>
-          <InputBase
-            className={classes.searchMapInput}
-            placeholder="Search Map"
-            autoFocus
-            inputProps={{ "aria-label": "search google maps" }}
-          />
-          <IconButton
-            className={classes.iconButton}
-            aria-label="search"
-            color="inherit"
-            onClick={() =>
-              alert("The search map functionality has not been implemented")
-            }
-          >
-            <SearchIcon color="inherit" />
-          </IconButton>
-          {!state.appState.isNewSighting &&
-          !state.appState.isEditingSighting ? (
-            <Divider
-              className={classes.divider}
-              orientation="vertical"
-              light={true}
-            />
+          {!state.appState.showSighting ? (
+            <>
+              <InputBase
+                className={classes.searchMapInput}
+                placeholder="Search Map"
+                autoFocus
+                inputProps={{ "aria-label": "search google maps" }}
+              />
+              <IconButton
+                className={classes.iconButton}
+                aria-label="search"
+                color="inherit"
+                onClick={() =>
+                  alert("The search map functionality has not been implemented")
+                }
+              >
+                <SearchIcon color="inherit" />
+              </IconButton>
+              {!(state.appState.isNewSighting || state.appState.showSighting) &&
+              !state.appState.isEditingSighting ? (
+                <Divider
+                  className={classes.divider}
+                  orientation="vertical"
+                  light={true}
+                />
+              ) : null}
+            </>
           ) : null}
 
           {state.appState.isAuth &&
           !state.appState.isNewSighting &&
-          !state.appState.isEditingSighting ? (
+          !state.appState.showSighting ? (
             <Tooltip title="Add a sighting">
               <IconButton
                 color="inherit"
@@ -107,8 +111,7 @@ const Header = () => {
               </IconButton>
             </Tooltip>
           ) : null}
-          {!state.appState.isNewSighting &&
-          !state.appState.isEditingSighting ? (
+          {!state.appState.isNewSighting && !state.appState.showSighting ? (
             <>
               <Tooltip title="Filter sightings">
                 <IconButton

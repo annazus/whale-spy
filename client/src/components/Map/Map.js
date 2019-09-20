@@ -68,23 +68,6 @@ const Map = () => {
   const classes = useStyles();
 
   useEffect(() => {
-    const getData = async () => {
-      const client = getClient();
-      try {
-        const sightingsData = await client.query({ query: QUERY_SIGHTINGS });
-        dispatch({
-          type: actionTypes.GET_SIGHTINGS,
-          payload: sightingsData.data
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
     window.addEventListener("resize", resizeMap);
 
     return resizeRemover;
@@ -121,8 +104,6 @@ const Map = () => {
   // }, [state.draftPin]);
 
   const _onViewportChange = viewport => {
-    // setViewport(viewport);
-
     dispatch({
       type: actionTypes.UPDATE_VIEWPORT,
       payload: {
@@ -136,8 +117,7 @@ const Map = () => {
   };
   const showSelectedPin = pin => {
     dispatch({
-      type: actionTypes.SET_CURRENT_SIGHTING,
-      payload: { currentPin: pin }
+      type: actionTypes.SHOW_SIGHTING
     });
   };
   // const onNewPinClicked = () => {
@@ -199,6 +179,16 @@ const Map = () => {
           showMoreHandler={showSelectedPin}
           commentsHandler={showComments}
           closeHandler={closeHandler}
+          showFullScreenHandler={() => {
+            let imageUrl;
+            if (state.appData.popup.images.length > 0) {
+              imageUrl = state.appData.popup.images[0].url;
+            } else return;
+            dispatch({
+              type: actionTypes.TOGGLE_FULLSCREEN_PHOTO,
+              payload: imageUrl
+            });
+          }}
         />
       </Popup>
     );
@@ -259,13 +249,17 @@ const Map = () => {
         onClick={clickHandler}
         mapStyle={process.env.REACT_APP_MAP_LAYER}
       >
-        <GeolocateControl
-          className={classes.geoLocateStyle}
-          positionOptions={{ enableHighAccuracy: true }}
-          trackUserLocation={true}
-          fitBoundsOptions={{ maxZoom: 8 }}
-          onViewportChange={_onViewportChange}
-        />
+        {
+          // <GeolocateControl
+          //   className={classes.geoLocateStyle}
+          //   positionOptions={{ enableHighAccuracy: true }}
+          //   trackUserLocation={true}
+          //   fitBoundsOptions={{ maxZoom: 8 }}
+          //   showUserLocation={true}
+          //   onViewportChange={_onViewportChange}
+          // />
+        }
+
         {state.draftPin
           ? markerRender({
               ...state.draftPin,

@@ -60,17 +60,19 @@ const CommentsContainer = () => {
       {state.currentPin.comments ? (
         <CommentsList commentsList={state.currentPin.comments} />
       ) : null}
-      <Subscription
-        subscription={COMMENT_ADDED_SUBSCRIPTION}
-        variables={{ pinId: state.currentPin.id }}
-        onSubscriptionData={({ subscriptionData }) => {
-          const { commentAdded } = subscriptionData.data;
-          dispatch({
-            type: actionTypes.ON_COMMENT_ADDED,
-            payload: { comment: commentAdded }
-          });
-        }}
-      />
+      {
+        // <Subscription
+        //   subscription={COMMENT_ADDED_SUBSCRIPTION}
+        //   variables={{ pinId: state.currentPin.id }}
+        //   onSubscriptionData={({ subscriptionData }) => {
+        //     const { commentAdded } = subscriptionData.data;
+        //     dispatch({
+        //       type: actionTypes.ON_COMMENT_ADDED,
+        //       payload: { comment: commentAdded }
+        //     });
+        //   }}
+        // />
+      }
     </Paper>
   );
 };

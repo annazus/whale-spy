@@ -60,7 +60,7 @@ const NavigationSideBar = () => {
       <Drawer
         className={classes.drawer}
         PaperProps={{ square: true }}
-        open={state.showNavigationSideBar}
+        open={state.appState.showNavigationSideBar}
         anchor="right"
         onClose={() => {
           setError(null);

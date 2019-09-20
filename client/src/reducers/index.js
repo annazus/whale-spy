@@ -22,20 +22,20 @@ const reducer = (state = {}, action) => {
           comments: comments.concat(action.payload.comment)
         }
       };
-    case actionTypes.ON_COMMENT_ADDED:
-      let comments1 = state.currentPin.comments;
+    // case actionTypes.ON_COMMENT_ADDED:
+    //   let comments1 = state.currentPin.comments;
 
-      if (!comments1) comments1 = [];
-      if (comments1.find(comment => comment.id === action.payload.comment.id))
-        return state;
-      return {
-        ...state,
-        isLoading: false,
-        currentPin: {
-          ...state.currentPin,
-          comments: comments1.concat(action.payload.comment)
-        }
-      };
+    //   if (!comments1) comments1 = [];
+    //   if (comments1.find(comment => comment.id === action.payload.comment.id))
+    //     return state;
+    //   return {
+    //     ...state,
+    //     isLoading: false,
+    //     currentPin: {
+    //       ...state.currentPin,
+    //       comments: comments1.concat(action.payload.comment)
+    //     }
+    //   };
     case actionTypes.CREATE_DRAFT_PIN:
       return {
         ...state,
@@ -46,7 +46,8 @@ const reducer = (state = {}, action) => {
           isEditingSighting: false,
           showSightingSummary: false,
           showNavigationSideBar: false,
-          showFilterWindow: false
+          showFilter: false,
+          showSighting: false
         },
         map: {
           viewport: { ...state.map.viewport, width: "100%", height: "300px" }
@@ -64,17 +65,17 @@ const reducer = (state = {}, action) => {
           longitude: action.payload.longitude
         }
       };
-    case actionTypes.UPDATE_CURRENT_PIN:
-      return {
-        ...state,
-        currentPin: { ...action.payload.currentPin },
-        draftPin: null
-      };
+    // case actionTypes.UPDATE_CURRENT_PIN:
+    //   return {
+    //     ...state,
+    //     currentPin: { ...action.payload.currentPin },
+    //     draftPin: null
+    //   };
 
-    case actionTypes.DELETE_PIN:
-      pins = state.pins;
-      newPins = state.pins.filter(pin => pin.id !== state.currentPin.id);
-      return { ...state, isLoading: false, pins: newPins, currentPin: null };
+    // case actionTypes.DELETE_PIN:
+    //   pins = state.pins;
+    //   newPins = state.pins.filter(pin => pin.id !== state.currentPin.id);
+    //   return { ...state, isLoading: false, pins: newPins, currentPin: null };
     case actionTypes.DISCARD_DRAFT:
       return {
         ...state,
@@ -145,8 +146,6 @@ const reducer = (state = {}, action) => {
         appState: { ...state.appState, isAuth: true },
         appData: { ...state.appData, me: action.payload.user }
       };
-    case actionTypes.MAKE_REQUEST:
-      return { ...state, isLoading: true };
 
     case actionTypes.ON_SIGHTING_ADDED:
       const sightings = state.appData.sightings;
@@ -231,12 +230,12 @@ const reducer = (state = {}, action) => {
       };
 
     case actionTypes.FILTER_CLOSE:
-      return { ...state, filterOpen: false };
+      return { ...state, appState: { ...state.appState, filterOpen: false } };
     case actionTypes.FILTER_OPEN:
       return {
         ...state,
-        filterOpen: true,
-        appData: { ...state.appData, popup: null }
+        appState: { ...state.appState, filterOpen: true },
+        appData: { ...state.appData }
       };
 
     case actionTypes.FILTER_DATE:
@@ -246,6 +245,11 @@ const reducer = (state = {}, action) => {
           ...state.filterCriteria,
           fromDate: action.payload.fromDate,
           toDate: action.payload.toDate
+        },
+        appData: { ...state.appData, popup: null },
+        appState: {
+          ...state.appState,
+          showSighting: false
         }
       };
     case actionTypes.FILTER_MARINE_MAMMAL_TYPE:
@@ -254,16 +258,33 @@ const reducer = (state = {}, action) => {
         filterCriteria: {
           ...state.filterCriteria,
           speciesList: action.payload.marineMammalTypes
+        },
+        appData: { ...state.appData, popup: null },
+        appState: {
+          ...state.appState,
+          showSighting: false
         }
       };
     case actionTypes.SHOW_NAV_SIDE:
       return {
         ...state,
-        showNavigationSideBar: true,
-        appData: { ...state.appData, popup: null }
+        appState: {
+          ...state.appState,
+          showNavigationSideBar: true,
+          filterOpen: false
+        },
+
+        appData: { ...state.appData }
       };
     case actionTypes.HIDE_NAV_SIDE:
-      return { ...state, showNavigationSideBar: false };
+      return {
+        ...state,
+        appState: {
+          ...state.appState,
+          showNavigationSideBar: false,
+          filterOpen: false
+        }
+      };
     case actionTypes.UPDATE_VIEWPORT:
       return { ...state, map: { viewport: action.payload.viewport } };
     case actionTypes.START_BUSY:
@@ -279,6 +300,37 @@ const reducer = (state = {}, action) => {
       return {
         ...state,
         appData: { ...state.appData, error: action.payload }
+      };
+    case actionTypes.TOGGLE_FULLSCREEN_PHOTO:
+      return {
+        ...state,
+        appData: {
+          ...state.appData,
+          imageUrl: action.payload
+        },
+        appState: {
+          ...state.appState,
+          showPhotoFullScreen: !state.appState.showPhotoFullScreen
+        }
+      };
+    case actionTypes.SHOW_SIGHTING:
+      return {
+        ...state,
+        viewport: { ...state.map.viewport, width: 0, height: 0 },
+
+        appState: {
+          ...state.appState,
+          showSighting: true
+        }
+      };
+    case actionTypes.CLOSE_SIGHTING:
+      return {
+        ...state,
+
+        appState: {
+          ...state.appState,
+          showSighting: false
+        }
       };
     default:
       return state;
