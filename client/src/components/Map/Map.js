@@ -250,14 +250,14 @@ const Map = () => {
         mapStyle={process.env.REACT_APP_MAP_LAYER}
       >
         {
-          // <GeolocateControl
-          //   className={classes.geoLocateStyle}
-          //   positionOptions={{ enableHighAccuracy: true }}
-          //   trackUserLocation={true}
-          //   fitBoundsOptions={{ maxZoom: 8 }}
-          //   showUserLocation={true}
-          //   onViewportChange={_onViewportChange}
-          // />
+          <GeolocateControl
+            className={classes.geoLocateStyle}
+            positionOptions={{ enableHighAccuracy: true }}
+            trackUserLocation={true}
+            fitBoundsOptions={{ maxZoom: 8 }}
+            showUserLocation={true}
+            onViewportChange={_onViewportChange}
+          />
         }
 
         {state.draftPin
