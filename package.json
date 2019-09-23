@@ -1,5 +1,5 @@
 {
-  "name": "whale-spy",
+  "name": "whalegram",
   "version": "1.0.0",
   "description": "Report whale sightings in the Puget Sound",
   "main": "index.js",

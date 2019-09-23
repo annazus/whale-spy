@@ -1,9 +1,9 @@
 {
-  "short_name": "Whale Spy",
+  "short_name": "Whalegram",
   "name": "Report Whale Sightings",
   "icons": [
     {
-      "src": "whaleIcon.svg",
+      "src": "whale.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     }

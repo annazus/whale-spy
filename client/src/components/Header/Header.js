@@ -54,7 +54,7 @@ const Header = () => {
         <Toolbar>
           <Logo />
           <Typography variant="h6" className={classes.title}>
-            Whale Spy
+            Whalegram
           </Typography>
           <div className={classes.grow}></div>
           {!state.appState.showSighting ? (
