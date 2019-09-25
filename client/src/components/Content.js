@@ -6,7 +6,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Header from "./Header";
 import Map from "./Map";
 import { Subscription } from "react-apollo";
-
+import AuthRoute from "./Auth/AuthRoute";
 import { Context } from "../Context";
 import { SightingHeader } from "./Sightings";
 import { ViewSighting } from "./Sightings";
@@ -89,7 +89,7 @@ const Content = () => {
         <Header />
         <Switch>
           <Route exact path="/" component={Map} />
-          <Route path="/new-sighting" component={Sightings} />
+          <AuthRoute path="/new-sighting" component={Sightings} />
           <Route path="/sighting/:id" component={ViewSighting} />
           <Route component={Map} />
         </Switch>
