@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { makeStyles } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -87,10 +87,14 @@ const Content = () => {
         <FilterWindow></FilterWindow>
         <NavigationSideBar></NavigationSideBar>
         <Header />
+        <Switch>
+          <Route exact path="/" component={Map} />
+          <Route path="/new-sighting" component={Sightings} />
+          <Route path="/sighting/:id" component={ViewSighting} />
+          <Route component={Map} />
+        </Switch>
       </Container>
-      <Route exact path="/" component={Map} />
-      <Route path="/new-sighting" component={Sightings} />
-      <Route path="/sighting/:id" component={ViewSighting} />
+
       {/* Subscriptions for Creating / Updating / Deleting Pins */}
       <Subscription
         subscription={SIGHTING_ADDED_SUBSCRIPTION}

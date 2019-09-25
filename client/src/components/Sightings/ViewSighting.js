@@ -17,7 +17,7 @@ import mmTypes from "../../Utils/whaleSpecies";
 import { formatToDisplay } from "../../Utils/DateFormatFunctions";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-
+import { actionTypes } from "../../actions";
 const useStyles = makeStyles(theme => ({
   container: {
     padding: theme.spacing(2),
@@ -135,7 +135,16 @@ const ViewSighting = ({ match, history, showFullScreenHandler }) => {
           {sighting.images.length > 0 ? (
             <IconButton
               className={classes.fullScreenIcon}
-              onClick={showFullScreenHandler}
+              onClick={() => {
+                let imageUrl;
+                if (sighting.images.length > 0) {
+                  imageUrl = sighting.images[0].url;
+                } else return;
+                dispatch({
+                  type: actionTypes.TOGGLE_FULLSCREEN_PHOTO,
+                  payload: imageUrl
+                });
+              }}
             >
               <FullscreenIcon></FullscreenIcon>
             </IconButton>

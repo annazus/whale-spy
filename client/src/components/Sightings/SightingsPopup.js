@@ -20,7 +20,7 @@ import whaleSpecies from "../../Utils/whaleSpecies";
 import FullScreenPhoto from "../FullScreenPhoto";
 import { formatToDisplay } from "../../Utils/DateFormatFunctions";
 const useStyles = makeStyles(theme => ({
-  card: { maxWidth: 240, position: "relative" },
+  card: { maxWidth: 240 },
   picture: { height: 140, position: "relative" },
   closeIcon: {
     // position: "absolute",
@@ -40,10 +40,15 @@ const useStyles = makeStyles(theme => ({
     zIndex: theme.zIndex.mobileStepper
   },
   imageFullScreen: {
+    position: "fixed",
     width: "100vw",
     height: "100vh",
-    margin: "auto",
-    objectFit: "cover"
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    objectFit: "cover",
+    zIndex: theme.zIndex.mobileStepper + 4000
   }
 }));
 
