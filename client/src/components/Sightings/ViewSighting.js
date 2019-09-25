@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { makeStyles } from "@material-ui/core";
+import { Context } from "../../Context";
+
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -88,9 +90,19 @@ const DisplayField = ({ label, children }) => {
   );
 };
 
-const ViewSighting = ({ sighting, closeHandler, showFullScreenHandler }) => {
+const ViewSighting = ({ match, history, showFullScreenHandler }) => {
+  const { state, dispatch } = useContext(Context);
+  const [sighting, setSighting] = useState(null);
+  useEffect(() => {
+    const sightingId = match.params.id;
+    const sighting = state.appData.sightings.find(
+      element => element.id === sightingId
+    );
+    setSighting(sighting);
+  }, [match.params.id, state.appData.sightings]);
   const classes = useStyles();
   console.log(sighting);
+  if (!sighting) return null;
   return (
     <Card className={classes.container}>
       <CardContent>
@@ -103,7 +115,10 @@ const ViewSighting = ({ sighting, closeHandler, showFullScreenHandler }) => {
             ></Avatar>
           }
           action={
-            <IconButton className={classes.closeIcon} onClick={closeHandler}>
+            <IconButton
+              className={classes.closeIcon}
+              onClick={() => history.goBack()}
+            >
               <CloseIcon></CloseIcon>
             </IconButton>
           }

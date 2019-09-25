@@ -1,25 +1,13 @@
 import { createContext } from "react";
 import whaleSpecies from "./Utils/whaleSpecies";
 export const Context = createContext({
-  isLoading: false,
-  currentPin: null,
-  draftPin: null,
-  pins: [],
-  showComments: false,
-  isAuth: false,
-
   //
   appState: {
     isAuth: false,
     isBusy: false,
-    isNewSighting: false,
-    isEditingSighting: false,
-    showSightingSummary: false,
     showNavigationSideBar: false,
     filterOpen: false,
-    showComments: false,
-    showPhotoFullScreen: false,
-    showSighting: false
+    showPhotoFullScreen: false
   },
   filterCriteria: {
     fromDate: null,
@@ -30,13 +18,12 @@ export const Context = createContext({
     sightings: [],
     me: [],
     error: null,
-    popup: null,
     imageUrl: null
   },
   map: {
     viewport: {
       height: window.innerHeight - 52,
-      width: "100vw",
+      width: "100%",
       latitude: 47.7237,
       longitude: -122.4713,
       zoom: 8

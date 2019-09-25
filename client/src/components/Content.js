@@ -1,9 +1,12 @@
 import React, { useContext, useEffect } from "react";
+import { BrowserRouter, Route } from "react-router-dom";
 import { makeStyles } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Header from "./Header";
 import Map from "./Map";
+import { Subscription } from "react-apollo";
+
 import { Context } from "../Context";
 import { SightingHeader } from "./Sightings";
 import { ViewSighting } from "./Sightings";
@@ -17,6 +20,11 @@ import FullScreenPhoto from "./FullScreenPhoto";
 import { getClient } from "../graphql/client";
 import { QUERY_ME, QUERY_SIGHTINGS } from "../graphql/definitions/queries";
 import { actionTypes } from "../actions";
+import {
+  SIGHTING_ADDED_SUBSCRIPTION,
+  SIGHTING_DELETED_SUBSCRIPTION,
+  SIGHTING_UPDATED_SUBSCRIPTION
+} from "../graphql/definitions/subscription";
 const useStyles = makeStyles(theme => ({
   container: {
     position: "relative",
@@ -68,7 +76,7 @@ const Content = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [googleUser]);
   return (
-    <>
+    <BrowserRouter>
       <CssBaseline />
 
       <Container maxWidth="md" className={classes.container}>
@@ -79,29 +87,52 @@ const Content = () => {
         <FilterWindow></FilterWindow>
         <NavigationSideBar></NavigationSideBar>
         <Header />
-        {state.appState.showSighting ? (
-          <ViewSighting
-            sighting={state.appData.popup}
-            closeHandler={() => dispatch({ type: actionTypes.CLOSE_SIGHTING })}
-            showFullScreenHandler={() =>
-              dispatch({
-                type: actionTypes.TOGGLE_FULLSCREEN_PHOTO,
-                payload: state.appData.popup.images.length
-                  ? state.appData.popup.images[0].url
-                  : null
-              })
-            }
-          ></ViewSighting>
-        ) : null}
-        <SightingHeader></SightingHeader>
-        {!state.appState.showSighting ? <Map /> : null}
-        {state.showComments ? (
-          <CommentsContainer />
-        ) : state.appState.isNewSighting ? (
-          <Sightings />
-        ) : null}
       </Container>
-    </>
+      <Route exact path="/" component={Map} />
+      <Route path="/new-sighting" component={Sightings} />
+      <Route path="/sighting/:id" component={ViewSighting} />
+      {/* Subscriptions for Creating / Updating / Deleting Pins */}
+      <Subscription
+        subscription={SIGHTING_ADDED_SUBSCRIPTION}
+        onSubscriptionData={({ subscriptionData }) => {
+          const { sightingAdded } = subscriptionData.data;
+          dispatch({
+            type: actionTypes.ON_SIGHTING_ADDED,
+            payload: {
+              sighting: {
+                ...sightingAdded,
+                dateSpotted: new Date(sightingAdded.dateSpotted)
+              }
+            }
+          });
+        }}
+      />
+      <Subscription
+        subscription={SIGHTING_UPDATED_SUBSCRIPTION}
+        onSubscriptionData={({ subscriptionData }) => {
+          const { pinUpdated } = subscriptionData.data;
+          dispatch({
+            type: actionTypes.ON_SIGHTING_UPDATED,
+            payload: {
+              pin: {
+                ...pinUpdated,
+                dateSpotted: new Date(pinUpdated.dateSpotted)
+              }
+            }
+          });
+        }}
+      />
+      <Subscription
+        subscription={SIGHTING_DELETED_SUBSCRIPTION}
+        onSubscriptionData={({ subscriptionData }) => {
+          const { pinDeleted } = subscriptionData.data;
+          dispatch({
+            type: actionTypes.ON_SIGHTING_DELETED,
+            payload: { pinId: pinDeleted.id }
+          });
+        }}
+      />
+    </BrowserRouter>
   );
 };
 

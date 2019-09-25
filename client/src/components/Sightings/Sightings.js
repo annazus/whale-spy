@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core";
+import { ReactComponent as DraftWhaleIcon } from "../Map/draftWhaleIcon.svg";
 
+import ReactMapGL, {
+  GeolocateControl,
+  Marker,
+  Popup,
+  NavigationControl
+} from "react-map-gl";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -9,7 +16,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-
+import IconButton from "@material-ui/core/IconButton";
 import TextField from "@material-ui/core/TextField";
 import Select from "@material-ui/core/Select";
 import RadioGroup from "@material-ui/core/RadioGroup";
@@ -20,7 +27,7 @@ import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormHelperText from "@material-ui/core/FormHelperText";
-
+import CloseIcon from "@material-ui/icons/Close";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
@@ -38,7 +45,8 @@ import mmTypes from "../../Utils/whaleSpecies";
 
 const useStyles = makeStyles(theme => ({
   container: {
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
+    position: "relative"
   },
   imageContainer: {
     width: "100%",
@@ -61,10 +69,60 @@ const useStyles = makeStyles(theme => ({
   panelDetails: {
     padding: theme.spacing(1),
     flexDirection: "column"
+  },
+  closeButton: {
+    position: "absolute",
+    top: 0,
+    right: 0
+  },
+  title: {
+    marginTop: theme.spacing(3)
+  },
+  navStyle: {
+    margin: theme.spacing(1),
+
+    position: "absolute",
+    top: 0,
+    left: 0
+  },
+
+  geoLocateStyle: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    margin: theme.spacing(1)
+  },
+
+  whaleIconStyle: {
+    width: "20px",
+    height: "20px",
+    color: "red",
+    zIndex: "0"
+  },
+  draftWhaleIconStyle: {
+    width: "30px",
+    height: "30px",
+    color: "red",
+    zIndex: "0"
   }
 }));
 
-const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
+const Sighting = ({
+  history,
+  sighting,
+  saveHandler,
+  changeHandler,
+  imageUrl,
+  clickHandler,
+  onDragEndHandler
+}) => {
+  const [viewport, setViewport] = useState({
+    height: 300,
+    width: "100%",
+    latitude: 47.7237,
+    longitude: -122.4713,
+    zoom: 8
+  });
   const classes = useStyles();
 
   const saveIsDisabled = () => {
@@ -81,6 +139,87 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
         }}
       >
         <div>
+          <IconButton
+            onClick={() => history.goBack()}
+            className={classes.closeButton}
+          >
+            <CloseIcon></CloseIcon>
+          </IconButton>
+          <Typography variant="h6" color="primary" align="center">
+            New Sighting
+          </Typography>
+          {sighting.error ? (
+            <Typography variant="subtitle1" color="error" align="center">
+              {sighting.error}
+            </Typography>
+          ) : null}
+          <FormControl
+            component="fieldset"
+            fullWidth
+            required
+            variant="standard"
+            margin="normal"
+          >
+            <FormLabel component="legend">Whale species</FormLabel>
+
+            <RadioGroup
+              name="species"
+              value={sighting.species}
+              onChange={changeHandler}
+            >
+              {mmTypes.map(({ name, val, helpUrl }) => {
+                return (
+                  <FormControlLabel
+                    key={val}
+                    value={val}
+                    control={<Radio />}
+                    label={
+                      <span>
+                        {name}
+                        {helpUrl ? (
+                          <Link href={helpUrl} rel="noopener" target="_blank">
+                            <InfoIcon></InfoIcon>
+                          </Link>
+                        ) : null}
+                      </span>
+                    }
+                  ></FormControlLabel>
+                );
+              })}
+            </RadioGroup>
+          </FormControl>
+          <Typography variant="subtitle2" color="secondary" align="center">
+            Update the location of your sighting by dragging the red whale icon
+            or clicking at the new location.
+          </Typography>
+          <ReactMapGL
+            {...viewport}
+            onViewportChange={setViewport}
+            mapboxApiAccessToken={process.env.REACT_APP_MAP_TOKEN}
+            onClick={clickHandler}
+            mapStyle={process.env.REACT_APP_MAP_LAYER}
+          >
+            {
+              <GeolocateControl
+                className={classes.geoLocateStyle}
+                positionOptions={{ enableHighAccuracy: true }}
+                trackUserLocation={true}
+                fitBoundsOptions={{ maxZoom: 8 }}
+                showUserLocation={true}
+                onViewportChange={setViewport}
+              />
+            }
+            <Marker
+              latitude={sighting.latitude}
+              longitude={sighting.longitude}
+              offsetLeft={-20}
+              offsetTop={-10}
+              draggable={true}
+              onDragEnd={onDragEndHandler}
+            >
+              <DraftWhaleIcon className={classes.draftWhaleIconStyle} />
+            </Marker>
+          </ReactMapGL>
           <LocationOnIcon />
           <Typography
             variant="subtitle1"
@@ -89,42 +228,6 @@ const Sighting = ({ sighting, saveHandler, changeHandler, imageUrl }) => {
             4
           )}`}</Typography>
         </div>
-
-        <FormControl
-          component="fieldset"
-          fullWidth
-          required
-          variant="standard"
-          margin="normal"
-        >
-          <FormLabel component="legend">Whale species</FormLabel>
-
-          <RadioGroup
-            name="species"
-            value={sighting.species}
-            onChange={changeHandler}
-          >
-            {mmTypes.map(({ name, val, helpUrl }) => {
-              return (
-                <FormControlLabel
-                  key={val}
-                  value={val}
-                  control={<Radio />}
-                  label={
-                    <span>
-                      {name}
-                      {helpUrl ? (
-                        <Link href={helpUrl} rel="noopener" target="_blank">
-                          <InfoIcon></InfoIcon>
-                        </Link>
-                      ) : null}
-                    </span>
-                  }
-                ></FormControlLabel>
-              );
-            })}
-          </RadioGroup>
-        </FormControl>
 
         {sighting.species === "ORCA" ? (
           <FormControl

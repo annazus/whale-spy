@@ -1,4 +1,6 @@
 import React, { useContext } from "react";
+
+import { Link as RouterLink, withRouter } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import InputBase from "@material-ui/core/InputBase";
@@ -43,10 +45,14 @@ const useStyles = makeStyles(theme => ({
   menuButton: {}
 }));
 
-const Header = () => {
+const Header = ({ match, location, history }) => {
   const { state, dispatch } = useContext(Context);
 
   const classes = useStyles();
+
+  console.log(match, location, history);
+  const isNewSighting = location.pathname === "/new-sighting";
+  const showSighting = location.pathname.match(/^\/sighting/);
 
   return (
     <div className={classes.container}>
@@ -57,7 +63,7 @@ const Header = () => {
             Whalegram
           </Typography>
           <div className={classes.grow}></div>
-          {!state.appState.showSighting ? (
+          {!(isNewSighting || showSighting) ? (
             <>
               <InputBase
                 className={classes.searchMapInput}
@@ -75,22 +81,19 @@ const Header = () => {
               >
                 <SearchIcon color="inherit" />
               </IconButton>
-              {!(state.appState.isNewSighting || state.appState.showSighting) &&
-              !state.appState.isEditingSighting ? (
-                <Divider
-                  className={classes.divider}
-                  orientation="vertical"
-                  light={true}
-                />
-              ) : null}
+              <Divider
+                className={classes.divider}
+                orientation="vertical"
+                light={true}
+              />
             </>
           ) : null}
 
-          {state.appState.isAuth &&
-          !state.appState.isNewSighting &&
-          !state.appState.showSighting ? (
+          {state.appState.isAuth && !isNewSighting && !showSighting ? (
             <Tooltip title="Add a sighting">
               <IconButton
+                component={RouterLink}
+                to="/new-sighting"
                 color="inherit"
                 edge="end"
                 onClick={() => {
@@ -111,7 +114,7 @@ const Header = () => {
               </IconButton>
             </Tooltip>
           ) : null}
-          {!state.appState.isNewSighting && !state.appState.showSighting ? (
+          {!isNewSighting && !showSighting ? (
             <>
               <Tooltip title="Filter sightings">
                 <IconButton
@@ -139,7 +142,8 @@ const Header = () => {
     </div>
   );
 };
-export { Header as default };
+const HeaderwithRouter = withRouter(Header);
+export { HeaderwithRouter as default };
 
 // {!state.isAuth ? (
 //   <>

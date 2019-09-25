@@ -11,14 +11,8 @@ import { ReactComponent as WhaleIcon } from "./whaleIcon.svg";
 import { ReactComponent as DraftWhaleIcon } from "./draftWhaleIcon.svg";
 import { Context } from "../../Context";
 import { actionTypes } from "../../actions";
-import { QUERY_SIGHTINGS } from "../../graphql/definitions/queries";
-import {
-  SIGHTING_ADDED_SUBSCRIPTION,
-  SIGHTING_DELETED_SUBSCRIPTION,
-  SIGHTING_UPDATED_SUBSCRIPTION
-} from "../../graphql/definitions/subscription";
+
 import { getClient } from "../../graphql/client";
-import { Subscription } from "react-apollo";
 import { SightingPopup } from "../Sightings";
 import getFilteredSightings from "../../Utils/getFilteredSightings";
 const useStyles = makeStyles(t => ({
@@ -87,7 +81,7 @@ const Map = () => {
         viewport: {
           ...state.map.viewport,
           width: "100%",
-          height: state.appState.isNewSighting ? 300 : window.innerHeight - 52
+          height: window.innerHeight - 52
         }
       }
     });
@@ -110,7 +104,7 @@ const Map = () => {
         viewport: {
           ...viewport,
           width: "100%",
-          height: state.appState.isNewSighting ? 300 : window.innerHeight - 52
+          height: window.innerHeight - 52
         }
       }
     });
@@ -139,15 +133,6 @@ const Map = () => {
   const clickHandler = ({ lngLat, type, target }) => {
     if (!state.appState.isAuth) return;
     if (target.nodeName === "BUTTON" || target.nodeName === "svg") return;
-    if (state.appState.isNewSighting) {
-      dispatch({
-        type: actionTypes.UPDATE_DRAFT_LOCATION,
-        payload: {
-          longitude: lngLat[0],
-          latitude: lngLat[1]
-        }
-      });
-    }
   };
 
   const closeHandler = () => {
@@ -194,17 +179,6 @@ const Map = () => {
     );
   };
 
-  const onDragEndHandler = ({ lngLat }) => {
-    if (state.appState.isNewSighting) {
-      dispatch({
-        type: actionTypes.UPDATE_DRAFT_LOCATION,
-        payload: {
-          longitude: lngLat[0],
-          latitude: lngLat[1]
-        }
-      });
-    }
-  };
   const markerRender = ({ sighting, longitude, latitude, draggable }) => {
     // if (!activeMarker) return;
     // const { lng, lat, title } = activeMarker;
@@ -215,13 +189,10 @@ const Map = () => {
         longitude={longitude}
         offsetLeft={-20}
         offsetTop={-10}
-        draggable={draggable}
-        onDragEnd={onDragEndHandler}
+        draggable={false}
       >
         <div
           onClick={() => {
-            if (state.appState.isNewSighting) return;
-
             setPopupPin(sighting);
 
             dispatch({
@@ -231,11 +202,7 @@ const Map = () => {
           }}
           style={{ zIndex: "-3" }}
         >
-          {draggable ? (
-            <DraftWhaleIcon className={classes.draftWhaleIconStyle} />
-          ) : (
-            <WhaleIcon className={classes.whaleIconStyle} />
-          )}
+          <WhaleIcon className={classes.whaleIconStyle} />
         </div>
       </Marker>
     );
@@ -260,13 +227,6 @@ const Map = () => {
           />
         }
 
-        {state.draftPin
-          ? markerRender({
-              ...state.draftPin,
-              draggable: true,
-              sighting: { id: 0 }
-            })
-          : null}
         {getFilteredSightings(
           state.appData.sightings,
           state.filterCriteria
@@ -281,48 +241,6 @@ const Map = () => {
           </div>
         </div>
       </ReactMapGL>
-
-      {/* Subscriptions for Creating / Updating / Deleting Pins */}
-      <Subscription
-        subscription={SIGHTING_ADDED_SUBSCRIPTION}
-        onSubscriptionData={({ subscriptionData }) => {
-          const { sightingAdded } = subscriptionData.data;
-          dispatch({
-            type: actionTypes.ON_SIGHTING_ADDED,
-            payload: {
-              sighting: {
-                ...sightingAdded,
-                dateSpotted: new Date(sightingAdded.dateSpotted)
-              }
-            }
-          });
-        }}
-      />
-      <Subscription
-        subscription={SIGHTING_UPDATED_SUBSCRIPTION}
-        onSubscriptionData={({ subscriptionData }) => {
-          const { pinUpdated } = subscriptionData.data;
-          dispatch({
-            type: actionTypes.ON_SIGHTING_UPDATED,
-            payload: {
-              pin: {
-                ...pinUpdated,
-                dateSpotted: new Date(pinUpdated.dateSpotted)
-              }
-            }
-          });
-        }}
-      />
-      <Subscription
-        subscription={SIGHTING_DELETED_SUBSCRIPTION}
-        onSubscriptionData={({ subscriptionData }) => {
-          const { pinDeleted } = subscriptionData.data;
-          dispatch({
-            type: actionTypes.ON_SIGHTING_DELETED,
-            payload: { pinId: pinDeleted.id }
-          });
-        }}
-      />
     </>
   );
 };
