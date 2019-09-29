@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/core";
 import { Context } from "../../Context";
 import { actionTypes } from "../../actions";
@@ -17,7 +17,6 @@ const useStyles = makeStyles(theme => ({
 const FullScreenPhoto = () => {
   const classes = useStyles();
   const { state, dispatch } = useContext(Context);
-  console.log(state.appState.showPhotoFullScreen, state.appData.imageUrl);
   const output = state.appState.showPhotoFullScreen ? (
     <div>
       <img
@@ -30,7 +29,6 @@ const FullScreenPhoto = () => {
       ></img>
     </div>
   ) : null;
-  console.log(output);
   return output;
 };
 

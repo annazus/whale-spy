@@ -21,7 +21,7 @@ import Logo from "../Logo";
 
 const useStyles = makeStyles(theme => ({
   container: {},
-  grow: {},
+  grow: { flex: 1 },
   title: {
     marginLeft: theme.spacing(2),
     display: "none",
@@ -50,7 +50,6 @@ const Header = ({ match, location, history }) => {
 
   const classes = useStyles();
 
-  console.log(match, location, history);
   const isNewSighting = location.pathname === "/new-sighting";
   const showSighting = location.pathname.match(/^\/sighting/);
 
@@ -63,32 +62,33 @@ const Header = ({ match, location, history }) => {
             Whalegram
           </Typography>
           <div className={classes.grow}></div>
-          {!(isNewSighting || showSighting) ? (
-            <>
-              <InputBase
-                className={classes.searchMapInput}
-                placeholder="Search Map"
-                autoFocus
-                inputProps={{ "aria-label": "search google maps" }}
-              />
-              <IconButton
-                className={classes.iconButton}
-                aria-label="search"
-                color="inherit"
-                onClick={() =>
-                  alert("The search map functionality has not been implemented")
-                }
-              >
-                <SearchIcon color="inherit" />
-              </IconButton>
-              <Divider
-                className={classes.divider}
-                orientation="vertical"
-                light={true}
-              />
-            </>
-          ) : null}
-
+          {
+            // {!(isNewSighting || showSighting) ? (
+            //   <>
+            //     <InputBase
+            //       className={classes.searchMapInput}
+            //       placeholder="Search Map"
+            //       autoFocus
+            //       inputProps={{ "aria-label": "search google maps" }}
+            //     />
+            //     <IconButton
+            //       className={classes.iconButton}
+            //       aria-label="search"
+            //       color="inherit"
+            //       onClick={() =>
+            //         alert("The search map functionality has not been implemented")
+            //       }
+            //     >
+            //       <SearchIcon color="inherit" />
+            //     </IconButton>
+            //     <Divider
+            //       className={classes.divider}
+            //       orientation="vertical"
+            //       light={true}
+            //     />
+            //   </>
+            // ) : null}
+          }
           {state.appState.isAuth && !isNewSighting && !showSighting ? (
             <Tooltip title="Add a sighting">
               <IconButton

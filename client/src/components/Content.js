@@ -8,10 +8,8 @@ import Map from "./Map";
 import { Subscription } from "react-apollo";
 import AuthRoute from "./Auth/AuthRoute";
 import { Context } from "../Context";
-import { SightingHeader } from "./Sightings";
 import { ViewSighting } from "./Sightings";
 import Sightings from "./Sightings";
-import CommentsContainer from "./CommentsContainer";
 import FilterWindow from "./Filter";
 import NavigationSideBar from "./NavigationSideBar";
 import FullScreenProgressIndicator from "./ProgressIndicator";
@@ -129,10 +127,10 @@ const Content = () => {
       <Subscription
         subscription={SIGHTING_DELETED_SUBSCRIPTION}
         onSubscriptionData={({ subscriptionData }) => {
-          const { pinDeleted } = subscriptionData.data;
+          const { sightingDeleted } = subscriptionData.data;
           dispatch({
             type: actionTypes.ON_SIGHTING_DELETED,
-            payload: { pinId: pinDeleted.id }
+            payload: { sightingId: sightingDeleted.id }
           });
         }}
       />

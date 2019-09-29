@@ -8,11 +8,9 @@ import ReactMapGL, {
 import { makeStyles } from "@material-ui/core";
 
 import { ReactComponent as WhaleIcon } from "./whaleIcon.svg";
-import { ReactComponent as DraftWhaleIcon } from "./draftWhaleIcon.svg";
 import { Context } from "../../Context";
 import { actionTypes } from "../../actions";
 
-import { getClient } from "../../graphql/client";
 import { SightingPopup } from "../Sightings";
 import getFilteredSightings from "../../Utils/getFilteredSightings";
 const useStyles = makeStyles(t => ({
@@ -59,6 +57,7 @@ const Map = () => {
   // const [viewport, setViewport] = useState(initialViewport);
 
   const { state, dispatch } = useContext(Context);
+  const [popup, setPopup] = useState(null);
   const classes = useStyles();
 
   useEffect(() => {
@@ -69,10 +68,7 @@ const Map = () => {
   }, []);
 
   const setPopupPin = popup => {
-    dispatch({
-      type: actionTypes.SET_POPUP,
-      payload: popup
-    });
+    setPopup(popup);
   };
   const resizeMap = () => {
     dispatch({
@@ -154,20 +150,20 @@ const Map = () => {
       <Popup
         tipSize={5}
         anchor="top"
-        longitude={state.appData.popup.longitude}
-        latitude={state.appData.popup.latitude}
+        longitude={popup.longitude}
+        latitude={popup.latitude}
         closeOnClick={false}
         closeButton={false}
       >
         <SightingPopup
-          sighting={state.appData.popup}
+          sighting={popup}
           showMoreHandler={showSelectedPin}
           commentsHandler={showComments}
           closeHandler={closeHandler}
           showFullScreenHandler={() => {
             let imageUrl;
-            if (state.appData.popup.images.length > 0) {
-              imageUrl = state.appData.popup.images[0].url;
+            if (popup.images.length > 0) {
+              imageUrl = popup.images[0].url;
             } else return;
             dispatch({
               type: actionTypes.TOGGLE_FULLSCREEN_PHOTO,
@@ -233,7 +229,7 @@ const Map = () => {
         ).map(sighting =>
           markerRender({ sighting, ...sighting, draggable: false })
         )}
-        {state.appData.popup ? renderPopup(state.appData.popup) : null}
+        {popup ? renderPopup(popup) : null}
 
         <div className={classes.fullscreenControlStyle}>
           <div className={classes.navStyle}>

@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
 import { Context } from "../../Context";
 const AuthRoute = ({ component: Component, ...rest }) => {
-  const { state, dispatch } = useContext(Context);
+  const { state } = useContext(Context);
 
   return (
     <Route

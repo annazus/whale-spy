@@ -3,28 +3,13 @@ import { gql } from "apollo-boost";
 export const MUTATION_SIGNUP = gql`
   mutation SignUp {
     signUp {
+      id
       email
       name
       picture
     }
   }
 `;
-
-// export const MUTATION_CREATE_SIGHTING = gql`
-//   mutation CreateSighting($content: String!) {
-//     createSighting(sighting: $content) {
-//       text
-//       createdAt
-//       author {
-//         name
-//         picture
-//       }
-//       sighting {
-//         id
-//       }
-//     }
-//   }
-// `;
 
 export const MUTATION_CREATE_SIGHTING = gql`
   mutation CreateSighting(
@@ -38,7 +23,7 @@ export const MUTATION_CREATE_SIGHTING = gql`
     $direction: String
     $vocalizing: Boolean
     $activity: String
-    $observerInteraction: String
+    $interactionWithObservers: String
     $observerDistance: String
     $observerLocation: String
     $imageUrl: String
@@ -55,7 +40,7 @@ export const MUTATION_CREATE_SIGHTING = gql`
         direction: $direction
         vocalizing: $vocalizing
         activity: $activity
-        observerInteraction: $observerInteraction
+        interactionWithObservers: $interactionWithObservers
         observerDistance: $observerDistance
         observerLocation: $observerLocation
         imageUrl: $imageUrl
@@ -72,7 +57,7 @@ export const MUTATION_CREATE_SIGHTING = gql`
       direction
       vocalizing
       activity
-      observerInteraction
+      interactionWithObservers
       observerDistance
       observerLocation
 
@@ -161,7 +146,7 @@ export const MUTATION_CREATE_SIGHTING = gql`
 
 export const MUTATION_DELETE_SIGHTING = gql`
   mutation DeleteSighting($sightingId: ID!) {
-    deleteSighting(sightingID: $sightingID) {
+    deleteSighting(sightingId: $sightingId) {
       id
     }
   }

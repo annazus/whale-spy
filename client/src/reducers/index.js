@@ -1,8 +1,6 @@
 import { actionTypes } from "../actions";
 
 const reducer = (state = {}, action) => {
-  let pins = [];
-  let newPins = [];
   switch (action.type) {
     case actionTypes.GET_SIGHTINGS:
       return {
@@ -34,7 +32,16 @@ const reducer = (state = {}, action) => {
           }
         };
       } else return state;
-
+    case actionTypes.ON_SIGHTING_DELETED:
+      return {
+        ...state,
+        appData: {
+          ...state.appData,
+          sightings: state.appData.sightings.filter(
+            element => element.id !== action.payload.sightingId
+          )
+        }
+      };
     case actionTypes.SIGNOUT_USER:
       return {
         ...state,
@@ -120,11 +127,11 @@ const reducer = (state = {}, action) => {
       return { ...state, appState: { ...state.appState, isBusy: true } };
     case actionTypes.END_BUSY:
       return { ...state, appState: { ...state.appState, isBusy: false } };
-    case actionTypes.SET_POPUP:
-      return {
-        ...state,
-        appData: { ...state.appData, popup: action.payload }
-      };
+    // case actionTypes.SET_POPUP:
+    //   return {
+    //     ...state,
+    //     appData: { ...state.appData, popup: action.payload }
+    //   };
     case actionTypes.SET_ERROR:
       return {
         ...state,

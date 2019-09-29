@@ -3,6 +3,7 @@ import { gql } from "apollo-boost";
 export const QUERY_ME = gql`
   query Me {
     me {
+      id
       email
       picture
       name
@@ -38,7 +39,7 @@ export const QUERY_SIGHTINGS = gql`
       direction
       vocalizing
       activity
-      observerInteraction
+      interactionWithObservers
       observerDistance
       observerLocation
       images {

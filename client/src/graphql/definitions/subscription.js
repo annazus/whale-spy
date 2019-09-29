@@ -14,7 +14,7 @@ export const SIGHTING_ADDED_SUBSCRIPTION = gql`
       direction
       vocalizing
       activity
-      observerInteraction
+      interactionWithObservers
       observerDistance
       observerLocation
       images {
@@ -46,7 +46,7 @@ export const SIGHTING_UPDATED_SUBSCRIPTION = gql`
       direction
       vocalizing
       activity
-      observerInteraction
+      interactionWithObservers
       observerDistance
       observerLocation
       image {

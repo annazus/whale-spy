@@ -85,7 +85,6 @@ const Mutation = {
   // ),
   updateSighting: authenticated(
     async (parent, { sightingId, sighting }, { currentUser, db, pubsub }) => {
-      console.log(sightingId, sighting);
       const sightingToUpdate = await db.Sighting.findByPk(sightingId);
       if (!sightingToUpdate) throw new Error("Sighting cannot be found");
       if (sightingToUpdate.userId !== currentUser.id) {
@@ -103,7 +102,7 @@ const Mutation = {
         speed,
         vocalizing,
         activity,
-        observerInteraction,
+        interactionWithObservers,
         observerDistance,
         observerLocation
       } = sighting;
@@ -116,7 +115,6 @@ const Mutation = {
         },
         { where: { id: sightingId } }
       );
-      console.log(rowsAffected);
       const updatedSighting = await db.Sighting.findByPk(sightingId);
       pubsub.publish(SIGHTING_UPDATED, {
         sightingUpdated: updatedSighting.dataValues
@@ -126,13 +124,14 @@ const Mutation = {
     }
   ),
   deleteSighting: authenticated(
-    async (parent, { sighting }, { db, currentUser, pubsub }) => {
-      const sightingToDelete = await db.Sighting.findByPk(sighting);
+    async (parent, { sightingId }, { db, currentUser, pubsub }) => {
+      const sightingToDelete = await db.Sighting.findByPk(sightingId);
+      console.log(sightingToDelete);
       if (!sightingToDelete) throw new Error("Sighting cannot be found");
       if (sightingToDelete.dataValues.userId !== currentUser.id)
         throw new Error("You must be the author of the sighting to delete it");
       const affectedRows = await db.Sighting.destroy({
-        where: { id: sighting }
+        where: { id: sightingId }
       });
       pubsub.publish(SIGHTING_DELETED, {
         sightingDeleted: sightingToDelete.dataValues

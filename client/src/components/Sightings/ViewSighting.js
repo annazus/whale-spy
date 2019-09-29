@@ -1,13 +1,17 @@
 import React, { useEffect, useContext, useState } from "react";
+import { Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core";
 import { Context } from "../../Context";
-
+import { getClient } from "../../graphql/client";
+import { MUTATION_DELETE_SIGHTING } from "../../graphql/definitions/mutations";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import FullscreenIcon from "@material-ui/icons/Fullscreen";
+import CardActions from "@material-ui/core/CardActions";
+import DeleteIcon from "@material-ui/icons/DeleteForever";
 
 import Avatar from "@material-ui/core/Avatar";
 import { red } from "@material-ui/core/colors";
@@ -90,7 +94,7 @@ const DisplayField = ({ label, children }) => {
   );
 };
 
-const ViewSighting = ({ match, history, showFullScreenHandler }) => {
+const ViewSighting = ({ match, history }) => {
   const { state, dispatch } = useContext(Context);
   const [sighting, setSighting] = useState(null);
   useEffect(() => {
@@ -101,8 +105,30 @@ const ViewSighting = ({ match, history, showFullScreenHandler }) => {
     setSighting(sighting);
   }, [match.params.id, state.appData.sightings]);
   const classes = useStyles();
-  console.log(sighting);
-  if (!sighting) return null;
+  const deleteSightingHandler = async () => {
+    try {
+      dispatch({ type: actionTypes.START_BUSY });
+
+      const variables = {
+        sightingId: sighting.id
+      };
+      const { id_token } = window.gapi.auth2
+        .getAuthInstance()
+        .currentUser.get()
+        .getAuthResponse();
+      const client = getClient(id_token);
+      const deletedSighting = await client.mutate({
+        mutation: MUTATION_DELETE_SIGHTING,
+        variables
+      });
+      dispatch({ type: actionTypes.END_BUSY });
+      history.goBack();
+    } catch (error) {
+      dispatch({ type: actionTypes.END_BUSY });
+      console.log("error saving", error);
+    }
+  };
+  if (!sighting) return <Redirect to="/"></Redirect>;
   return (
     <Card className={classes.container}>
       <CardContent>
@@ -173,7 +199,7 @@ const ViewSighting = ({ match, history, showFullScreenHandler }) => {
 
         <DisplayField label="# of Adults ">
           <Typography variant="body1" gutterBottom>
-            {sighting.countAdult ? sighting.countAdult : "Not provided"}
+            {sighting.countAdults ? sighting.countAdults : "Not provided"}
           </Typography>
         </DisplayField>
         <DisplayField label="# of Juveniles ">
@@ -198,8 +224,8 @@ const ViewSighting = ({ match, history, showFullScreenHandler }) => {
         </DisplayField>
         <DisplayField label="Interaction with Observers">
           <Typography variant="body1" gutterBottom>
-            {sighting.observerInteraction
-              ? sighting.observerInteraction
+            {sighting.interactionWithObservers
+              ? sighting.interactionWithObservers
               : "Not provided"}
           </Typography>
         </DisplayField>
@@ -219,6 +245,13 @@ const ViewSighting = ({ match, history, showFullScreenHandler }) => {
           </Typography>
         </DisplayField>
       </CardContent>
+      <CardActions disableSpacing>
+        {state.appState.isAuth && state.appData.me.id === sighting.author.id ? (
+          <IconButton aria-label="Delete" onClick={deleteSightingHandler}>
+            <DeleteIcon color="secondary" fontSize="large" />
+          </IconButton>
+        ) : null}
+      </CardActions>
     </Card>
   );
 };

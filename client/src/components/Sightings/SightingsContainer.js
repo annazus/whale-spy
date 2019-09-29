@@ -2,10 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useAuthenticatedClient, getClient } from "../../graphql/client";
 import { Context } from "../../Context";
 import { actionTypes } from "../../actions";
-import {
-  MUTATION_CREATE_SIGHTING,
-  MUTATION_CREATE_COMMENT
-} from "../../graphql/definitions/mutations";
+import { MUTATION_CREATE_SIGHTING } from "../../graphql/definitions/mutations";
 import Sightings from "./Sightings";
 import { uploadToCloudinary } from "../../Utils/UploadToCloudinary";
 
@@ -22,7 +19,6 @@ const SightingContainer = ({ history }) => {
   const client = useAuthenticatedClient();
   const clickHandler = ({ lngLat, type, target }) => {
     if (target.nodeName === "BUTTON" || target.nodeName === "svg") return;
-    console.log(lngLat);
 
     setDraftPin({
       ...draftPin,
@@ -57,8 +53,8 @@ const SightingContainer = ({ history }) => {
         direction: draftPin.direction ? draftPin.direction : null,
         vocalizing: draftPin.vocalizing ? draftPin.vocalizing : null,
         activity: draftPin.activity ? draftPin.activity : null,
-        observerInteraction: draftPin.observerInteraction
-          ? draftPin.observerInteraction
+        interactionWithObservers: draftPin.interactionWithObservers
+          ? draftPin.interactionWithObservers
           : null,
         observerDistance: draftPin.observerDistance
           ? draftPin.observerDistance

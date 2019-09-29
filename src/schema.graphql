@@ -27,7 +27,7 @@ type Sighting {
   direction: String
   vocalizing: Boolean
   activity: String
-  observerInteraction: String
+  interactionWithObservers: String
   observerLocation: String
   observerDistance: String
   createdAt: Date!
@@ -58,7 +58,7 @@ type Mutation {
   # createSighting(sighting: String!): Sighting
   createSighting(sighting: CreateSightingInput!): Sighting!
 
-  deleteSighting(sighting: ID!): Sighting!
+  deleteSighting(sightingId: ID!): Sighting!
   updateSighting(sightingId: ID!, sighting: UpdateSightingInput!): Sighting!
   createComment(sightingId: ID!, text: String!): Comment!
   deleteComment(commentId: ID!): Comment!
@@ -77,7 +77,7 @@ input CreateSightingInput {
   direction: String
   vocalizing: Boolean
   activity: String
-  observerInteraction: String
+  interactionWithObservers: String
   observerLocation: String
   observerDistance: String
   imageUrl: String
@@ -93,7 +93,7 @@ input UpdateSightingInput {
   speed: String
   vocalizing: Boolean
   activity: String
-  observerInteraction: String
+  interactionWithObservers: String
   observerLocation: String
   observerDistance: String
 }

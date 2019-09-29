@@ -1,13 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core";
 import { ReactComponent as DraftWhaleIcon } from "../Map/draftWhaleIcon.svg";
 
-import ReactMapGL, {
-  GeolocateControl,
-  Marker,
-  Popup,
-  NavigationControl
-} from "react-map-gl";
+import ReactMapGL, { GeolocateControl, Marker } from "react-map-gl";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -124,7 +119,21 @@ const Sighting = ({
     zoom: 8
   });
   const classes = useStyles();
+  useEffect(() => {
+    window.addEventListener("resize", resizeMap);
 
+    return resizeRemover;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const resizeMap = () => {
+    setViewport({
+      ...viewport,
+      width: "100%"
+    });
+  };
+  const resizeRemover = () => {
+    window.removeEventListener("resize", resizeMap);
+  };
   const saveIsDisabled = () => {
     const isDisabled = !sighting.dateSpotted || !sighting.species;
     return isDisabled;
@@ -194,7 +203,7 @@ const Sighting = ({
           </Typography>
           <ReactMapGL
             {...viewport}
-            onViewportChange={setViewport}
+            onViewportChange={viewport => setViewport(viewport)}
             mapboxApiAccessToken={process.env.REACT_APP_MAP_TOKEN}
             onClick={clickHandler}
             mapStyle={process.env.REACT_APP_MAP_LAYER}
@@ -280,14 +289,14 @@ const Sighting = ({
         </MuiPickersUtilsProvider>
 
         <FormControl fullWidth variant="standard" margin="normal">
-          <InputLabel htmlFor="countAdult">Count of adults</InputLabel>
+          <InputLabel htmlFor="countAdults">Count of adults</InputLabel>
 
           <Select
-            value={sighting.countAdult}
+            value={sighting.countAdults}
             onChange={changeHandler}
             inputProps={{
-              name: "countAdult",
-              id: "countAdult"
+              name: "countAdults",
+              id: "s"
             }}
           >
             {["0", "1", "2", "3", "4", "5", "6", "7+"].map(value => {
@@ -389,14 +398,14 @@ const Sighting = ({
               </Select>
             </FormControl>
             <FormControl fullWidth variant="standard" margin="normal">
-              <InputLabel htmlFor="observerInteraction">
+              <InputLabel htmlFor="interactionWithObservers">
                 Interaction with Observers
               </InputLabel>
 
               <Select
-                id="observerInteraction"
-                name="observerInteraction"
-                value={sighting.observerInteraction}
+                id="interactionWithObservers"
+                name="interactionWithObservers"
+                value={sighting.interactionWithObservers}
                 onChange={changeHandler}
               >
                 {[
